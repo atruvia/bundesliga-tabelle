@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 import java.util.Collections;
 import java.util.List;
 
+import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +58,12 @@ class TabellenHttpAdapterTest {
 	TabellenHttpAdapter sut;
 
 	MockMvc mockMvc;
+	MockMvc mockMvcForInternalServerError;
 
 	@BeforeEach
 	void setup() {
-		mockMvc = standaloneSetup(sut).setControllerAdvice(new GlobalExceptionHandler()).build();
+		mockMvc = standaloneSetup(sut).build();
+		mockMvcForInternalServerError = standaloneSetup(sut).setControllerAdvice(new GlobalExceptionHandler()).build();
 	}
 
 	@MockBean
@@ -138,9 +141,23 @@ class TabellenHttpAdapterTest {
 		String message = "Some service exception";
 		when(tabellenService.erstelleTabelle(league, season)).thenThrow(new RuntimeException(message));
 
-		mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
+		mockMvcForInternalServerError.perform(get("/tabelle/" + league + "/" + season)) //
 				.andDo(print()) //
 				.andExpect(status().is5xxServerError()) //
+		;
+	}
+
+	@Test
+	void failsWith404WhenInvalidSeasonIsQueried() throws Exception {
+		String validLeague = "bl1";
+		String invalidSeason = "9999";
+
+		when(tabellenService.erstelleTabelle(validLeague, invalidSeason))
+				.thenThrow(new AvailableLeagueNotFoundException(validLeague, invalidSeason));
+
+		mockMvc.perform(get("/tabelle/" + validLeague + "/" + invalidSeason)) //
+				.andDo(print()) //
+				.andExpect(status().isNotFound()) //
 		;
 	}
 
