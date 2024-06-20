@@ -34,6 +34,7 @@ class DefaultTabellenServiceTest {
 
 	private static Map<String, Function<TabellenPlatz, Object>> extractors() {
 		Map<String, Function<TabellenPlatz, Object>> content = new LinkedHashMap<>();
+		content.put("Platz", TabellenPlatz::platz);
 		content.put("Logo", t -> image(t.wappen(), 32));
 		content.put("Verein", TabellenPlatz::teamName);
 		content.put("Sp", TabellenPlatz::spiele);
