@@ -3,6 +3,7 @@ package de.atruvia.ase.samman.buli.domain.ports.primary;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Stream.concat;
 import static org.approvaltests.Approvals.verify;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -41,8 +42,11 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		verify(tabelle.stream().map(f -> print(f, longest(tabelle, TabellenPlatz::teamName))).collect(joining("\n")),
-				csv());
+		var header = Stream.of(Stream.of( //
+				"mannschaft", "spiele", "siege", "unentschieden", "niederlagen", "tore", "gegentore", "torDifferenz",
+				"punkte", "tendenz", "laufendesSpiel", "wappen").collect(joining(",")));
+		var content = tabelle.stream().map(f -> print(f, longest(tabelle, TabellenPlatz::teamName)));
+		verify(concat(header, content).collect(joining("\n")), csv());
 	}
 
 	static Options csv() {
