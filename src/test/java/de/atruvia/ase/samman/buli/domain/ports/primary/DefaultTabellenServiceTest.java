@@ -17,7 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.approvaltests.core.Options;
@@ -46,7 +45,7 @@ class DefaultTabellenServiceTest {
 		content.put("TD", TabellenPlatz::torDifferenz);
 		content.put("Pkte", TabellenPlatz::punkte);
 		content.put("Letzte 5", DefaultTabellenServiceTest::tendenz);
-		content.put("Spiel", t -> laufendesSpiel(t));
+		content.put("Spiel", DefaultTabellenServiceTest::laufendesSpiel);
 		return content;
 	}
 
@@ -75,11 +74,11 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		var headers = extractors.keySet().toArray();
-		var header = Stream.of(markdownRow(headers));
-		var separator = Stream.of(markdownSeparator(headers));
-		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);
-		verify(concat(header, separator, content).collect(joining("\n")), markdown());
+		var headerNames = extractors.keySet().toArray(String[]::new);
+		var headerRow = Stream.of(markdownRow(headerNames));
+		var separatorRow = Stream.of(markdownSeparator(headerNames));
+		var contentRow = tabelle.stream().map(DefaultTabellenServiceTest::print);
+		verify(concat(headerRow, separatorRow, contentRow).collect(joining("\n")), markdown());
 	}
 
 	@Test
@@ -97,15 +96,11 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static String print(TabellenPlatz tabellenPlatz) {
-		return extractors.values().stream().map(c -> c.apply(tabellenPlatz)).map(Object::toString).collect(joiner());
+		return collectToMarkdownString(extractors.values().stream().map(c -> c.apply(tabellenPlatz)));
 	}
 
 	private static Object image(URI uri, int height) {
 		return format("<img src=\"%s\" height=\"" + height + "\" />", uri.toASCIIString());
-	}
-
-	private static String markdownSeparator(Object[] headers) {
-		return Stream.of(headers).map(Object::toString).map(s -> s.replaceAll(".", "-")).collect(joiner());
 	}
 
 	@SafeVarargs
@@ -113,12 +108,16 @@ class DefaultTabellenServiceTest {
 		return stream(streams).reduce(Stream::concat).orElse(empty());
 	}
 
-	private static String markdownRow(Object... values) {
-		return Stream.of(values).map(Object::toString).collect(joiner());
+	private static String markdownSeparator(String[] headers) {
+		return collectToMarkdownString(Stream.of(headers).map(s -> s.replaceAll(".", "-")));
 	}
 
-	private static Collector<CharSequence, ?, String> joiner() {
-		return joining("|", "|", "|");
+	private static String markdownRow(String... values) {
+		return collectToMarkdownString(Stream.of(values));
+	}
+
+	private static String collectToMarkdownString(Stream<? extends Object> values) {
+		return values.map(Object::toString).collect(joining("|", "|", "|"));
 	}
 
 	private static String tendenz(TabellenPlatz tabellenPlatz) {
