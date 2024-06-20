@@ -1,5 +1,8 @@
 package de.atruvia.ase.samman.buli.domain.ports.primary;
 
+import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
+import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
+import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
@@ -8,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -23,6 +27,12 @@ import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.Tendenz;
 
 class DefaultTabellenServiceTest {
+
+	private static final Map<Ergebnis, Character> tendenzMap = new EnumMap<>(Map.of( //
+			SIEG, '✅', //
+			UNENTSCHIEDEN, '➖', //
+			NIEDERLAGE, '❌' //
+	));
 
 	@Test
 	void tabelleBl12022Spieltag24() {
@@ -43,8 +53,7 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		Object[] headers = { "Logo", "Verein", "Sp", "S", "U", "N", "T",
-				"GT", "TD", "Pkte", "Letzte 5", "Spiel" };
+		Object[] headers = { "Logo", "Verein", "Sp", "S", "U", "N", "T", "GT", "TD", "Pkte", "Letzte 5", "Spiel" };
 		var header = Stream.of(markdownRow(headers));
 		var separator = Stream.of(markdownSeparator(headers));
 		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);
@@ -113,7 +122,7 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static String toString(Tendenz tendenz) {
-		return tendenz.ergebnisse().stream().map(Ergebnis::name).map(n -> n.substring(0, 1)).collect(joining());
+		return tendenz.ergebnisse().stream().map(tendenzMap::get).map(String::valueOf).collect(joining());
 	}
 
 	private static String toString(PaarungView laufendesSpiel) {
