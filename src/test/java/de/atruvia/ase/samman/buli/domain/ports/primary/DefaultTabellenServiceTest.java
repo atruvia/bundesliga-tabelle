@@ -1,15 +1,18 @@
 package de.atruvia.ase.samman.buli.domain.ports.primary;
 
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 import static org.approvaltests.Approvals.verify;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.approvaltests.core.Options;
+import org.approvaltests.core.Options.FileOptions;
 import org.junit.jupiter.api.Test;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
@@ -38,7 +41,12 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		verify(tabelle.stream().map(f -> print(f, longest(tabelle, TabellenPlatz::teamName))).collect(joining("\n")));
+		verify(tabelle.stream().map(f -> print(f, longest(tabelle, TabellenPlatz::teamName))).collect(joining("\n")),
+				csv());
+	}
+
+	static Options csv() {
+		return new FileOptions(Map.of()).withExtension(".csv");
 	}
 
 	@Test
@@ -57,7 +65,7 @@ class DefaultTabellenServiceTest {
 
 	static String print(TabellenPlatz tabellenPlatz, int length) {
 		return Stream.of( //
-				stringFormat(length, tabellenPlatz.teamName()), //
+				tabellenPlatz.teamName(), //
 				tabellenPlatz.spiele(), //
 				tabellenPlatz.siege(), //
 				tabellenPlatz.unentschieden(), //
@@ -69,15 +77,7 @@ class DefaultTabellenServiceTest {
 				toString(tabellenPlatz.tendenz()), //
 				toString(tabellenPlatz.laufendesSpiel()), //
 				tabellenPlatz.wappen() //
-		).map(DefaultTabellenServiceTest::format).collect(joining(" | "));
-	}
-
-	static String stringFormat(int length, Object team) {
-		return String.format("%-" + (length + 1) + "s", team);
-	}
-
-	static String format(Object o) {
-		return o instanceof Number n ? "%3d".formatted(n) : Objects.toString(o);
+		).map(Object::toString).collect(joining(","));
 	}
 
 	static String toString(Tendenz tendenz) {
@@ -85,7 +85,10 @@ class DefaultTabellenServiceTest {
 	}
 
 	static String toString(PaarungView laufendesSpiel) {
-		return laufendesSpiel == null ? "   " : (laufendesSpiel.tore() + ":" + laufendesSpiel.gegentore());
+		if (laufendesSpiel == null) {
+			return "";
+		}
+		return format("%d:%d(%s)", laufendesSpiel.tore(), laufendesSpiel.gegentore(), laufendesSpiel.gegner().team());
 	}
 
 }
