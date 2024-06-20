@@ -3,12 +3,13 @@ package de.atruvia.ase.samman.buli.domain.ports.primary;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Stream.concat;
 import static org.approvaltests.Approvals.verify;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.approvaltests.core.Options;
@@ -41,10 +42,12 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		var header = Stream.of(csvRow("Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore",
-				"Gegentore", "Tordifferenz", "Punkte", "Tendenz", "Laufendes Spiel", "Wappen"));
+		Object[] headers = { "Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore", "Gegentore",
+				"Tordifferenz", "Punkte", "Tendenz", "Laufendes Spiel", "Wappen" };
+		var header = Stream.of(markdownRow(headers));
+		var separator = Stream.of(markdownSeparator(headers));
 		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);
-		verify(concat(header, content).collect(joining("\n")), csv());
+		verify(concatAll(header, separator, content).collect(joining("\n")), markdown());
 	}
 
 	@Test
@@ -57,12 +60,12 @@ class DefaultTabellenServiceTest {
 				.withFailMessage(message);
 	}
 
-	private static Options csv() {
-		return new FileOptions(Map.of()).withExtension(".csv");
+	private static Options markdown() {
+		return new FileOptions(Map.of()).withExtension(".md");
 	}
 
 	private static String print(TabellenPlatz tabellenPlatz) {
-		return csvRow( //
+		return markdownRow( //
 				tabellenPlatz.teamName(), //
 				tabellenPlatz.spiele(), //
 				tabellenPlatz.siege(), //
@@ -78,8 +81,26 @@ class DefaultTabellenServiceTest {
 		);
 	}
 
-	private static String csvRow(Object... values) {
-		return Stream.of(values).map(Object::toString).collect(joining(","));
+	private static String markdownSeparator(Object[] headers) {
+		return Stream.of(addEmptyFirstAndLast(headers)).map(Object::toString).map(s -> s.replaceAll(".", "-"))
+				.collect(joiner());
+	}
+
+	private static Object[] addEmptyFirstAndLast(Object[] headers) {
+		return concatAll(Stream.of(""), Stream.of(headers), Stream.of("")).toArray();
+	}
+
+	@SafeVarargs
+	private static <T> Stream<? extends T> concatAll(Stream<? extends T>... streams) {
+		return Arrays.stream(streams).reduce(Stream::concat).orElse(Stream.empty());
+	}
+
+	private static String markdownRow(Object... values) {
+		return Stream.of(addEmptyFirstAndLast(values)).map(Object::toString).collect(joiner());
+	}
+
+	private static Collector<CharSequence, ?, String> joiner() {
+		return joining("|");
 	}
 
 	private static String toString(Tendenz tendenz) {
