@@ -12,7 +12,9 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
+import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
+import de.atruvia.ase.samman.buli.domain.TabellenPlatz.Tendenz;
 
 class DefaultTabellenServiceTest {
 
@@ -41,7 +43,7 @@ class DefaultTabellenServiceTest {
 	@Test
 	void whenRepoThrowsExceptionThenTheServiceThrowsTheException() {
 		String message = "some data load error";
-		TabellenService sut = new DefaultTabellenService((league, season) -> {
+		TabellenService sut = new DefaultTabellenService((__i1, __i2) -> {
 			throw new RuntimeException(message);
 		});
 		assertThatExceptionOfType(RuntimeException.class).isThrownBy(() -> sut.erstelleTabelle("bl1", "2022"))
@@ -63,6 +65,7 @@ class DefaultTabellenServiceTest {
 				tabellenPlatz.gesamtGegentore(), //
 				tabellenPlatz.torDifferenz(), //
 				tabellenPlatz.punkte(), //
+				toString(tabellenPlatz.tendenz()), //
 				tabellenPlatz.wappen() //
 		).map(DefaultTabellenServiceTest::format).collect(joining(" | "));
 	}
@@ -73,6 +76,10 @@ class DefaultTabellenServiceTest {
 
 	static String format(Object o) {
 		return o instanceof Number n ? "%3d".formatted(n) : Objects.toString(o);
+	}
+
+	private static String toString(Tendenz tendenz) {
+		return tendenz.ergebnisse().stream().map(Ergebnis::name).map(n -> n.substring(0, 1)).collect(joining());
 	}
 
 }
