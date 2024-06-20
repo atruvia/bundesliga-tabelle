@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
+import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.Tendenz;
 
@@ -66,11 +67,12 @@ class DefaultTabellenServiceTest {
 				tabellenPlatz.torDifferenz(), //
 				tabellenPlatz.punkte(), //
 				toString(tabellenPlatz.tendenz()), //
+				toString(tabellenPlatz.laufendesSpiel()), //
 				tabellenPlatz.wappen() //
 		).map(DefaultTabellenServiceTest::format).collect(joining(" | "));
 	}
 
-	static String stringFormat(int length, String team) {
+	static String stringFormat(int length, Object team) {
 		return String.format("%-" + (length + 1) + "s", team);
 	}
 
@@ -78,8 +80,12 @@ class DefaultTabellenServiceTest {
 		return o instanceof Number n ? "%3d".formatted(n) : Objects.toString(o);
 	}
 
-	private static String toString(Tendenz tendenz) {
+	static String toString(Tendenz tendenz) {
 		return tendenz.ergebnisse().stream().map(Ergebnis::name).map(n -> n.substring(0, 1)).collect(joining());
+	}
+
+	static String toString(PaarungView laufendesSpiel) {
+		return laufendesSpiel == null ? "   " : (laufendesSpiel.tore() + ":" + laufendesSpiel.gegentore());
 	}
 
 }
