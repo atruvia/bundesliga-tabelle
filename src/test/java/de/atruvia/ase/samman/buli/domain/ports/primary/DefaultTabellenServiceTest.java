@@ -100,7 +100,7 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static Object image(URI uri, int height) {
-		return format("<img src=\"%s\" height=\"" + height + "\" />", uri.toASCIIString());
+		return format("<p align=\"center\"><img src=\"%s\" height=\"" + height + "\" /></p>", uri.toASCIIString());
 	}
 
 	@SafeVarargs
