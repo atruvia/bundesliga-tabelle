@@ -43,8 +43,8 @@ class DefaultTabellenServiceTest {
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
 		var header = Stream.of(Stream.of( //
-				"mannschaft", "spiele", "siege", "unentschieden", "niederlagen", "tore", "gegentore", "torDifferenz",
-				"punkte", "tendenz", "laufendesSpiel", "wappen").collect(joining(",")));
+				"Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore", "Gegentore", "Tordifferenz",
+				"Punkte", "Tendenz", "Laufendes Spiel", "Wappen").collect(joining(",")));
 		var content = tabelle.stream().map(f -> print(f, longest(tabelle, TabellenPlatz::teamName)));
 		verify(concat(header, content).collect(joining("\n")), csv());
 	}
@@ -92,7 +92,7 @@ class DefaultTabellenServiceTest {
 		if (laufendesSpiel == null) {
 			return "";
 		}
-		return format("%d:%d(%s)", laufendesSpiel.tore(), laufendesSpiel.gegentore(), laufendesSpiel.gegner().team());
+		return format("%d:%d (%s)", laufendesSpiel.tore(), laufendesSpiel.gegentore(), laufendesSpiel.gegner().team());
 	}
 
 }
