@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.joining;
 import static org.approvaltests.Approvals.verify;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +43,8 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		Object[] headers = { "Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore", "Gegentore",
-				"Tordifferenz", "Punkte", "Tendenz", "Laufendes Spiel", "Wappen" };
+		Object[] headers = { "Wappen", "Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore",
+				"Gegentore", "Tordifferenz", "Punkte", "Tendenz", "Laufendes Spiel" };
 		var header = Stream.of(markdownRow(headers));
 		var separator = Stream.of(markdownSeparator(headers));
 		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);
@@ -66,6 +67,7 @@ class DefaultTabellenServiceTest {
 
 	private static String print(TabellenPlatz tabellenPlatz) {
 		return markdownRow( //
+				image(tabellenPlatz.wappen(), 32), //
 				tabellenPlatz.teamName(), //
 				tabellenPlatz.spiele(), //
 				tabellenPlatz.siege(), //
@@ -76,9 +78,12 @@ class DefaultTabellenServiceTest {
 				tabellenPlatz.torDifferenz(), //
 				tabellenPlatz.punkte(), //
 				toString(tabellenPlatz.tendenz()), //
-				toString(tabellenPlatz.laufendesSpiel()), //
-				tabellenPlatz.wappen() //
+				toString(tabellenPlatz.laufendesSpiel()) //
 		);
+	}
+
+	private static Object image(URI uri, int height) {
+		return format("<img src=\"%s\" height=\"" + height + "\" />", uri.toASCIIString());
 	}
 
 	private static String markdownSeparator(Object[] headers) {
