@@ -48,7 +48,7 @@ class DefaultTabellenServiceTest {
 		var header = Stream.of(markdownRow(headers));
 		var separator = Stream.of(markdownSeparator(headers));
 		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);
-		verify(concatAll(header, separator, content).collect(joining("\n")), markdown());
+		verify(concat(header, separator, content).collect(joining("\n")), markdown());
 	}
 
 	@Test
@@ -87,21 +87,25 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static String markdownSeparator(Object[] headers) {
-		return Stream.of(addEmptyFirstAndLast(headers)).map(Object::toString).map(s -> s.replaceAll(".", "-"))
+		return Stream.of(addFirstAndLast(headers, "")).map(Object::toString).map(s -> s.replaceAll(".", "-"))
 				.collect(joiner());
 	}
 
-	private static Object[] addEmptyFirstAndLast(Object[] headers) {
-		return concatAll(Stream.of(""), Stream.of(headers), Stream.of("")).toArray();
-	}
-
 	@SafeVarargs
-	private static <T> Stream<? extends T> concatAll(Stream<? extends T>... streams) {
+	private static <T> Stream<? extends T> concat(Stream<? extends T>... streams) {
 		return Arrays.stream(streams).reduce(Stream::concat).orElse(Stream.empty());
 	}
 
+	private static Object[] addFirstAndLast(Object[] objects, String firstAndLastElement) {
+		return concat( //
+				Stream.of(firstAndLastElement), //
+				Stream.of(objects), //
+				Stream.of(firstAndLastElement) //
+		).toArray();
+	}
+
 	private static String markdownRow(Object... values) {
-		return Stream.of(addEmptyFirstAndLast(values)).map(Object::toString).collect(joiner());
+		return Stream.of(addFirstAndLast(values, "")).map(Object::toString).collect(joiner());
 	}
 
 	private static Collector<CharSequence, ?, String> joiner() {
