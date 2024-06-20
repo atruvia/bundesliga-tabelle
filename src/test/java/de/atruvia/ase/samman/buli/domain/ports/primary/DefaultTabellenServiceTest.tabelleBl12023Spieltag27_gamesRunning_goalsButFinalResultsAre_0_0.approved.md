@@ -1,5 +1,5 @@
-|Wappen|Mannschaft|Spiele|Siege|Unentschieden|Niederlagen|Tore|Gegentore|Tordifferenz|Punkte|Tendenz|Laufendes Spiel|
-|------|----------|------|-----|-------------|-----------|----|---------|------------|------|-------|---------------|
+|Logo|Verein|Sp|S|U|N|T|GT|TD|Pkte|Letzte 5|Spiel|
+|----|------|--|-|-|-|-|--|--|----|--------|-----|
 |<img src="https://upload.wikimedia.org/wikipedia/de/b/b3/Fc_st_pauli_logo.svg" height="32" />|FC St. Pauli|26|15|9|2|48|25|23|54|SSNSS||
 |<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Holstein_Kiel_Logo.svg/300px-Holstein_Kiel_Logo.svg.png" height="32" />|Holstein Kiel|27|16|4|7|50|34|16|52|SSUNS|1:0 (FC Hansa Rostock)|
 |<img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Hamburger_SV_logo.svg" height="32" />|Hamburger SV|26|13|5|8|50|37|13|44|SNNSU||

@@ -1,5 +1,5 @@
-|Wappen|Mannschaft|Spiele|Siege|Unentschieden|Niederlagen|Tore|Gegentore|Tordifferenz|Punkte|Tendenz|Laufendes Spiel|
-|------|----------|------|-----|-------------|-----------|----|---------|------------|------|-------|---------------|
+|Logo|Verein|Sp|S|U|N|T|GT|TD|Pkte|Letzte 5|Spiel|
+|----|------|--|-|-|-|-|--|--|----|--------|-----|
 |<img src="https://i.imgur.com/jJEsJrj.png" height="32" />|FC Bayern München|24|15|7|2|71|25|46|52|SSSNS||
 |<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/560px-Borussia_Dortmund_logo.svg.png" height="32" />|Borussia Dortmund|24|16|2|6|49|30|19|50|USSSS||
 |<img src="https://i.imgur.com/Rpwsjz1.png" height="32" />|RB Leipzig|24|13|6|5|49|29|20|45|SNSSN||

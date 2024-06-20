@@ -43,8 +43,8 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		Object[] headers = { "Wappen", "Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore",
-				"Gegentore", "Tordifferenz", "Punkte", "Tendenz", "Laufendes Spiel" };
+		Object[] headers = { "Logo", "Verein", "Sp", "S", "U", "N", "T",
+				"GT", "TD", "Pkte", "Letzte 5", "Spiel" };
 		var header = Stream.of(markdownRow(headers));
 		var separator = Stream.of(markdownSeparator(headers));
 		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);

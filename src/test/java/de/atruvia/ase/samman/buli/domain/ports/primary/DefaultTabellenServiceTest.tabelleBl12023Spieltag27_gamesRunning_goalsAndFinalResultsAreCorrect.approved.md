@@ -1,5 +1,5 @@
-|Wappen|Mannschaft|Spiele|Siege|Unentschieden|Niederlagen|Tore|Gegentore|Tordifferenz|Punkte|Tendenz|Laufendes Spiel|
-|------|----------|------|-----|-------------|-----------|----|---------|------------|------|-------|---------------|
+|Logo|Verein|Sp|S|U|N|T|GT|TD|Pkte|Letzte 5|Spiel|
+|----|------|--|-|-|-|-|--|--|----|--------|-----|
 |<img src="https://upload.wikimedia.org/wikipedia/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/1200px-Bayer_Leverkusen_Logo.svg.png" height="32" />|Bayer Leverkusen|27|23|4|0|68|19|49|73|SSSSS||
 |<img src="https://i.imgur.com/jJEsJrj.png" height="32" />|FC Bayern München|27|19|3|5|78|33|45|60|NSSUS||
 |<img src="https://i.imgur.com/v0tkpNx.png" height="32" />|VfB Stuttgart|27|18|3|6|63|34|29|57|USSSU||
