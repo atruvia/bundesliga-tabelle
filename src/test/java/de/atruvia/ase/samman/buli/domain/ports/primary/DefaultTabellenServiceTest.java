@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.approvaltests.core.Options;
@@ -42,15 +41,10 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		var header = Stream.of(Stream.of( //
-				"Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore", "Gegentore", "Tordifferenz",
-				"Punkte", "Tendenz", "Laufendes Spiel", "Wappen").collect(joining(",")));
-		var content = tabelle.stream().map(f -> print(f, longest(tabelle, TabellenPlatz::teamName)));
+		var header = Stream.of(csvRow("Mannschaft", "Spiele", "Siege", "Unentschieden", "Niederlagen", "Tore",
+				"Gegentore", "Tordifferenz", "Punkte", "Tendenz", "Laufendes Spiel", "Wappen"));
+		var content = tabelle.stream().map(DefaultTabellenServiceTest::print);
 		verify(concat(header, content).collect(joining("\n")), csv());
-	}
-
-	static Options csv() {
-		return new FileOptions(Map.of()).withExtension(".csv");
 	}
 
 	@Test
@@ -63,12 +57,12 @@ class DefaultTabellenServiceTest {
 				.withFailMessage(message);
 	}
 
-	static int longest(List<TabellenPlatz> tabellenPlaetze, Function<TabellenPlatz, String> attribute) {
-		return tabellenPlaetze.stream().map(attribute).mapToInt(String::length).max().orElse(0);
+	private static Options csv() {
+		return new FileOptions(Map.of()).withExtension(".csv");
 	}
 
-	static String print(TabellenPlatz tabellenPlatz, int length) {
-		return Stream.of( //
+	private static String print(TabellenPlatz tabellenPlatz) {
+		return csvRow( //
 				tabellenPlatz.teamName(), //
 				tabellenPlatz.spiele(), //
 				tabellenPlatz.siege(), //
@@ -81,14 +75,18 @@ class DefaultTabellenServiceTest {
 				toString(tabellenPlatz.tendenz()), //
 				toString(tabellenPlatz.laufendesSpiel()), //
 				tabellenPlatz.wappen() //
-		).map(Object::toString).collect(joining(","));
+		);
 	}
 
-	static String toString(Tendenz tendenz) {
+	private static String csvRow(Object... values) {
+		return Stream.of(values).map(Object::toString).collect(joining(","));
+	}
+
+	private static String toString(Tendenz tendenz) {
 		return tendenz.ergebnisse().stream().map(Ergebnis::name).map(n -> n.substring(0, 1)).collect(joining());
 	}
 
-	static String toString(PaarungView laufendesSpiel) {
+	private static String toString(PaarungView laufendesSpiel) {
 		if (laufendesSpiel == null) {
 			return "";
 		}
