@@ -12,6 +12,8 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import java.net.URI;
 import java.util.function.Function;
 
+import org.jmolecules.ddd.annotation.ValueObject;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import lombok.experimental.Accessors;
 @Value
 @Builder(toBuilder = true)
 @Accessors(fluent = true)
+@ValueObject
 public class Paarung {
 
 	@Value

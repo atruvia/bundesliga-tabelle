@@ -18,6 +18,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jmolecules.ddd.annotation.Entity;
+
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.ErgebnisEntry;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
@@ -27,6 +29,7 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
+@Entity
 public class Tabelle {
 
 	@Value

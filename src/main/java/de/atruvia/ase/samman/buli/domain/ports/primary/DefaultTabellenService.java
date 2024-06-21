@@ -2,7 +2,6 @@ package de.atruvia.ase.samman.buli.domain.ports.primary;
 
 import java.util.List;
 
-import org.jmolecules.architecture.hexagonal.PrimaryPort;
 import org.springframework.stereotype.Service;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@PrimaryPort
 public class DefaultTabellenService implements TabellenService {
 
 	private final SpieltagRepo spieltagRepo;

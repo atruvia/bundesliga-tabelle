@@ -21,6 +21,8 @@ import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
+import org.jmolecules.ddd.annotation.ValueObject;
+
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
@@ -34,6 +36,7 @@ import lombok.experimental.Accessors;
 @Value
 @Accessors(fluent = true)
 @Builder
+@ValueObject
 public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 
 	@Value
