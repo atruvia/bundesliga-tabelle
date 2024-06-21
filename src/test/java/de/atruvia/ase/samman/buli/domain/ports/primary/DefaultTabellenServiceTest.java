@@ -4,10 +4,11 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
+import static de.atruvia.ase.samman.buli.util.Streams.concat;
 import static java.lang.String.format;
-import static java.util.Arrays.stream;
+import static java.util.Map.entry;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Stream.empty;
+import static java.util.stream.Collectors.toMap;
 import static org.approvaltests.Approvals.verify;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -16,6 +17,7 @@ import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -24,29 +26,29 @@ import org.approvaltests.core.Options.FileOptions;
 import org.junit.jupiter.api.Test;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
-import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 
-class DefaultTabellenServiceTest {
+public class DefaultTabellenServiceTest {
 
-	private static final Map<String, Function<TabellenPlatz, Object>> extractors = extractors();
+	private static final Map<String, Function<TabellenPlatz, Object>> attributes = attributeExtractors()
+			.collect(toMap(Entry::getKey, Entry::getValue, (x, y) -> y, LinkedHashMap::new));
 
-	private static Map<String, Function<TabellenPlatz, Object>> extractors() {
-		Map<String, Function<TabellenPlatz, Object>> content = new LinkedHashMap<>();
-		content.put("Platz", TabellenPlatz::platz);
-		content.put("Logo", t -> image(t.wappen(), 32));
-		content.put("Verein", TabellenPlatz::teamName);
-		content.put("Sp", TabellenPlatz::spiele);
-		content.put("S", TabellenPlatz::siege);
-		content.put("U", TabellenPlatz::unentschieden);
-		content.put("N", TabellenPlatz::niederlagen);
-		content.put("T", TabellenPlatz::gesamtTore);
-		content.put("GT", TabellenPlatz::gesamtGegentore);
-		content.put("TD", TabellenPlatz::torDifferenz);
-		content.put("Pkte", TabellenPlatz::punkte);
-		content.put("Letzte 5", DefaultTabellenServiceTest::tendenz);
-		content.put("Spiel", DefaultTabellenServiceTest::laufendesSpiel);
-		return content;
+	private static Stream<Entry<String, Function<TabellenPlatz, Object>>> attributeExtractors() {
+		return Stream.of( //
+				entry("Platz", TabellenPlatz::platz), //
+				entry("Logo", t -> image(t.wappen(), 32)), //
+				entry("Verein", TabellenPlatz::teamName), //
+				entry("Sp", TabellenPlatz::spiele), //
+				entry("S", TabellenPlatz::siege), //
+				entry("U", TabellenPlatz::unentschieden), //
+				entry("N", TabellenPlatz::niederlagen), //
+				entry("T", TabellenPlatz::gesamtTore), //
+				entry("GT", TabellenPlatz::gesamtGegentore), //
+				entry("TD", TabellenPlatz::torDifferenz), //
+				entry("Pkte", TabellenPlatz::punkte), //
+				entry("Letzte 5", DefaultTabellenServiceTest::tendenz), //
+				entry("Spiel", DefaultTabellenServiceTest::laufendesSpiel) //
+		);
 	}
 
 	private static final Map<Ergebnis, Character> tendenzMap = new EnumMap<>(Map.of( //
@@ -74,7 +76,7 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
-		var headerNames = extractors.keySet().toArray(String[]::new);
+		var headerNames = attributes.keySet().toArray(String[]::new);
 		var headerRow = Stream.of(markdownRow(headerNames));
 		var separatorRow = Stream.of(markdownSeparator(headerNames));
 		var contentRows = tabelle.stream().map(DefaultTabellenServiceTest::print);
@@ -96,16 +98,15 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static String print(TabellenPlatz tabellenPlatz) {
-		return collectToMarkdownString(extractors.values().stream().map(c -> c.apply(tabellenPlatz)));
+		return collectToMarkdownString(valuesOf(tabellenPlatz));
+	}
+
+	private static Stream<Object> valuesOf(TabellenPlatz tabellenPlatz) {
+		return attributes.values().stream().map(c -> c.apply(tabellenPlatz));
 	}
 
 	private static Object image(URI uri, int height) {
-		return format("<p align=\"center\"><img src=\"%s\" height=\"" + height + "\" /></p>", uri.toASCIIString());
-	}
-
-	@SafeVarargs
-	private static <T> Stream<? extends T> concat(Stream<? extends T>... streams) {
-		return stream(streams).reduce(Stream::concat).orElse(empty());
+		return format("<p align=\"center\"><img src=\"%s\" height=\"%d\" /></p>", uri.toASCIIString(), height);
 	}
 
 	private static String markdownSeparator(String[] headers) {
@@ -126,7 +127,7 @@ class DefaultTabellenServiceTest {
 	}
 
 	private static String laufendesSpiel(TabellenPlatz tabellenPlatz) {
-		PaarungView laufendesSpiel = tabellenPlatz.laufendesSpiel();
+		var laufendesSpiel = tabellenPlatz.laufendesSpiel();
 		return laufendesSpiel == null //
 				? "" //
 				: format("%d:%d (%s)", laufendesSpiel.tore(), laufendesSpiel.gegentore(),
