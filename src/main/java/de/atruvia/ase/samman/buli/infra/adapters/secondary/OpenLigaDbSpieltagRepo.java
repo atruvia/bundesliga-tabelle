@@ -42,6 +42,7 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
+	@SecondaryAdapter
 	private static class Team {
 		Object teamId;
 		String teamName;
@@ -54,6 +55,7 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
+	@SecondaryAdapter
 	private static class MatchResult {
 		int resultTypeID;
 		int pointsTeam1;
@@ -69,6 +71,7 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
+	@SecondaryAdapter
 	private static class Goal {
 
 		private static final Comparator<Goal> inChronologicalOrder = comparing(g -> g.goalID);
@@ -86,6 +89,7 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
+	@SecondaryAdapter
 	private static class Match {
 		Team team1;
 		Team team2;

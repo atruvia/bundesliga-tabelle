@@ -27,6 +27,7 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
+	@SecondaryAdapter
 	private static class JsonTeam {
 		String teamName;
 		String teamIconUrl;

@@ -1,10 +1,15 @@
 package de.atruvia.ase.samman.buli.infra.adapters.primary;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
+import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
+import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jmolecules.architecture.hexagonal.PrimaryAdapter;
 import org.springframework.http.ResponseEntity;
@@ -28,25 +33,29 @@ import lombok.Value;
 @PrimaryAdapter
 public class TabellenHttpAdapter {
 
-	public static enum JsonErgebnis {
+	@PrimaryAdapter
+	private static enum JsonErgebnis {
 		N, U, S;
+
+		private static final Map<Ergebnis, JsonErgebnis> mapping = new EnumMap<>(Map.of( //
+				SIEG, JsonErgebnis.S, //
+				UNENTSCHIEDEN, JsonErgebnis.U, //
+				NIEDERLAGE, JsonErgebnis.N //
+		));
 
 		public static List<JsonErgebnis> fromDomain(List<Ergebnis> ergebnisse) {
 			return ergebnisse.stream().map(JsonErgebnis::fromDomain).toList();
 		}
 
 		public static JsonErgebnis fromDomain(Ergebnis ergebnis) {
-			return switch (ergebnis) {
-			case SIEG -> JsonErgebnis.S;
-			case UNENTSCHIEDEN -> JsonErgebnis.U;
-			case NIEDERLAGE -> JsonErgebnis.N;
-			};
+			return mapping.get(ergebnis);
 		}
 
 	}
 
 	@Value
 	@Builder
+	@PrimaryAdapter
 	private static class JsonLaufendesSpiel {
 		@Schema(description = "Mögliche Ausprägungen: 'S' (Sieg), 'U' (Unentschieden), 'N' (Niederlage). "
 				+ "Da das Spiel noch nicht beendet ist handelt es sich eigentlich nicht um Sieg bzw. Niederlage sondern um Führung bzw. Rückstand. ", allowableValues = {
@@ -58,12 +67,18 @@ public class TabellenHttpAdapter {
 		int tore;
 		@Schema(description = "Geschossene Tore des gegnerischen Teams")
 		int toreGegner;
+
+		@PrimaryAdapter
+		private static class JsonLaufendesSpielBuilder {
+
+		}
 	}
 
 	@Value
 	@Builder
 	@JsonInclude(NON_NULL)
-	public static class JsonTabellenPlatz {
+	@PrimaryAdapter
+	private static class JsonTabellenPlatz {
 
 		private static final int TENDENZ_MAX_LENGTH = 5;
 
@@ -114,6 +129,10 @@ public class TabellenHttpAdapter {
 					);
 		}
 
+		@PrimaryAdapter
+		public static class JsonTabellenPlatzBuilder {
+
+		}
 	}
 
 	private final TabellenService tabellenService;
