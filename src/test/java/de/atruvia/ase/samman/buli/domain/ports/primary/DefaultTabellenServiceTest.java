@@ -106,7 +106,7 @@ public class DefaultTabellenServiceTest {
 	}
 
 	private static Object image(URI uri, int height) {
-		return format("<p align=\"center\"><img src=\"%s\" height=\"%d\" /></p>", uri.toASCIIString(), height);
+		return format("<p align=\"center\"><img src=\"%s\" height=\"%d\"/></p>", uri.toASCIIString(), height);
 	}
 
 	private static String markdownSeparator(String[] headers) {
@@ -123,7 +123,7 @@ public class DefaultTabellenServiceTest {
 
 	private static String tendenz(TabellenPlatz tabellenPlatz) {
 		return tabellenPlatz.tendenz().ergebnisse().stream().map(tendenzMap::get).map(String::valueOf)
-				.collect(joining());
+				.collect(joining(" "));
 	}
 
 	private static String laufendesSpiel(TabellenPlatz tabellenPlatz) {
