@@ -77,8 +77,8 @@ class DefaultTabellenServiceTest {
 		var headerNames = extractors.keySet().toArray(String[]::new);
 		var headerRow = Stream.of(markdownRow(headerNames));
 		var separatorRow = Stream.of(markdownSeparator(headerNames));
-		var contentRow = tabelle.stream().map(DefaultTabellenServiceTest::print);
-		verify(concat(headerRow, separatorRow, contentRow).collect(joining("\n")), markdown());
+		var contentRows = tabelle.stream().map(DefaultTabellenServiceTest::print);
+		verify(concat(headerRow, separatorRow, contentRows).collect(joining("\n")), markdown());
 	}
 
 	@Test
