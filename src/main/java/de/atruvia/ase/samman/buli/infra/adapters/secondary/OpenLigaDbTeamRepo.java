@@ -6,6 +6,7 @@ import static lombok.AccessLevel.PUBLIC;
 import java.net.URI;
 import java.util.List;
 
+import org.jmolecules.architecture.hexagonal.SecondaryAdapter;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 
 @Repository
 @RequiredArgsConstructor
+@SecondaryAdapter
 class OpenLigaDbTeamRepo implements TeamRepo {
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getavailableteams/{league}/{season}";

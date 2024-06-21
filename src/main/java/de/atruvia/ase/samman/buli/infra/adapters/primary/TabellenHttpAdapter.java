@@ -6,6 +6,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import java.util.List;
 
+import org.jmolecules.architecture.hexagonal.PrimaryAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import lombok.Value;
 
 @RestController
 @RequiredArgsConstructor
+@PrimaryAdapter
 public class TabellenHttpAdapter {
 
 	public static enum JsonErgebnis {

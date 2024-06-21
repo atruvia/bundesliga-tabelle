@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jmolecules.architecture.hexagonal.SecondaryAdapter;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,6 +32,7 @@ import lombok.experimental.FieldDefaults;
 
 @Repository
 @RequiredArgsConstructor
+@SecondaryAdapter
 public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getmatchdata/{league}/{season}";
