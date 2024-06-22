@@ -26,6 +26,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection;
+import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
 import lombok.Builder;
 import lombok.Value;
@@ -63,11 +64,11 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		ErgebnisTyp ergebnisTyp;
 		ViewDirection viewDirection;
 		int tore;
-		Object identifierGegner;
+		TeamIdentifier identifierGegner;
 		int gegenTore;
 	}
 
-	Object identifier;
+	TeamIdentifier identifier;
 	URI wappen;
 	@With
 	int platz;
@@ -151,14 +152,14 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			gegentore = new HashMap<>();
 		}
 
-		public TabellenPlatzBuilder team(Object identifier, String name) {
+		public TabellenPlatzBuilder team(TeamIdentifier identifier, String name) {
 			this.identifier = identifier;
 			this.teamName = name;
 			return this;
 		}
 
 		public TabellenPlatzBuilder ergebnis(Ergebnis ergebnis, ErgebnisTyp ergebnisTyp, ViewDirection viewDirection,
-				int tore, Object gegnerIdentifier, int gegenTore) {
+				int tore, TeamIdentifier gegnerIdentifier, int gegenTore) {
 			this.ergebnisse
 					.add(new ErgebnisEntry(ergebnis, ergebnisTyp, viewDirection, tore, gegnerIdentifier, gegenTore));
 			return this;

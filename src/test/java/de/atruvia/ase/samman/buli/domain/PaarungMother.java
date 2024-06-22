@@ -44,8 +44,8 @@ public final class PaarungMother {
 
 	public static Paarung paarungWithAllAttributesSet() {
 		return new Paarung(BEENDET, //
-				new Entry("IdentifierHeim", Team.builder().name("Heim").wappen(URI.create("WappenHeim")).build(), 1), //
-				new Entry("IdentifierGast", Team.builder().name("Gast").wappen(URI.create("WappenGast")).build(), 2) //
+				new Entry(Team.builder().name("Heim").wappen(URI.create("WappenHeim")).build(), 1), //
+				new Entry(Team.builder().name("Gast").wappen(URI.create("WappenGast")).build(), 2) //
 		);
 	}
 

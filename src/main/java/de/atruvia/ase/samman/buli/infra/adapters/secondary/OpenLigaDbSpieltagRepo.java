@@ -3,6 +3,7 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.LAUFEND;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
 import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo.endergebnisType;
 import static de.atruvia.ase.samman.buli.util.Streams.toOnlyElement;
 import static java.net.URI.create;
@@ -44,13 +45,22 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
 	private static class Team {
-		Object teamId;
+		String teamId;
 		String teamName;
 		String teamIconUrl;
 
 		private Entry toDomain() {
-			return new Entry(teamId, de.atruvia.ase.samman.buli.domain.Team.builder().name(teamName).wappen(create(teamIconUrl)).build(), 0);
+			return new Entry(team(), 0);
 		}
+
+		private de.atruvia.ase.samman.buli.domain.Team team() {
+			return de.atruvia.ase.samman.buli.domain.Team.builder() //
+					.identifier(teamIdentifier(teamId)) //
+					.name(teamName) //
+					.wappen(create(teamIconUrl)) //
+					.build();
+		}
+
 	}
 
 	@ToString

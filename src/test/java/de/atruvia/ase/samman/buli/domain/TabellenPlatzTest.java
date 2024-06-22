@@ -2,6 +2,7 @@ package de.atruvia.ase.samman.buli.domain;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
@@ -10,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 class TabellenPlatzTest {
 
-	TabellenPlatz anyPlatz = TabellenPlatz.builder().team(new Object(), "team1").wappen(URI.create("proto://wappen1"))
-			.build();
+	TabellenPlatz anyPlatz = TabellenPlatz.builder().team(teamIdentifier("anyIdentifier"), "team1")
+			.wappen(URI.create("proto://wappen1")).build();
 
 	/**
 	 * Dieser Test ist ein Detailtest, welcher nicht nach TDD outside-in entstanden

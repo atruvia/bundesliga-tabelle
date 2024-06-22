@@ -9,7 +9,6 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.LAUFEND;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 
-import java.net.URI;
 import java.util.function.Function;
 
 import org.jmolecules.ddd.annotation.ValueObject;
@@ -108,19 +107,12 @@ public class Paarung {
 	}
 
 	@Value
+	@RequiredArgsConstructor
 	@Builder(toBuilder = true)
 	public static class Entry {
-		Object identifier;
 		Team team;
 		@With
 		int tore;
-
-		public Entry(Object identifier, Team team, int tore) {
-			this.identifier = identifier == null ? team.name() : identifier;
-			this.team = team;
-			this.tore = tore;
-		}
-
 	}
 
 	@Builder.Default

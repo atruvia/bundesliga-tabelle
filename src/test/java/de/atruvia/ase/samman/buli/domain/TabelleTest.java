@@ -5,6 +5,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.createPaarungen;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
 import static java.net.URI.create;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
@@ -239,11 +240,11 @@ class TabelleTest {
 	void beiAenderndemMannschaftsnamenWirdDerLetzteUebernommen() {
 		String team1 = "Team 1";
 		String team2 = "Team 2";
-		var heimAlt = team(team1).identifier(team1);
-		var gastAlt = team(team2 + "-A").identifier(team2);
+		var heimAlt = team(team1, team1);
+		var gastAlt = team(team2 + "-A", team2);
 
-		var heimNeu = team(team1).identifier(team1);
-		var gastNeu = team(team2 + "-B").identifier(team2);
+		var heimNeu = team(team1, team1);
+		var gastNeu = team(team2 + "-B", team2);
 		gegebenSeienDiePaarungen(paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
@@ -256,11 +257,11 @@ class TabelleTest {
 	void beiAenderndemMannschaftsnamenNullWirdNichtUebernommen() {
 		String team1 = "Team 1";
 		String team2 = "Team 2";
-		var heimAlt = team(team1).identifier(team1);
-		var gastAlt = team(team2).identifier(team2);
+		var heimAlt = team(team1, team1);
+		var gastAlt = team(team2, team2);
 
-		var heimNeu = team(team1).identifier(team1);
-		var gastNeu = team(null).identifier(team2);
+		var heimNeu = team(team1, team1);
+		var gastNeu = team(null, team2);
 		gegebenSeienDiePaarungen( //
 				paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
@@ -342,7 +343,7 @@ class TabelleTest {
 	}
 
 	private static PaarungBuilder paarung(String teamHeim, String teamGast) {
-		return paarung(team(teamHeim), team(teamGast));
+		return paarung(team(teamHeim, teamHeim), team(teamGast, teamGast));
 	}
 
 	private static PaarungBuilder paarung(String teamHeim, String teamGast, URI wappenHeim, URI wappenGast) {
@@ -351,8 +352,8 @@ class TabelleTest {
 				.gast(Entry.builder().team(Team.builder().name(teamGast).wappen(wappenGast).build()).build());
 	}
 
-	private static EntryBuilder team(String team) {
-		return Entry.builder().identifier(team).team(Team.builder().name(team).build());
+	private static EntryBuilder team(String team, String identifier) {
+		return Entry.builder().team(Team.builder().identifier(teamIdentifier(identifier)).name(team).build());
 	}
 
 	private static PaarungBuilder paarung(EntryBuilder heim, EntryBuilder gast) {

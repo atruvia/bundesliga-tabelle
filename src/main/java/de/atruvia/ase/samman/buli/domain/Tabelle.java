@@ -23,6 +23,7 @@ import org.jmolecules.ddd.annotation.Entity;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.ErgebnisEntry;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
+import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -64,11 +65,11 @@ public class Tabelle {
 			return (o1, o2) -> biFunction.apply(o1, o2).compareTo(biFunction.apply(o2, o1));
 		}
 
-		private static Object identifier(OrdnungsElement ordnungsElement) {
+		private static TeamIdentifier identifier(OrdnungsElement ordnungsElement) {
 			return ordnungsElement.tabellenPlatz.identifier();
 		}
 
-		private static Predicate<ErgebnisEntry> gegnerIs(Object gegner) {
+		private static Predicate<ErgebnisEntry> gegnerIs(TeamIdentifier gegner) {
 			return e -> Objects.equals(e.identifierGegner(), gegner);
 		}
 
@@ -105,7 +106,7 @@ public class Tabelle {
 
 	}
 
-	private final Map<Object, TabellenPlatz> eintraege = new HashMap<>();
+	private final Map<TeamIdentifier, TabellenPlatz> eintraege = new HashMap<>();
 
 	public void add(Paarung paarung) {
 		addInternal(paarung.viewForTeam(HEIM));
@@ -113,17 +114,17 @@ public class Tabelle {
 	}
 
 	private void addInternal(PaarungView paarung) {
-		eintraege.merge(paarung.team().identifier(), newEntry(paarung), TabellenPlatz::mergeWith);
+		eintraege.merge(paarung.team().team().identifier(), newEntry(paarung), TabellenPlatz::mergeWith);
 	}
 
 	private TabellenPlatz newEntry(PaarungView paarung) {
 		var team = paarung.team();
-		TabellenPlatzBuilder builder = TabellenPlatz.builder().team(team.identifier(), paarung.team().team().name())
-				.wappen(paarung.team().team().wappen());
+		TabellenPlatzBuilder builder = TabellenPlatz.builder()
+				.team(team.team().identifier(), paarung.team().team().name()).wappen(paarung.team().team().wappen());
 		if (!paarung.isGeplant()) {
 			builder = builder.spiele(1) //
 					.ergebnis(paarung.ergebnis(), paarung.ergebnisTyp(), paarung.direction(), paarung.tore(),
-							paarung.gegner().identifier(), paarung.gegentore()) //
+							paarung.gegner().team().identifier(), paarung.gegentore()) //
 					.punkte(paarung.ergebnis().punkte()) //
 					.withTore(paarung.direction(), paarung.tore()) //
 					.withGegentore(paarung.direction(), paarung.gegentore()) //

@@ -18,8 +18,8 @@ public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 	private final AvailableLeagueRepo availableLeagueRepo;
 
 	public List<Resultinfo> getResultinfos(String league, String season) {
-		AvailableLeague availableLeague = availableLeagueRepo.getAvailableLeague(league, season).orElseThrow(
-				() -> new AvailableLeagueNotFoundException(league, season));
+		AvailableLeague availableLeague = availableLeagueRepo.getAvailableLeague(league, season)
+				.orElseThrow(() -> new AvailableLeagueNotFoundException(league, season));
 		return getResultinfos(availableLeague.leagueId);
 	}
 
