@@ -2,15 +2,14 @@ package de.atruvia.ase.samman.buli.domain.ports.primary;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
+import de.atruvia.ase.samman.buli.springframework.ServiceImplementation;
 import lombok.RequiredArgsConstructor;
 
-@Service // springframework
+@ServiceImplementation(TabellenService.class)
 @RequiredArgsConstructor
 public class DefaultTabellenService implements TabellenService {
 
