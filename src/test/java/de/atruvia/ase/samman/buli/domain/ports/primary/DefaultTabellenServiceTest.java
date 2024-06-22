@@ -117,7 +117,7 @@ public class DefaultTabellenServiceTest {
 		return collectToMarkdownString(Stream.of(values));
 	}
 
-	private static String collectToMarkdownString(Stream<? extends Object> values) {
+	private static String collectToMarkdownString(Stream<Object> values) {
 		return values.map(Object::toString).collect(joining("|", "|", "|"));
 	}
 

@@ -44,11 +44,11 @@ public class Tabelle {
 		// [X] die Anzahl aller auswärts erzielten Tore
 
 		private static final Comparator<OrdnungsElement> comparator = comparing(value(TabellenPlatz::punkte)) //
-				.thenComparing(comparing(value(TabellenPlatz::torDifferenz))) //
-				.thenComparing(comparing(value(TabellenPlatz::gesamtTore))) //
+				.thenComparing(value(TabellenPlatz::torDifferenz)) //
+				.thenComparing(value(TabellenPlatz::gesamtTore)) //
 				.thenComparing(direkterVergleichGesamt()) //
 				.thenComparing(direkterVergleichAuswaertsTore()) //
-				.thenComparing(comparing(value(TabellenPlatz::auswaertsTore))) //
+				.thenComparing(value(TabellenPlatz::auswaertsTore)) //
 				.reversed();
 
 		private static Comparator<OrdnungsElement> direkterVergleichGesamt() {

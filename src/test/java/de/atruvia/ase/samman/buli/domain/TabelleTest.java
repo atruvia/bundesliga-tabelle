@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -181,7 +182,7 @@ class TabelleTest {
 		);
 	}
 
-	private void dontCare() {
+	private static void dontCare() {
 	}
 
 	@Test
@@ -360,8 +361,8 @@ class TabelleTest {
 		this.paarungen = stream(paarungen).map(PaarungBuilder::build).toArray(Paarung[]::new);
 	}
 
-	private void gegebenSeienDiePaarungen(List<Paarung> paarungen) {
-		this.paarungen = paarungen.stream().toArray(Paarung[]::new);
+	private void gegebenSeienDiePaarungen(Collection<Paarung> paarungen) {
+		this.paarungen = paarungen.toArray(Paarung[]::new);
 	}
 
 	private void wennDieTabelleBerechnetWird() {

@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
 import org.jmolecules.ddd.annotation.ValueObject;
@@ -67,8 +66,6 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		Object identifierGegner;
 		int gegenTore;
 	}
-
-	private static final BinaryOperator<Integer> adder = (i1, i2) -> i1 + i2;
 
 	Object identifier;
 	URI wappen;
@@ -187,8 +184,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 				.ergebnisse(merge(ergebnisse, other.ergebnisse)) //
 				.spiele(merge(spiele, other.spiele)) //
 				.punkte(merge(punkte, other.punkte)) //
-				.tore(merge(adder, tore, other.tore)) //
-				.gegentore(merge(adder, gegentore, other.gegentore)) //
+				.tore(merge(Integer::sum, tore, other.tore)) //
+				.gegentore(merge(Integer::sum, gegentore, other.gegentore)) //
 				.wappen(lastNonNull(wappen, other.wappen)) //
 				.laufendesSpiel(lastNonNull(laufendesSpiel, other.laufendesSpiel)) //
 				.build();

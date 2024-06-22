@@ -33,7 +33,7 @@ class ArchitectureTest {
 			.areAnnotatedWith(PrimaryPortImplementation.class).should(implementTheSpecifiedInterface());
 
 	private static ArchCondition<? super JavaClass> implementTheSpecifiedInterface() {
-		return new ArchCondition<JavaClass>("implement the specified interface") {
+		return new ArchCondition<>("implement the specified interface") {
 
 			@Override
 			public void check(JavaClass javaClass, ConditionEvents events) {

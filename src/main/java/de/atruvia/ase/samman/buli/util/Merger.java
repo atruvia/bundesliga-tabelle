@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public final class Merger {
 
-	public static interface Mergeable<T> {
+	public interface Mergeable<T> {
 		T mergeWith(T other);
 	}
 
@@ -44,8 +44,8 @@ public final class Merger {
 
 	@SafeVarargs
 	public static <T> T lastNonNull(T... objects) {
-		// could be done with streams as well but then we would consume much more
-		// elements then we have to
+		// could be done with streams as well, but then we would consume much more
+		// elements than we have to
 		// stream(objects).filter(Objects::nonNull).reduce(lastElement()).orElse(null);
 		for (var it = asList(objects).listIterator(objects.length); it.hasPrevious();) {
 			T prev;

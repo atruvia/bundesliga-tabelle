@@ -107,12 +107,11 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 				builder = builder.goals(endergebnis.pointsTeam1, endergebnis.pointsTeam2);
 			} else if (ergebnisTyp == LAUFEND) {
 				// a final result is always present on started games, but in some cases it has
-				// been 0:0 while there have already been shoot some goals. Of course we always
+				// been 0:0 while there have already been shot some goals. Of course, we always
 				// could take the "goals" in account (this always is correct) but we should
 				// prefer using the final result if it's present.
-				// In the meanwhile we have seen everything at started games! e.g. a half time
-				// score of 3:2 with a final score of 0:0 and goals where goals where missing
-				// (0:1, 0:3)
+				// In the meanwhile we have seen everything at started games! e.g. a half-time
+				// score of 3:2 with a final score of 0:0 and goals where missing (0:1, 0:3)
 				Goal lastGoal = Goal.lastGoalOf(goals);
 				builder = builder.goals(lastGoal.scoreTeam1, lastGoal.scoreTeam2);
 			}

@@ -34,7 +34,7 @@ import lombok.Value;
 public class TabellenHttpAdapter {
 
 	@PrimaryAdapter
-	private static enum JsonErgebnis {
+	private enum JsonErgebnis {
 		N, U, S;
 
 		private static final Map<Ergebnis, JsonErgebnis> mapping = new EnumMap<>(Map.of( //
