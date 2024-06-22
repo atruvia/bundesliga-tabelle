@@ -5,8 +5,10 @@ import static lombok.AccessLevel.PRIVATE;
 import java.net.URI;
 
 import org.jmolecules.ddd.annotation.Entity;
-import org.jmolecules.ddd.annotation.Identity;
+import org.jmolecules.ddd.types.AggregateRoot;
+import org.jmolecules.ddd.types.Identifier;
 
+import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -16,11 +18,12 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @Builder
 @Entity
-public class Team {
+public class Team implements AggregateRoot<Team, TeamIdentifier> {
 
 	@Value
 	@RequiredArgsConstructor(access = PRIVATE)
-	public static class TeamIdentifier {
+	public static class TeamIdentifier implements Identifier {
+
 		String value;
 
 		public static TeamIdentifier teamIdentifier(long value) {
@@ -32,7 +35,6 @@ public class Team {
 		}
 	}
 
-	@Identity
 	TeamIdentifier identifier;
 	String name;
 	URI wappen;
@@ -41,6 +43,11 @@ public class Team {
 		this.identifier = identifier == null ? new TeamIdentifier(name) : identifier;
 		this.name = name;
 		this.wappen = wappen;
+	}
+
+	@Override
+	public TeamIdentifier getId() {
+		return identifier;
 	}
 
 }
