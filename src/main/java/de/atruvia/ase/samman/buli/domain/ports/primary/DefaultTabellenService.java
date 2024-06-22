@@ -10,7 +10,7 @@ import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Service // springframework
 @RequiredArgsConstructor
 public class DefaultTabellenService implements TabellenService {
 

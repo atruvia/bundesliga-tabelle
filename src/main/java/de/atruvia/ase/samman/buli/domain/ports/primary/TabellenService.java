@@ -7,7 +7,7 @@ import org.jmolecules.ddd.annotation.Service;
 
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 
-@Service
+@Service // jmolecules-ddd
 @PrimaryPort
 public interface TabellenService {
 
