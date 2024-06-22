@@ -346,11 +346,13 @@ class TabelleTest {
 	}
 
 	private static PaarungBuilder paarung(String teamHeim, String teamGast, URI wappenHeim, URI wappenGast) {
-		return paarung(team(teamHeim).wappen(wappenHeim), team(teamGast).wappen(wappenGast));
+		return Paarung.builder()
+				.heim(Entry.builder().team(Team.builder().name(teamHeim).wappen(wappenHeim).build()).build())
+				.gast(Entry.builder().team(Team.builder().name(teamGast).wappen(wappenGast).build()).build());
 	}
 
 	private static EntryBuilder team(String team) {
-		return Entry.builder().identifier(team).team(team);
+		return Entry.builder().identifier(team).team(Team.builder().name(team).build());
 	}
 
 	private static PaarungBuilder paarung(EntryBuilder heim, EntryBuilder gast) {

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
+import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 
 class OpenLigaDbSpieltagRepoTest {
@@ -37,8 +38,8 @@ class OpenLigaDbSpieltagRepoTest {
 		List<Paarung> paarungen = repo().lade("bl1", "2022");
 		Paarung expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
-				.heim(new Entry(idFrankfurt, teamFrankfurt, wappenFrankfurt, 1)) //
-				.gast(new Entry(idMuenchen, teamMuenchen, wappenMuenchen, 6)) //
+				.heim(new Entry(idFrankfurt, Team.builder().name(teamFrankfurt).wappen(wappenFrankfurt).build(), 1)) //
+				.gast(new Entry(idMuenchen, Team.builder().name(teamMuenchen).wappen(wappenMuenchen).build(), 6)) //
 				.build();
 		assertThat(paarungen).hasSize(306).element(0).isEqualTo(expected0);
 	}
@@ -50,8 +51,8 @@ class OpenLigaDbSpieltagRepoTest {
 		List<Paarung> paarungen = repo().lade("bl1", "2023");
 		Paarung expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
-				.heim(new Entry(idBremen, teamBremen, wappenBremen, 0)) //
-				.gast(new Entry(idMuenchen, teamMuenchen, wappenMuenchen, 4)) //
+				.heim(new Entry(idBremen, Team.builder().name(teamBremen).wappen(wappenBremen).build(), 0)) //
+				.gast(new Entry(idMuenchen, Team.builder().name(teamMuenchen).wappen(wappenMuenchen).build(), 4)) //
 				.build();
 		assertThat(paarungen).hasSize(9).element(0).isEqualTo(expected0);
 	}

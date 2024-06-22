@@ -6,6 +6,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static de.atruvia.ase.samman.buli.util.Streams.concat;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
 import static java.util.Map.entry;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
@@ -114,7 +115,7 @@ public class DefaultTabellenServiceTest {
 	}
 
 	private static String markdownRow(String... values) {
-		return collectToMarkdownString(Stream.of(values));
+		return collectToMarkdownString(stream(values));
 	}
 
 	private static String collectToMarkdownString(Stream<Object> values) {
@@ -131,7 +132,7 @@ public class DefaultTabellenServiceTest {
 		return laufendesSpiel == null //
 				? "" //
 				: format("%d:%d (%s)", laufendesSpiel.tore(), laufendesSpiel.gegentore(),
-						laufendesSpiel.gegner().team());
+						laufendesSpiel.gegner().team().name());
 	}
 
 }

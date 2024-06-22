@@ -123,7 +123,7 @@ public class TabellenHttpAdapter {
 					? null //
 					: new JsonLaufendesSpiel( //
 							JsonErgebnis.fromDomain(paarung.ergebnis()), //
-							paarung.gegner().team(), //
+							paarung.gegner().team().name(), //
 							paarung.tore(), //
 							paarung.gegentore() //
 					);

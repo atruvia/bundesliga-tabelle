@@ -111,15 +111,13 @@ public class Paarung {
 	@Builder(toBuilder = true)
 	public static class Entry {
 		Object identifier;
-		String team;
-		URI wappen;
+		Team team;
 		@With
 		int tore;
 
-		public Entry(Object identifier, String team, URI wappen, int tore) {
-			this.identifier = identifier == null ? team : identifier;
+		public Entry(Object identifier, Team team, int tore) {
+			this.identifier = identifier == null ? team.name() : identifier;
 			this.team = team;
-			this.wappen = wappen;
 			this.tore = tore;
 		}
 
@@ -157,7 +155,7 @@ public class Paarung {
 		}
 
 		private static Entry entry(String team) {
-			return Entry.builder().team(team).build();
+			return Entry.builder().team(Team.builder().name(team).build()).build();
 		}
 
 		public PaarungBuilder endergebnis(int toreHeim, int toreGast) {

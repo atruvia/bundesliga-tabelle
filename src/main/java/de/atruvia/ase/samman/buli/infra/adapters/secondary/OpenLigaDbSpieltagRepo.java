@@ -49,7 +49,7 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 		String teamIconUrl;
 
 		private Entry toDomain() {
-			return new Entry(teamId, teamName, create(teamIconUrl), 0);
+			return new Entry(teamId, de.atruvia.ase.samman.buli.domain.Team.builder().name(teamName).wappen(create(teamIconUrl)).build(), 0);
 		}
 	}
 
