@@ -89,7 +89,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		return collectToList(ergebnisseEntryStream().filter(e -> entryErgebnisIsTypeOf(e, ergebnisTyp)));
 	}
 
-	Stream<ErgebnisEntry> ergebnisseEntryStream() {
+	private Stream<ErgebnisEntry> ergebnisseEntryStream() {
 		return ergebnisse.stream();
 	}
 
@@ -166,13 +166,13 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			return this;
 		}
 
-		public TabellenPlatzBuilder withGegentore(ViewDirection direction, int anzahl) {
-			this.gegentore.put(direction, anzahl);
-			return this;
-		}
-
 		public TabellenPlatzBuilder withTore(ViewDirection viewDirection, int anzahl) {
 			this.tore.put(viewDirection, anzahl);
+			return this;
+		}
+		
+		public TabellenPlatzBuilder withGegentore(ViewDirection direction, int anzahl) {
+			this.gegentore.put(direction, anzahl);
 			return this;
 		}
 
