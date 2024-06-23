@@ -9,6 +9,9 @@
 name: Java CI with Maven
 
 on:
+  schedule:
+  # each first day of month
+  - cron: "0 0 1 * *"
   push:
   pull_request:
 permissions:
