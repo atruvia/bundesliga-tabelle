@@ -1,51 +1,53 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
+import static de.atruvia.ase.samman.buli.domain.TeamMother.idFrankfurt;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.idMuenchen;
 import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URI;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Team;
+import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 
 class OpenLigaDbTeamRepoIT {
 
-	String teamMuenchen = "FC Bayern München";
-	String teamFrankfurt = "Eintracht Frankfurt";
-
-	URI wappenFrankfurt = create("https://i.imgur.com/X8NFkOb.png");
-	URI wappenMuenchen = create("https://i.imgur.com/jJEsJrj.png");
-
 	@Test
 	void canRetrieveDataOf2022() {
-		String league = "bl1";
-		String season = "2022";
-		assertThat(team(teamFrankfurt, league, season))
-				.hasValueSatisfying(t -> assertThat(t.wappen()).isEqualTo(wappenFrankfurt));
-		assertThat(team(teamMuenchen, league, season))
-				.hasValueSatisfying(t -> assertThat(t.wappen()).isEqualTo(wappenMuenchen));
+		var teams = teams("bl1", "2022");
+		assertThat(teamByIdentifier(teams, idFrankfurt)).hasValueSatisfying(t -> {
+			assertThat(t.name()).isEqualTo("Eintracht Frankfurt");
+			assertThat(t.wappen()).isEqualTo(create("https://i.imgur.com/X8NFkOb.png"));
+		});
+		assertThat(teamByIdentifier(teams, idMuenchen)).hasValueSatisfying(t -> {
+			assertThat(t.name()).isEqualTo("FC Bayern München");
+			assertThat(t.wappen()).isEqualTo(create("https://i.imgur.com/jJEsJrj.png"));
+		});
 	}
 
 	@Test
 	void canRetrieveDataOf2023() {
-		String league = "bl1";
-		String season = "2023";
-		assertThat(team(teamFrankfurt, league, season))
-				.hasValueSatisfying(t -> assertThat(t.wappen()).isEqualTo(wappenFrankfurt));
-		assertThat(team(teamMuenchen, league, season))
-				.hasValueSatisfying(t -> assertThat(t.wappen()).isEqualTo(wappenMuenchen));
+		var teams = teams("bl1", "2023");
+		assertThat(teamByIdentifier(teams, idFrankfurt)).hasValueSatisfying(t -> {
+			assertThat(t.name()).isEqualTo("Eintracht Frankfurt");
+			assertThat(t.wappen()).isEqualTo(create("https://i.imgur.com/X8NFkOb.png"));
+		});
+		assertThat(teamByIdentifier(teams, idMuenchen)).hasValueSatisfying(t -> {
+			assertThat(t.name()).isEqualTo("FC Bayern München");
+			assertThat(t.wappen()).isEqualTo(create("https://i.imgur.com/jJEsJrj.png"));
+		});
 	}
 
-	Optional<Team> team(String teamName, String league, String season) {
-		return teams(league, season).filter(t -> t.name().equals(teamName)).findFirst();
+	Optional<Team> teamByIdentifier(List<Team> teams, TeamIdentifier identifier) {
+		return teams.stream().filter(t -> identifier.equals(t.identifier())).findFirst();
 	}
 
-	Stream<Team> teams(String league, String season) {
-		return repo().getTeams(league, season).stream();
+	List<Team> teams(String league, String season) {
+		return repo().getTeams(league, season);
 	}
 
 	OpenLigaDbTeamRepo repo() {

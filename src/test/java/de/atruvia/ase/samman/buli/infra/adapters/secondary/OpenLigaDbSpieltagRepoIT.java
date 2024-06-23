@@ -1,11 +1,11 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
-import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
-import static java.net.URI.create;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.net.URI;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -14,36 +14,20 @@ import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
-import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueRepo;
 import de.atruvia.ase.samman.buli.infra.internal.DefaultOpenLigaDbResultinfoRepo;
 
 class OpenLigaDbSpieltagRepoIT {
-
-	int idFrankfurt = 91;
-	int idMuenchen = 40;
-	int idBremen = 134;
-
-	String teamMuenchen = "FC Bayern München";
-	String teamFrankfurt = "Eintracht Frankfurt";
-	String teamBremen = "Werder Bremen";
-
-	URI wappenFrankfurt = create("https://i.imgur.com/X8NFkOb.png");
-	URI wappenMuenchen = create("https://i.imgur.com/jJEsJrj.png");
-	URI wappenBremen = create("https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/"
-			+ "SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png");
 
 	@Test
 	void canRetrieveDataOf2022() {
 		List<Paarung> paarungen = repo().lade("bl1", "2022");
 		Paarung expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
-				.heim(new Entry(Team.builder().identifier(teamIdentifier(idFrankfurt)).name(teamFrankfurt)
-						.wappen(wappenFrankfurt).build(), 1)) //
-				.gast(new Entry(Team.builder().identifier(teamIdentifier(idMuenchen)).name(teamMuenchen)
-						.wappen(wappenMuenchen).build(), 6)) //
+				.heim(new Entry(teamFrankfurt, 1)) //
+				.gast(new Entry(teamMuenchen, 6)) //
 				.build();
-		assertThat(paarungen).hasSize(matchesOfFullSeason(18)).element(0).isEqualTo(expected0);
+		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(0).isEqualTo(expected0);
 	}
 
 	@Test
@@ -51,12 +35,10 @@ class OpenLigaDbSpieltagRepoIT {
 		List<Paarung> paarungen = repo().lade("bl1", "2023");
 		Paarung expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
-				.heim(new Entry(Team.builder().identifier(teamIdentifier(idBremen)).name(teamBremen)
-						.wappen(wappenBremen).build(), 0)) //
-				.gast(new Entry(Team.builder().identifier(teamIdentifier(idMuenchen)).name(teamMuenchen)
-						.wappen(wappenMuenchen).build(), 4)) //
+				.heim(new Entry(teamBremen, 0)) //
+				.gast(new Entry(teamMuenchen, 4)) //
 				.build();
-		assertThat(paarungen).hasSize(matchesOfFullSeason(18)).element(0).isEqualTo(expected0);
+		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(0).isEqualTo(expected0);
 	}
 
 	@Test
@@ -71,7 +53,7 @@ class OpenLigaDbSpieltagRepoIT {
 				new DefaultOpenLigaDbResultinfoRepo(restTemplate, new AvailableLeagueRepo(restTemplate)));
 	}
 
-	int matchesOfFullSeason(int teams) {
+	int matchesOfFullSeasonOfTeams(int teams) {
 		return matchesPerMatchday(teams) * matchdays(teams);
 	}
 

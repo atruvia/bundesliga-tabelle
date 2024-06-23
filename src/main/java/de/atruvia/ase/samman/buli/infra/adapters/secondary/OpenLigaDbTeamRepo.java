@@ -1,5 +1,6 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
+import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
 import static java.util.Arrays.stream;
 import static lombok.AccessLevel.PUBLIC;
 
@@ -29,11 +30,12 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
 	private static class JsonTeam {
+		long teamId;
 		String teamName;
 		String teamIconUrl;
 
 		Team toDomain() {
-			return Team.builder().name(teamName).wappen(toURI(teamIconUrl)).build();
+			return Team.builder().identifier(teamIdentifier(teamId)).name(teamName).wappen(toURI(teamIconUrl)).build();
 		}
 
 		private static URI toURI(String wappen) {
