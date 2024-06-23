@@ -9,6 +9,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.util.Merger.enforceUnique;
 import static de.atruvia.ase.samman.buli.util.Merger.lastNonNull;
 import static de.atruvia.ase.samman.buli.util.Merger.merge;
+import static de.atruvia.ase.samman.buli.util.Merger.sum;
 import static java.util.Arrays.asList;
 import static java.util.stream.Stream.generate;
 
@@ -170,7 +171,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			this.tore.put(viewDirection, anzahl);
 			return this;
 		}
-		
+
 		public TabellenPlatzBuilder withGegentore(ViewDirection direction, int anzahl) {
 			this.gegentore.put(direction, anzahl);
 			return this;
@@ -184,8 +185,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 				.identifier(enforceUnique(identifier, other.identifier)) //
 				.teamName(lastNonNull(teamName, other.teamName)) //
 				.ergebnisse(merge(ergebnisse, other.ergebnisse)) //
-				.spiele(merge(spiele, other.spiele)) //
-				.punkte(merge(punkte, other.punkte)) //
+				.spiele(sum(spiele, other.spiele)) //
+				.punkte(sum(punkte, other.punkte)) //
 				.tore(merge(Integer::sum, tore, other.tore)) //
 				.gegentore(merge(Integer::sum, gegentore, other.gegentore)) //
 				.wappen(lastNonNull(wappen, other.wappen)) //

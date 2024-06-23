@@ -27,7 +27,7 @@ public final class Merger {
 		return first.mergeWith(second);
 	}
 
-	public static int merge(int... values) {
+	public static int sum(int... values) {
 		return IntStream.of(values).sum();
 	}
 
