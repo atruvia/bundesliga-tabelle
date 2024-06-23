@@ -2,7 +2,6 @@ package de.atruvia.ase.samman.buli.domain;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static java.lang.Integer.MAX_VALUE;
-import static java.lang.Integer.MIN_VALUE;
 import static java.util.function.Predicate.not;
 import static java.util.stream.IntStream.range;
 import static java.util.stream.IntStream.rangeClosed;
@@ -36,9 +35,9 @@ public final class PaarungMother {
 	public static Paarung paarung(String heimTeam, String gastTeam, Ergebnis ergebnis) {
 		PaarungBuilder builder = PaarungBuilder.paarung(heimTeam, gastTeam);
 		return (switch (ergebnis) {
-		case SIEG -> builder.endergebnis(MAX_VALUE, MIN_VALUE);
+		case SIEG -> builder.endergebnis(MAX_VALUE, 0);
 		case UNENTSCHIEDEN -> builder.endergebnis(MAX_VALUE, MAX_VALUE);
-		case NIEDERLAGE -> builder.endergebnis(MIN_VALUE, MAX_VALUE);
+		case NIEDERLAGE -> builder.endergebnis(0, MAX_VALUE);
 		}).build();
 	}
 
