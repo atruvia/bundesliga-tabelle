@@ -30,6 +30,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection;
 import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
 import lombok.Builder;
+import lombok.Singular;
 import lombok.Value;
 import lombok.With;
 import lombok.experimental.Accessors;
@@ -59,16 +60,6 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 
 	}
 
-	@Value
-	static class ErgebnisEntry {
-		Ergebnis ergebnis;
-		ErgebnisTyp ergebnisTyp;
-		ViewDirection viewDirection;
-		int tore;
-		TeamIdentifier identifierGegner;
-		int gegenTore;
-	}
-
 	TeamIdentifier identifier;
 	URI wappen;
 	@With
@@ -76,30 +67,31 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	@With
 	String teamName;
 	int spiele;
-	List<ErgebnisEntry> ergebnisse;
+	@Singular(value = "paarung")
+	List<PaarungView> paarungen;
 	int punkte;
 	Map<ViewDirection, Integer> tore;
 	Map<ViewDirection, Integer> gegentore;
 	PaarungView laufendesSpiel;
 
 	public List<Ergebnis> ergebnisse() {
-		return collectToList(ergebnisseEntryStream());
+		return collectToList(paarungenStream());
 	}
 
 	public List<Ergebnis> ergebnisse(ErgebnisTyp... ergebnisTyp) {
-		return collectToList(ergebnisseEntryStream().filter(e -> entryErgebnisIsTypeOf(e, ergebnisTyp)));
+		return collectToList(paarungenStream().filter(e -> entryErgebnisIsTypeOf(e, ergebnisTyp)));
 	}
 
-	Stream<ErgebnisEntry> ergebnisseEntryStream() {
-		return ergebnisse.stream();
+	Stream<PaarungView> paarungenStream() {
+		return paarungen.stream();
 	}
 
-	private static List<Ergebnis> collectToList(Stream<ErgebnisEntry> filter) {
-		return filter.map(ErgebnisEntry::ergebnis).toList();
+	private static List<Ergebnis> collectToList(Stream<PaarungView> stream) {
+		return stream.map(PaarungView::ergebnis).toList();
 	}
 
-	private static boolean entryErgebnisIsTypeOf(ErgebnisEntry e, ErgebnisTyp... ergebnisTyp) {
-		return asList(ergebnisTyp).contains(e.ergebnisTyp());
+	private static boolean entryErgebnisIsTypeOf(PaarungView paarung, ErgebnisTyp... ergebnisTyp) {
+		return asList(ergebnisTyp).contains(paarung.ergebnisTyp());
 	}
 
 	public int gesamtTore() {
@@ -137,7 +129,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		builder.platz = platz;
 		builder.teamName = teamName;
 		builder.spiele = spiele;
-		builder.ergebnisse = new ArrayList<>(ergebnisse);
+		builder.paarungen = new ArrayList<>(paarungen);
 		builder.punkte = punkte;
 		builder.tore = new HashMap<>(tore);
 		builder.gegentore = new HashMap<>(gegentore);
@@ -148,7 +140,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	public static class TabellenPlatzBuilder {
 
 		public TabellenPlatzBuilder() {
-			ergebnisse = new ArrayList<>();
+			paarungen = new ArrayList<>();
 			tore = new HashMap<>();
 			gegentore = new HashMap<>();
 		}
@@ -157,13 +149,6 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			this.identifier = identifier;
 			this.teamName = name;
 			this.wappen = wappen;
-			return this;
-		}
-
-		public TabellenPlatzBuilder ergebnis(Ergebnis ergebnis, ErgebnisTyp ergebnisTyp, ViewDirection viewDirection,
-				int tore, TeamIdentifier gegnerIdentifier, int gegenTore) {
-			this.ergebnisse
-					.add(new ErgebnisEntry(ergebnis, ergebnisTyp, viewDirection, tore, gegnerIdentifier, gegenTore));
 			return this;
 		}
 
@@ -184,7 +169,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		return builder() //
 				.identifier(checkUnique(identifier, other.identifier)) //
 				.teamName(lastNonNull(teamName, other.teamName)) //
-				.ergebnisse(merge(ergebnisse, other.ergebnisse)) //
+				.paarungen(merge(paarungen, other.paarungen)) //
 				.spiele(sum(spiele, other.spiele)) //
 				.punkte(sum(punkte, other.punkte)) //
 				.tore(merge(Integer::sum, tore, other.tore)) //
@@ -207,7 +192,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	}
 
 	private int countAnzahl(Ergebnis type) {
-		return (int) ergebnisseEntryStream().map(ErgebnisEntry::ergebnis).filter(type::equals).count();
+		return (int) paarungenStream().map(PaarungView::ergebnis).filter(type::equals).count();
 	}
 
 	public Tendenz tendenz() {

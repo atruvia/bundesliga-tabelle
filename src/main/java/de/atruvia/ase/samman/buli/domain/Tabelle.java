@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 import org.jmolecules.ddd.annotation.Entity;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
-import de.atruvia.ase.samman.buli.domain.TabellenPlatz.ErgebnisEntry;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
 import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 import lombok.Getter;
@@ -69,17 +68,17 @@ public class Tabelle {
 			return ordnungsElement.tabellenPlatz.identifier();
 		}
 
-		private static Predicate<ErgebnisEntry> gegnerIs(TeamIdentifier gegner) {
-			return e -> Objects.equals(e.identifierGegner(), gegner);
+		private static Predicate<PaarungView> gegnerIs(TeamIdentifier gegner) {
+			return e -> Objects.equals(e.gegner().team().identifier(), gegner);
 		}
 
-		private static Predicate<ErgebnisEntry> isAuswaerts() {
-			return e -> Objects.equals(e.viewDirection(), AUSWAERTS);
+		private static Predicate<PaarungView> isAuswaerts() {
+			return e -> Objects.equals(e.direction(), AUSWAERTS);
 		}
 
-		private static int whereToreIs(TabellenPlatz tabellenPlatz, Predicate<ErgebnisEntry> filter) {
-			return tabellenPlatz.ergebnisseEntryStream().filter(filter).map(ErgebnisEntry::tore)
-					.mapToInt(Integer::valueOf).sum();
+		private static int whereToreIs(TabellenPlatz tabellenPlatz, Predicate<PaarungView> filter) {
+			return tabellenPlatz.paarungenStream().filter(filter).map(PaarungView::tore).mapToInt(Integer::valueOf)
+					.sum();
 		}
 
 		@Getter(value = PRIVATE)
@@ -124,8 +123,7 @@ public class Tabelle {
 				.team(team.identifier(), team.name(), team.wappen());
 		if (!paarung.isGeplant()) {
 			builder = builder.spiele(1) //
-					.ergebnis(paarung.ergebnis(), paarung.ergebnisTyp(), paarung.direction(), paarung.tore(),
-							paarung.gegner().team().identifier(), paarung.gegentore()) //
+					.paarung(paarung) //
 					.punkte(paarung.ergebnis().punkte()) //
 					.withTore(paarung.direction(), paarung.tore()) //
 					.withGegentore(paarung.direction(), paarung.gegentore()) //

@@ -1,7 +1,8 @@
 package de.atruvia.ase.samman.buli.domain;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
-import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
+import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
+import static de.atruvia.ase.samman.buli.domain.PaarungMother.paarung;
 import static java.util.Arrays.asList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -55,8 +56,10 @@ public final class TabellenPlatzMother {
 	}
 
 	public static TabellenPlatz platzWith(Ergebnis ergebnis, ErgebnisTyp ergebnisTyp) {
-		return TabellenPlatz.builder().identifier(teamIdentifier("same object for all"))
-				.ergebnis(ergebnis, ergebnisTyp, null, 0, teamIdentifier("opposite id"), 0).build();
+		var paarung = paarung("same object for all", "opposite id", ergebnis).toBuilder().ergebnisTyp(ergebnisTyp)
+				.build();
+		return TabellenPlatz.builder().identifier(paarung.heim().team().identifier()).paarung(paarung.viewForTeam(HEIM))
+				.build();
 	}
 
 }
