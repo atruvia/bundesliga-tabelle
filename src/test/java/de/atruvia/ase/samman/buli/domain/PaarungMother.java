@@ -12,12 +12,11 @@ import java.util.List;
 import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PaarungMother {
-
-	private PaarungMother() {
-		super();
-	}
 
 	public static List<Paarung> createPaarungen(String firstTeam, Ergebnis... ergebnisse) {
 		List<String> opponents = opponents(firstTeam, ergebnisse.length);
