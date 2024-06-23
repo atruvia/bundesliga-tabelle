@@ -14,10 +14,14 @@ public class Tore implements Comparable<Tore> {
 
 	int anzahl;
 
-	public static Tore tore(int anzahl) {
+	private Tore(int anzahl) {
 		if (anzahl < 0) {
 			throw new IllegalArgumentException("Value must not be negative bus was " + anzahl);
 		}
+		this.anzahl = anzahl;
+	}
+
+	public static Tore tore(int anzahl) {
 		return new Tore(anzahl);
 	}
 
