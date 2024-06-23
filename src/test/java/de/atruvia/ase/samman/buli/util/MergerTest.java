@@ -14,19 +14,19 @@ import org.junit.jupiter.api.Test;
 class MergerTest {
 
 	@Test
-		void testCheckUnique_empty() {
-			assertThatThrownBy(Merger::checkUnique).hasMessageContaining("empty");
-		}
+	void testCheckUnique_empty() {
+		assertThatThrownBy(Merger::checkUnique).hasMessageContaining("empty");
+	}
 
 	@Test
-		void testCheckUnique_allUnique() {
-			assertThat(checkUnique("a", "a", "a")).isEqualTo("a");
-		}
+	void testCheckUnique_allUnique() {
+		assertThat(checkUnique("a", "a", "a")).isEqualTo("a");
+	}
 
 	@Test
-		void testCheckUnique_notAllUnique() {
-			assertThatThrownBy(() -> checkUnique("a", "A", "a")).hasMessageContaining("a, A, a");
-		}
+	void testCheckUnique_notAllUnique() {
+		assertThatThrownBy(() -> checkUnique("a", "A", "a")).hasMessageContaining("a, A, a");
+	}
 
 	@Test
 	void testLastNonNull() {
