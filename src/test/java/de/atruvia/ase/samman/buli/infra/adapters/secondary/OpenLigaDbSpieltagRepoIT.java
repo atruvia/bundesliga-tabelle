@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
@@ -42,7 +43,7 @@ class OpenLigaDbSpieltagRepoIT {
 				.gast(new Entry(Team.builder().identifier(teamIdentifier(idMuenchen)).name(teamMuenchen)
 						.wappen(wappenMuenchen).build(), 6)) //
 				.build();
-		assertThat(paarungen).hasSize(18 / 2 * 17 * 2).element(0).isEqualTo(expected0);
+		assertThat(paarungen).hasSize(matchesOfFullSeason(18)).element(0).isEqualTo(expected0);
 	}
 
 	@Test
@@ -55,13 +56,31 @@ class OpenLigaDbSpieltagRepoIT {
 				.gast(new Entry(Team.builder().identifier(teamIdentifier(idMuenchen)).name(teamMuenchen)
 						.wappen(wappenMuenchen).build(), 4)) //
 				.build();
-		assertThat(paarungen).element(0).isEqualTo(expected0);
+		assertThat(paarungen).hasSize(matchesOfFullSeason(18)).element(0).isEqualTo(expected0);
+	}
+
+	@Test
+	@ExpectedToFail("no data for 2024/25 yet --- add assertions for match #0 when available")
+	void canRetrieveDataOf2024() {
+		assertThat(repo().lade("bl1", "2024")).isNotEmpty();
 	}
 
 	OpenLigaDbSpieltagRepo repo() {
 		RestTemplate restTemplate = new RestTemplate();
 		return new OpenLigaDbSpieltagRepo(restTemplate,
 				new DefaultOpenLigaDbResultinfoRepo(restTemplate, new AvailableLeagueRepo(restTemplate)));
+	}
+
+	int matchesOfFullSeason(int teams) {
+		return matchesPerMatchday(teams) * matchdays(teams);
+	}
+
+	int matchdays(int teams) {
+		return (teams - 1) * 2;
+	}
+
+	int matchesPerMatchday(int teams) {
+		return teams / 2;
 	}
 
 }
