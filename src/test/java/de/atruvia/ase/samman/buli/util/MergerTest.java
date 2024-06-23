@@ -14,6 +14,11 @@ import org.junit.jupiter.api.Test;
 class MergerTest {
 
 	@Test
+	void testEnforceUnique_empty() {
+		assertThatThrownBy(Merger::enforceUnique).hasMessageContaining("empty");
+	}
+
+	@Test
 	void testEnforceUnique_allUnique() {
 		assertThat(enforceUnique("a", "a", "a")).isEqualTo("a");
 	}

@@ -1,5 +1,6 @@
 package de.atruvia.ase.samman.buli.util;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.function.Predicate.not;
@@ -58,9 +59,12 @@ public final class Merger {
 
 	@SafeVarargs
 	public static <T> T enforceUnique(T... objects) {
+		if (objects.length == 0) {
+			throw new IllegalArgumentException("objects must not be empty");
+		}
 		T ref = objects[0];
-		if (Arrays.stream(objects).anyMatch(not(ref::equals))) {
-			throw new IllegalStateException("Object differs " + Arrays.toString(objects));
+		if (stream(objects).anyMatch(not(ref::equals))) {
+			throw new IllegalStateException(format("objects %s differs ", Arrays.toString(objects)));
 		}
 		return ref;
 	}
