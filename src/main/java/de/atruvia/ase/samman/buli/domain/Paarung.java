@@ -107,12 +107,20 @@ public class Paarung {
 	}
 
 	@Value
-	@RequiredArgsConstructor
 	@Builder(toBuilder = true)
 	public static class Entry {
 		Team team;
 		@With
 		int tore;
+
+		public Entry(Team team, int tore) {
+			if (tore < 0) {
+				throw new IllegalArgumentException("Tore darf nicht negativ sein, ist aber " + tore);
+			}
+			this.team = team;
+			this.tore = tore;
+		}
+
 	}
 
 	@Builder.Default

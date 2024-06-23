@@ -6,15 +6,34 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.paarungWithAllAttributesSet;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
+import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.Negative;
 
 class PaarungTest {
+
+	@Property
+	void keinePaarungMitNegativenHeimToren(@ForAll @Negative int negative) {
+		assertThrowsRTE(paarungWithAllAttributesSet().heim(), negative);
+	}
+
+	@Property
+	void keinePaarungMitNegativenGastToren(@ForAll @Negative int negative) {
+		assertThrowsRTE(paarungWithAllAttributesSet().gast(), negative);
+	}
+
+	static void assertThrowsRTE(Entry entry, int negative) {
+		assertThatThrownBy(() -> entry.withTore(negative)).hasMessageContainingAll("negativ", String.valueOf(negative));
+	}
 
 	@Test
 	void heimUndAuswaertsView() {
