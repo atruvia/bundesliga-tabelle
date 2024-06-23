@@ -41,7 +41,7 @@ class PaarungTest {
 		var heim = paarung.viewForTeam(HEIM);
 		var ausw = paarung.viewForTeam(AUSWAERTS);
 
-		assertEqualsViceVersa(heim, ausw, PaarungView::team, PaarungView::gegner);
+		assertEqualsViceVersa(heim, ausw, PaarungView::self, PaarungView::gegner);
 		assertEqualsViceVersa(heim, ausw, PaarungView::tore, PaarungView::gegentore);
 
 		assertThat(heim.ergebnisTyp()).isEqualTo(ausw.ergebnisTyp());

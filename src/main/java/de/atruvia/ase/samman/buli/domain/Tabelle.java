@@ -36,13 +36,6 @@ public class Tabelle {
 	@Accessors(fluent = true)
 	private static class OrdnungsElement implements Comparable<OrdnungsElement> {
 
-		// [X] Die Summe der erzielten Punkte
-		// [X] Die nach dem Subtraktionsverfahren ermittelte Tordifferenz
-		// [X] Anzahl der erzielten Tore
-		// [X] Das Gesamtergebnis aus Hin- und Rückspiel im direkten Vergleich
-		// [X] Die Anzahl der auswärts erzielten Tore im direkten Vergleich
-		// [X] die Anzahl aller auswärts erzielten Tore
-
 		private static final Comparator<OrdnungsElement> comparator = comparing(value(TabellenPlatz::punkte)) //
 				.thenComparing(value(TabellenPlatz::torDifferenz)) //
 				.thenComparing(value(TabellenPlatz::gesamtTore)) //
@@ -113,12 +106,11 @@ public class Tabelle {
 	}
 
 	private void addInternal(PaarungView paarung) {
-		eintraege.merge(paarung.team().team().identifier(), newEntry(paarung), TabellenPlatz::mergeWith);
+		eintraege.merge(paarung.self().team().identifier(), newEntry(paarung), TabellenPlatz::mergeWith);
 	}
 
 	private TabellenPlatz newEntry(PaarungView paarung) {
-		var entry = paarung.team();
-		var team = entry.team();
+		var team = paarung.self().team();
 		TabellenPlatzBuilder builder = TabellenPlatz.builder() //
 				.team(team.identifier(), team.name(), team.wappen());
 		if (!paarung.isGeplant()) {

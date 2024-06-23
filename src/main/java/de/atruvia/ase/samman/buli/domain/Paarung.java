@@ -30,13 +30,13 @@ public class Paarung {
 	public class PaarungView {
 
 		ViewDirection direction;
-		Function<Paarung, Entry> team;
+		Function<Paarung, Entry> self;
 		Function<Paarung, Entry> gegner;
 		@Getter(lazy = true)
 		Ergebnis ergebnis = calcErgebnis();
 
-		public Entry team() {
-			return team.apply(paarung());
+		public Entry self() {
+			return self.apply(paarung());
 		}
 
 		public Entry gegner() {
@@ -44,7 +44,7 @@ public class Paarung {
 		}
 
 		public int tore() {
-			return team().tore();
+			return self().tore();
 		}
 
 		public int gegentore() {
