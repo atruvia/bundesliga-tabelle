@@ -58,7 +58,7 @@ public final class Merger {
 	}
 
 	@SafeVarargs
-	public static <T> T enforceUnique(T... objects) {
+	public static <T> T checkUnique(T... objects) {
 		if (objects.length == 0) {
 			throw new IllegalArgumentException("objects must not be empty");
 		}

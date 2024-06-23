@@ -6,7 +6,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
-import static de.atruvia.ase.samman.buli.util.Merger.enforceUnique;
+import static de.atruvia.ase.samman.buli.util.Merger.checkUnique;
 import static de.atruvia.ase.samman.buli.util.Merger.lastNonNull;
 import static de.atruvia.ase.samman.buli.util.Merger.merge;
 import static de.atruvia.ase.samman.buli.util.Merger.sum;
@@ -182,7 +182,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	@Override
 	public TabellenPlatz mergeWith(TabellenPlatz other) {
 		return builder() //
-				.identifier(enforceUnique(identifier, other.identifier)) //
+				.identifier(checkUnique(identifier, other.identifier)) //
 				.teamName(lastNonNull(teamName, other.teamName)) //
 				.ergebnisse(merge(ergebnisse, other.ergebnisse)) //
 				.spiele(sum(spiele, other.spiele)) //

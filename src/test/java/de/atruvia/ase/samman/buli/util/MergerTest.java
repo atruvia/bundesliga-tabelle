@@ -1,6 +1,6 @@
 package de.atruvia.ase.samman.buli.util;
 
-import static de.atruvia.ase.samman.buli.util.Merger.enforceUnique;
+import static de.atruvia.ase.samman.buli.util.Merger.checkUnique;
 import static de.atruvia.ase.samman.buli.util.Merger.lastNonNull;
 import static de.atruvia.ase.samman.buli.util.Merger.merge;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,19 +14,19 @@ import org.junit.jupiter.api.Test;
 class MergerTest {
 
 	@Test
-	void testEnforceUnique_empty() {
-		assertThatThrownBy(Merger::enforceUnique).hasMessageContaining("empty");
-	}
+		void testCheckUnique_empty() {
+			assertThatThrownBy(Merger::checkUnique).hasMessageContaining("empty");
+		}
 
 	@Test
-	void testEnforceUnique_allUnique() {
-		assertThat(enforceUnique("a", "a", "a")).isEqualTo("a");
-	}
+		void testCheckUnique_allUnique() {
+			assertThat(checkUnique("a", "a", "a")).isEqualTo("a");
+		}
 
 	@Test
-	void testEnforceUnique_notAllUnique() {
-		assertThatThrownBy(() -> enforceUnique("a", "A", "a")).hasMessageContaining("a, A, a");
-	}
+		void testCheckUnique_notAllUnique() {
+			assertThatThrownBy(() -> checkUnique("a", "A", "a")).hasMessageContaining("a, A, a");
+		}
 
 	@Test
 	void testLastNonNull() {
