@@ -89,7 +89,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		return collectToList(ergebnisseEntryStream().filter(e -> entryErgebnisIsTypeOf(e, ergebnisTyp)));
 	}
 
-	private Stream<ErgebnisEntry> ergebnisseEntryStream() {
+	Stream<ErgebnisEntry> ergebnisseEntryStream() {
 		return ergebnisse.stream();
 	}
 
