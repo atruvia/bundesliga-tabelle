@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
+import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public final class PaarungMother {
 	public static List<Paarung> createPaarungen(String firstTeam, Ergebnis... ergebnisse) {
 		List<String> opponents = opponents(firstTeam, ergebnisse.length);
 		return range(0, ergebnisse.length)
-				.mapToObj(i -> swapIfOdd(i, paarung(firstTeam, opponents.get(i), ergebnisse[i]))).toList();
+				.mapToObj(i -> swapIfOdd(i, paarung(firstTeam, opponents.get(i), ergebnisse[i], BEENDET))).toList();
 	}
 
 	private static Paarung swapIfOdd(int index, Paarung paarung) {
@@ -31,12 +32,12 @@ public final class PaarungMother {
 		return paarung.toBuilder().heim(paarung.gast()).gast(paarung.heim()).build();
 	}
 
-	public static Paarung paarung(String heimTeam, String gastTeam, Ergebnis ergebnis) {
+	public static Paarung paarung(String heimTeam, String gastTeam, Ergebnis ergebnis, ErgebnisTyp ergebnisTyp) {
 		PaarungBuilder builder = PaarungBuilder.paarung(heimTeam, gastTeam);
 		return (switch (ergebnis) {
-		case SIEG -> builder.endergebnis(MAX_VALUE, 0);
-		case UNENTSCHIEDEN -> builder.endergebnis(MAX_VALUE, MAX_VALUE);
-		case NIEDERLAGE -> builder.endergebnis(0, MAX_VALUE);
+		case SIEG -> builder.ergebnis(ergebnisTyp, MAX_VALUE, 0);
+		case UNENTSCHIEDEN -> builder.ergebnis(ergebnisTyp, MAX_VALUE, MAX_VALUE);
+		case NIEDERLAGE -> builder.ergebnis(ergebnisTyp, 0, MAX_VALUE);
 		}).build();
 	}
 

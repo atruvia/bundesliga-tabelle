@@ -56,8 +56,7 @@ public final class TabellenPlatzMother {
 	}
 
 	public static TabellenPlatz platzWith(Ergebnis ergebnis, ErgebnisTyp ergebnisTyp) {
-		var paarung = paarung("same object for all", "opposite id", ergebnis).toBuilder().ergebnisTyp(ergebnisTyp)
-				.build();
+		var paarung = paarung("same object for all", "opposite id", ergebnis, BEENDET);
 		return TabellenPlatz.builder().identifier(paarung.heim().team().identifier()).paarung(paarung.viewForTeam(HEIM))
 				.build();
 	}

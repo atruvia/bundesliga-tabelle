@@ -166,7 +166,7 @@ public class Paarung {
 			return ergebnis(LAUFEND, toreHeim, toreGast);
 		}
 
-		private PaarungBuilder ergebnis(ErgebnisTyp ergebnisTyp, int toreHeim, int toreGast) {
+		PaarungBuilder ergebnis(ErgebnisTyp ergebnisTyp, int toreHeim, int toreGast) {
 			return ergebnisTyp(ergebnisTyp).goals(toreHeim, toreGast);
 		}
 
