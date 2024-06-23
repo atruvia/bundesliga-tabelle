@@ -5,6 +5,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.createPaarungen;
+import static de.atruvia.ase.samman.buli.domain.Tore.tore;
 import static java.lang.Integer.MAX_VALUE;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -63,8 +64,8 @@ class ContractVerificationTest {
 	void runningGame() {
 		when(spieltagRepoMock.lade(anyString(), anyString())).thenReturn( //
 				paarungen( 
-					paarung("Team 1", "Team 4").zwischenergebnis(MAX_VALUE, 0), //
-					paarung("Team 2", "Team 3").endergebnis(0, 0) //
+					paarung("Team 1", "Team 4").zwischenergebnis(tore(MAX_VALUE), tore(0)), //
+					paarung("Team 2", "Team 3").endergebnis(tore(0), tore(0)) //
 				)
 		);
 	}

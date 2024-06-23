@@ -2,6 +2,7 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
+import static de.atruvia.ase.samman.buli.domain.Tore.tore;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.resultinfoProvider;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restTemplateMock;
@@ -40,9 +41,9 @@ class OpenLigaDbSpieltagRepoTest {
 		Paarung expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
 				.heim(new Entry(Team.builder().identifier(teamIdentifier(idFrankfurt)).name(teamFrankfurt)
-						.wappen(wappenFrankfurt).build(), 1)) //
+						.wappen(wappenFrankfurt).build(), tore(1))) //
 				.gast(new Entry(Team.builder().identifier(teamIdentifier(idMuenchen)).name(teamMuenchen)
-						.wappen(wappenMuenchen).build(), 6)) //
+						.wappen(wappenMuenchen).build(), tore(6))) //
 				.build();
 		assertThat(paarungen).hasSize(306).element(0).isEqualTo(expected0);
 	}
@@ -55,9 +56,9 @@ class OpenLigaDbSpieltagRepoTest {
 		Paarung expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
 				.heim(new Entry(Team.builder().identifier(teamIdentifier(idBremen)).name(teamBremen)
-						.wappen(wappenBremen).build(), 0)) //
+						.wappen(wappenBremen).build(), tore(0))) //
 				.gast(new Entry(Team.builder().identifier(teamIdentifier(idMuenchen)).name(teamMuenchen)
-						.wappen(wappenMuenchen).build(), 4)) //
+						.wappen(wappenMuenchen).build(), tore(4))) //
 				.build();
 		assertThat(paarungen).hasSize(9).element(0).isEqualTo(expected0);
 	}

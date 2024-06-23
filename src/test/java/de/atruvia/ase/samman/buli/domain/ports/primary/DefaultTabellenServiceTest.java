@@ -43,9 +43,9 @@ public class DefaultTabellenServiceTest {
 				entry("S", TabellenPlatz::siege), //
 				entry("U", TabellenPlatz::unentschieden), //
 				entry("N", TabellenPlatz::niederlagen), //
-				entry("T", TabellenPlatz::gesamtTore), //
-				entry("GT", TabellenPlatz::gesamtGegentore), //
-				entry("TD", TabellenPlatz::torDifferenz), //
+				entry("T", t -> t.gesamtTore().anzahl()), //
+				entry("GT", t -> t.gesamtGegentore().anzahl()), //
+				entry("TD", t -> t.torDifferenz().anzahl()), //
 				entry("Pkte", TabellenPlatz::punkte), //
 				entry("Letzte 5", DefaultTabellenServiceTest::tendenz), //
 				entry("Spiel", DefaultTabellenServiceTest::laufendesSpiel) //
@@ -131,7 +131,7 @@ public class DefaultTabellenServiceTest {
 		var laufendesSpiel = tabellenPlatz.laufendesSpiel();
 		return laufendesSpiel == null //
 				? "" //
-				: format("%d:%d (%s)", laufendesSpiel.tore(), laufendesSpiel.gegentore(),
+				: format("%d:%d (%s)", laufendesSpiel.tore().anzahl(), laufendesSpiel.gegentore().anzahl(),
 						laufendesSpiel.gegner().team().name());
 	}
 
