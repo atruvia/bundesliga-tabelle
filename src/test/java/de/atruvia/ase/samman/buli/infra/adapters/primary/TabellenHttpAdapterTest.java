@@ -163,8 +163,9 @@ class TabellenHttpAdapterTest {
 
 	static TabellenPlatz platzWithBase(int base, TabellenPlatzBuilder builder) {
 		int cnt = 0;
-		return builder.wappen(create("proto://wappen-team-" + base)) //
-				.team(teamIdentifier("Identifier " + base + (++cnt)), "Team " + base) //
+		return builder //
+				.team(teamIdentifier("Identifier " + base + (++cnt)), "Team " + base,
+						create("proto://wappen-team-" + base)) //
 				.spiele(base + (++cnt)) //
 				.withTore(HEIM, base + (++cnt)) //
 				.withGegentore(HEIM, base + (++cnt)) //

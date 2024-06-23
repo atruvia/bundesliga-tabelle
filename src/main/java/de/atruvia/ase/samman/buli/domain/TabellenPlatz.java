@@ -152,9 +152,10 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			gegentore = new HashMap<>();
 		}
 
-		public TabellenPlatzBuilder team(TeamIdentifier identifier, String name) {
+		public TabellenPlatzBuilder team(TeamIdentifier identifier, String name, URI wappen) {
 			this.identifier = identifier;
 			this.teamName = name;
+			this.wappen = wappen;
 			return this;
 		}
 

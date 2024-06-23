@@ -118,9 +118,10 @@ public class Tabelle {
 	}
 
 	private TabellenPlatz newEntry(PaarungView paarung) {
-		var team = paarung.team();
-		TabellenPlatzBuilder builder = TabellenPlatz.builder()
-				.team(team.team().identifier(), paarung.team().team().name()).wappen(paarung.team().team().wappen());
+		var entry = paarung.team();
+		var team = entry.team();
+		TabellenPlatzBuilder builder = TabellenPlatz.builder() //
+				.team(team.identifier(), team.name(), team.wappen());
 		if (!paarung.isGeplant()) {
 			builder = builder.spiele(1) //
 					.ergebnis(paarung.ergebnis(), paarung.ergebnisTyp(), paarung.direction(), paarung.tore(),

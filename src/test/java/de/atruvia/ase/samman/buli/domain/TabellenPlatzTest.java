@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 class TabellenPlatzTest {
 
-	TabellenPlatz anyPlatz = TabellenPlatz.builder().team(teamIdentifier("anyIdentifier"), "team1")
-			.wappen(URI.create("proto://wappen1")).build();
+	TabellenPlatz anyPlatz = TabellenPlatz.builder()
+			.team(teamIdentifier("anyIdentifier"), "team1", URI.create("proto://wappen1")).build();
 
 	/**
 	 * Dieser Test ist ein Detailtest, welcher nicht nach TDD outside-in entstanden
