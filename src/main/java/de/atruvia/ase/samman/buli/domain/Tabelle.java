@@ -77,9 +77,9 @@ public class Tabelle {
 			return e -> Objects.equals(e.viewDirection(), AUSWAERTS);
 		}
 
-		private static Tore whereToreIs(TabellenPlatz tabellenPlatz, Predicate<ErgebnisEntry> filter) {
-			return tabellenPlatz.ergebnisseEntryStream().filter(filter).map(ErgebnisEntry::tore).reduce(Tore::add)
-					.orElse(Tore.NULL);
+		private static int whereToreIs(TabellenPlatz tabellenPlatz, Predicate<ErgebnisEntry> filter) {
+			return tabellenPlatz.ergebnisseEntryStream().filter(filter).map(ErgebnisEntry::tore)
+					.mapToInt(Integer::valueOf).sum();
 		}
 
 		@Getter(value = PRIVATE)

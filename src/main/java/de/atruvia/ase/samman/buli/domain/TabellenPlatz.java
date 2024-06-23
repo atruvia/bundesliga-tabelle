@@ -63,9 +63,9 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		Ergebnis ergebnis;
 		ErgebnisTyp ergebnisTyp;
 		ViewDirection viewDirection;
-		Tore tore;
+		int tore;
 		TeamIdentifier identifierGegner;
-		Tore gegenTore;
+		int gegenTore;
 	}
 
 	TeamIdentifier identifier;
@@ -77,8 +77,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	int spiele;
 	List<ErgebnisEntry> ergebnisse;
 	int punkte;
-	Map<ViewDirection, Tore> tore;
-	Map<ViewDirection, Tore> gegentore;
+	Map<ViewDirection, Integer> tore;
+	Map<ViewDirection, Integer> gegentore;
 	PaarungView laufendesSpiel;
 
 	public List<Ergebnis> ergebnisse() {
@@ -89,7 +89,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		return collectToList(ergebnisseEntryStream().filter(e -> entryErgebnisIsTypeOf(e, ergebnisTyp)));
 	}
 
-	Stream<ErgebnisEntry> ergebnisseEntryStream() {
+	private Stream<ErgebnisEntry> ergebnisseEntryStream() {
 		return ergebnisse.stream();
 	}
 
@@ -101,32 +101,32 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		return asList(ergebnisTyp).contains(e.ergebnisTyp());
 	}
 
-	public Tore gesamtTore() {
-		return heimtore().add(auswaertsTore());
+	public int gesamtTore() {
+		return heimtore() + auswaertsTore();
 	}
 
-	public Tore gesamtGegentore() {
-		return heimGegentore().add(auswaertsGegentore());
+	public int gesamtGegentore() {
+		return heimGegentore() + auswaertsGegentore();
 	}
 
-	public Tore heimtore() {
-		return tore().getOrDefault(HEIM, Tore.NULL);
+	public int heimtore() {
+		return tore().getOrDefault(HEIM, 0);
 	}
 
-	public Tore auswaertsTore() {
-		return tore().getOrDefault(AUSWAERTS, Tore.NULL);
+	public int auswaertsTore() {
+		return tore().getOrDefault(AUSWAERTS, 0);
 	}
 
-	public Tore heimGegentore() {
-		return gegentore().getOrDefault(HEIM, Tore.NULL);
+	public int heimGegentore() {
+		return gegentore().getOrDefault(HEIM, 0);
 	}
 
-	public Tore auswaertsGegentore() {
-		return gegentore().getOrDefault(AUSWAERTS, Tore.NULL);
+	public int auswaertsGegentore() {
+		return gegentore().getOrDefault(AUSWAERTS, 0);
 	}
 
-	public Tore torDifferenz() {
-		return gesamtTore().minus(gesamtGegentore());
+	public int torDifferenz() {
+		return gesamtTore() - gesamtGegentore();
 	}
 
 	public TabellenPlatzBuilder toBuilder() {
@@ -160,18 +160,18 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		}
 
 		public TabellenPlatzBuilder ergebnis(Ergebnis ergebnis, ErgebnisTyp ergebnisTyp, ViewDirection viewDirection,
-				Tore tore, TeamIdentifier gegnerIdentifier, Tore gegenTore) {
+				int tore, TeamIdentifier gegnerIdentifier, int gegenTore) {
 			this.ergebnisse
 					.add(new ErgebnisEntry(ergebnis, ergebnisTyp, viewDirection, tore, gegnerIdentifier, gegenTore));
 			return this;
 		}
 
-		public TabellenPlatzBuilder withTore(ViewDirection viewDirection, Tore anzahl) {
+		public TabellenPlatzBuilder withTore(ViewDirection viewDirection, int anzahl) {
 			this.tore.put(viewDirection, anzahl);
 			return this;
 		}
-
-		public TabellenPlatzBuilder withGegentore(ViewDirection direction, Tore anzahl) {
+		
+		public TabellenPlatzBuilder withGegentore(ViewDirection direction, int anzahl) {
 			this.gegentore.put(direction, anzahl);
 			return this;
 		}
@@ -186,8 +186,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 				.ergebnisse(merge(ergebnisse, other.ergebnisse)) //
 				.spiele(merge(spiele, other.spiele)) //
 				.punkte(merge(punkte, other.punkte)) //
-				.tore(merge(Tore::add, tore, other.tore)) //
-				.gegentore(merge(Tore::add, gegentore, other.gegentore)) //
+				.tore(merge(Integer::sum, tore, other.tore)) //
+				.gegentore(merge(Integer::sum, gegentore, other.gegentore)) //
 				.wappen(lastNonNull(wappen, other.wappen)) //
 				.laufendesSpiel(lastNonNull(laufendesSpiel, other.laufendesSpiel)) //
 				.build();

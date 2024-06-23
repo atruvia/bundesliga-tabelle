@@ -1,7 +1,6 @@
 package de.atruvia.ase.samman.buli.cucumber;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
-import static de.atruvia.ase.samman.buli.domain.Tore.tore;
 import static java.lang.Integer.parseInt;
 import static java.util.Map.entry;
 import static java.util.Objects.requireNonNull;
@@ -32,15 +31,12 @@ public class StepDefs {
 			entry("Unentschieden", TabellenPlatz::unentschieden), //
 			entry("Niederlagen", TabellenPlatz::niederlagen), //
 			entry("Punkte", TabellenPlatz::punkte), //
-			entry("Tore", t -> t.gesamtTore().anzahl()), //
-			entry("Gegentore", t -> t.gesamtGegentore().anzahl()), //
-			entry("Tordifferenz", t -> t.torDifferenz().anzahl()), //
-			entry("Tendenz", StepDefs::tendenz) //
+			entry("Tore", TabellenPlatz::gesamtTore), //
+			entry("Gegentore", TabellenPlatz::gesamtGegentore), //
+			entry("Tordifferenz", TabellenPlatz::torDifferenz), //
+			entry("Tendenz", t -> t.tendenz().ergebnisse().stream().map(Ergebnis::name).map(n -> n.substring(0, 1))
+					.collect(joining())) //
 	);
-
-	private static String tendenz(TabellenPlatz platz) {
-		return platz.tendenz().ergebnisse().stream().map(Ergebnis::name).map(n -> n.substring(0, 1)).collect(joining());
-	}
 
 	List<Paarung> paarungen = new ArrayList<>();
 	Tabelle tabelle = new Tabelle();
@@ -60,8 +56,7 @@ public class StepDefs {
 		if (split.length != 2) {
 			throw new IllegalArgumentException("Cannot split " + ergebnis + " into two parts");
 		}
-		paarungen.add(
-				paarung(teamHeim, teamGast).endergebnis(tore(parseInt(split[0])), tore(parseInt(split[1]))).build());
+		paarungen.add(paarung(teamHeim, teamGast).endergebnis(parseInt(split[0]), parseInt(split[1])).build());
 	}
 
 	@Wenn("die Tabelle berechnet wird")

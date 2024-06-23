@@ -43,11 +43,11 @@ public class Paarung {
 			return gegner.apply(paarung());
 		}
 
-		public Tore tore() {
+		public int tore() {
 			return team().tore();
 		}
 
-		public Tore gegentore() {
+		public int gegentore() {
 			return gegner().tore();
 		}
 
@@ -60,10 +60,11 @@ public class Paarung {
 		}
 
 		private Ergebnis calcErgebnis() {
-			int compared = tore().compareTo(gegentore());
-			if (compared == 0) {
+			var tore = tore();
+			var gegentore = gegentore();
+			if (tore == gegentore) {
 				return UNENTSCHIEDEN;
-			} else if (compared > 0) {
+			} else if (tore > gegentore) {
 				return SIEG;
 			} else {
 				return NIEDERLAGE;
@@ -111,7 +112,7 @@ public class Paarung {
 	public static class Entry {
 		Team team;
 		@With
-		Tore tore;
+		int tore;
 	}
 
 	@Builder.Default
@@ -131,7 +132,7 @@ public class Paarung {
 		return this.ergebnisTyp == ergebnisTyp;
 	}
 
-	public Paarung withErgebnis(Tore toreHeim, Tore toreGast) {
+	public Paarung withErgebnis(int toreHeim, int toreGast) {
 		return toBuilder().endergebnis(toreHeim, toreGast).build();
 	}
 
@@ -149,19 +150,19 @@ public class Paarung {
 			return Entry.builder().team(Team.builder().name(team).build()).build();
 		}
 
-		public PaarungBuilder endergebnis(Tore toreHeim, Tore toreGast) {
+		public PaarungBuilder endergebnis(int toreHeim, int toreGast) {
 			return ergebnis(BEENDET, toreHeim, toreGast);
 		}
 
-		public PaarungBuilder zwischenergebnis(Tore toreHeim, Tore toreGast) {
+		public PaarungBuilder zwischenergebnis(int toreHeim, int toreGast) {
 			return ergebnis(LAUFEND, toreHeim, toreGast);
 		}
 
-		private PaarungBuilder ergebnis(ErgebnisTyp ergebnisTyp, Tore toreHeim, Tore toreGast) {
+		private PaarungBuilder ergebnis(ErgebnisTyp ergebnisTyp, int toreHeim, int toreGast) {
 			return ergebnisTyp(ergebnisTyp).goals(toreHeim, toreGast);
 		}
 
-		public PaarungBuilder goals(Tore toreHeim, Tore toreGast) {
+		public PaarungBuilder goals(int toreHeim, int toreGast) {
 			return heim(heim.withTore(toreHeim)).gast(gast.withTore(toreGast));
 		}
 

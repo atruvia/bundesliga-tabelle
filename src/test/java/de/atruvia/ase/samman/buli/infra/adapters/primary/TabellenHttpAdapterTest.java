@@ -7,7 +7,6 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.TabellenPlatzMother.platzWith;
 import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
-import static de.atruvia.ase.samman.buli.domain.Tore.tore;
 import static java.net.URI.create;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
@@ -95,9 +94,9 @@ class TabellenHttpAdapterTest {
 				.andExpect(jsonPath("$.[0].siege", is(platz1.siege()))) //
 				.andExpect(jsonPath("$.[0].unentschieden", is(platz1.unentschieden()))) //
 				.andExpect(jsonPath("$.[0].niederlagen", is(platz1.niederlagen()))) //
-				.andExpect(jsonPath("$.[0].tore", is(platz1.gesamtTore().anzahl()))) //
-				.andExpect(jsonPath("$.[0].gegentore", is(platz1.gesamtGegentore().anzahl()))) //
-				.andExpect(jsonPath("$.[0].tordifferenz", is(platz1.torDifferenz().anzahl()))) //
+				.andExpect(jsonPath("$.[0].tore", is(platz1.gesamtTore()))) //
+				.andExpect(jsonPath("$.[0].gegentore", is(platz1.gesamtGegentore()))) //
+				.andExpect(jsonPath("$.[0].tordifferenz", is(platz1.torDifferenz()))) //
 				.andExpect(jsonPath("$.[0].punkte", is(platz1.punkte()))) //
 				.andExpect(jsonPath("$.[0].tendenz[0]", is("N"))) //
 				.andExpect(jsonPath("$.[0].tendenz[1]", is("U"))) //
@@ -111,9 +110,9 @@ class TabellenHttpAdapterTest {
 				.andExpect(jsonPath("$.[1].siege", is(platz2.siege()))) //
 				.andExpect(jsonPath("$.[1].unentschieden", is(platz2.unentschieden()))) //
 				.andExpect(jsonPath("$.[1].niederlagen", is(platz2.niederlagen()))) //
-				.andExpect(jsonPath("$.[1].tore", is(platz2.gesamtTore().anzahl()))) //
-				.andExpect(jsonPath("$.[1].gegentore", is(platz2.gesamtGegentore().anzahl()))) //
-				.andExpect(jsonPath("$.[1].tordifferenz", is(platz2.torDifferenz().anzahl()))) //
+				.andExpect(jsonPath("$.[1].tore", is(platz2.gesamtTore()))) //
+				.andExpect(jsonPath("$.[1].gegentore", is(platz2.gesamtGegentore()))) //
+				.andExpect(jsonPath("$.[1].tordifferenz", is(platz2.torDifferenz()))) //
 				.andExpect(jsonPath("$.[1].punkte", is(platz2.punkte()))) //
 				.andExpect(jsonPath("$.[1].tendenz.length()", is(0))) //
 				.andExpect(jsonPath("$.[1]*", not(hasKey("laufendesSpiel")))) //
@@ -168,10 +167,10 @@ class TabellenHttpAdapterTest {
 				.team(teamIdentifier("Identifier " + base + (++cnt)), "Team " + base,
 						create("proto://wappen-team-" + base)) //
 				.spiele(base + (++cnt)) //
-				.withTore(HEIM, tore(base + (++cnt))) //
-				.withGegentore(HEIM, tore(base + (++cnt))) //
-				.withTore(AUSWAERTS, tore(base + (++cnt))) //
-				.withGegentore(AUSWAERTS, tore(base + (++cnt))) //
+				.withTore(HEIM, base + (++cnt)) //
+				.withGegentore(HEIM, base + (++cnt)) //
+				.withTore(AUSWAERTS, base + (++cnt)) //
+				.withGegentore(AUSWAERTS, base + (++cnt)) //
 				.punkte(base + (++cnt)) //
 				.build();
 	}

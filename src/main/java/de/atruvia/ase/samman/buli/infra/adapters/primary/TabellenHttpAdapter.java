@@ -103,9 +103,9 @@ public class TabellenHttpAdapter {
 					.team(domain.teamName()) //
 					.spiele(domain.spiele()) //
 					.punkte(domain.punkte()) //
-					.tore(domain.gesamtTore().anzahl()) //
-					.gegentore(domain.gesamtGegentore().anzahl()) //
-					.tordifferenz(domain.torDifferenz().anzahl()) //
+					.tore(domain.gesamtTore()) //
+					.gegentore(domain.gesamtGegentore()) //
+					.tordifferenz(domain.torDifferenz()) //
 					.siege(domain.siege()) //
 					.unentschieden(domain.unentschieden()) //
 					.niederlagen(domain.niederlagen()) //
@@ -124,8 +124,8 @@ public class TabellenHttpAdapter {
 					: new JsonLaufendesSpiel( //
 							JsonErgebnis.fromDomain(paarung.ergebnis()), //
 							paarung.gegner().team().name(), //
-							paarung.tore().anzahl(), //
-							paarung.gegentore().anzahl() //
+							paarung.tore(), //
+							paarung.gegentore() //
 					);
 		}
 
