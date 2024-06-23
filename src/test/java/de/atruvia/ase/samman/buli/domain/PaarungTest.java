@@ -7,7 +7,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.paarungWithAllAttributesSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import java.util.function.Function;
 
@@ -55,8 +55,10 @@ class PaarungTest {
 
 	private static void assertEqualsViceVersa(PaarungView view1, PaarungView view2, Function<PaarungView, Object> f1,
 			Function<PaarungView, Object> f2) {
-		assertEquals(f1.apply(view1), f2.apply(view2));
-		assertEquals(f1.apply(view2), f2.apply(view1));
+		assertSoftly(s -> {
+			s.assertThat(f1.apply(view1)).isEqualTo(f2.apply(view2));
+			s.assertThat(f1.apply(view2)).isEqualTo(f2.apply(view1));
+		});
 	}
 
 }
