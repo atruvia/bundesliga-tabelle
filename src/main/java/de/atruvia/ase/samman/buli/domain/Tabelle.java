@@ -22,13 +22,14 @@ import org.jmolecules.ddd.annotation.Entity;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
-import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
+import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
+// it's not a value object since it contains mutable state (could be solved by creating new table instanced on #add) nor it's an entity since it doesn't have an identity. 
 @Entity
 public class Tabelle {
 
@@ -57,12 +58,12 @@ public class Tabelle {
 			return (o1, o2) -> biFunction.apply(o1, o2).compareTo(biFunction.apply(o2, o1));
 		}
 
-		private static TeamIdentifier identifier(OrdnungsElement ordnungsElement) {
+		private static TeamId identifier(OrdnungsElement ordnungsElement) {
 			return ordnungsElement.tabellenPlatz.identifier();
 		}
 
-		private static Predicate<PaarungView> gegnerIs(TeamIdentifier gegner) {
-			return e -> Objects.equals(e.gegner().team().identifier(), gegner);
+		private static Predicate<PaarungView> gegnerIs(TeamId gegner) {
+			return e -> Objects.equals(e.gegner().team().id(), gegner);
 		}
 
 		private static Predicate<PaarungView> isAuswaerts() {
@@ -98,7 +99,7 @@ public class Tabelle {
 
 	}
 
-	private final Map<TeamIdentifier, TabellenPlatz> eintraege = new HashMap<>();
+	private final Map<TeamId, TabellenPlatz> eintraege = new HashMap<>();
 
 	public void add(Paarung paarung) {
 		addInternal(paarung.viewForTeam(HEIM));
@@ -106,13 +107,13 @@ public class Tabelle {
 	}
 
 	private void addInternal(PaarungView paarung) {
-		eintraege.merge(paarung.self().team().identifier(), newEntry(paarung), TabellenPlatz::mergeWith);
+		eintraege.merge(paarung.self().team().id(), newEntry(paarung), TabellenPlatz::mergeWith);
 	}
 
 	private TabellenPlatz newEntry(PaarungView paarung) {
 		var team = paarung.self().team();
 		TabellenPlatzBuilder builder = TabellenPlatz.builder() //
-				.team(team.identifier(), team.name(), team.wappen());
+				.team(team.id(), team.name(), team.wappen());
 		if (!paarung.isGeplant()) {
 			builder = builder.spiele(1) //
 					.paarung(paarung) //

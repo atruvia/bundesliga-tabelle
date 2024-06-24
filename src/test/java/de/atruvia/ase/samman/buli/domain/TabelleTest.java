@@ -5,7 +5,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.createPaarungen;
-import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static java.net.URI.create;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
@@ -352,8 +352,8 @@ class TabelleTest {
 				.gast(Entry.builder().team(Team.builder().name(teamGast).wappen(wappenGast).build()).build());
 	}
 
-	private static EntryBuilder team(String team, String identifier) {
-		return Entry.builder().team(Team.builder().identifier(teamIdentifier(identifier)).name(team).build());
+	private static EntryBuilder team(String team, String teamid) {
+		return Entry.builder().team(Team.builder().id(teamId(teamid)).name(team).build());
 	}
 
 	private static PaarungBuilder paarung(EntryBuilder heim, EntryBuilder gast) {

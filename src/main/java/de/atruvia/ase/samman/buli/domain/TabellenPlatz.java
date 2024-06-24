@@ -27,7 +27,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection;
-import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
+import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
 import lombok.Builder;
 import lombok.Singular;
@@ -60,7 +60,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 
 	}
 
-	TeamIdentifier identifier;
+	TeamId identifier;
 	URI wappen;
 	@With
 	int platz;
@@ -145,7 +145,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			gegentore = new HashMap<>();
 		}
 
-		public TabellenPlatzBuilder team(TeamIdentifier identifier, String name, URI wappen) {
+		public TabellenPlatzBuilder team(TeamId identifier, String name, URI wappen) {
 			this.identifier = identifier;
 			this.teamName = name;
 			this.wappen = wappen;

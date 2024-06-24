@@ -6,7 +6,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.TabellenPlatzMother.platzWith;
-import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static java.net.URI.create;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
@@ -174,8 +174,7 @@ class TabellenHttpAdapterTest {
 	static TabellenPlatz platzWithBase(int base, TabellenPlatzBuilder builder) {
 		int cnt = 0;
 		return builder //
-				.team(teamIdentifier("Identifier " + base + (++cnt)), "Team " + base,
-						create("proto://wappen-team-" + base)) //
+				.team(teamId("Identifier " + base + (++cnt)), "Team " + base, create("proto://wappen-team-" + base)) //
 				.spiele(base + (++cnt)) //
 				.withTore(HEIM, base + (++cnt)) //
 				.withGegentore(HEIM, base + (++cnt)) //

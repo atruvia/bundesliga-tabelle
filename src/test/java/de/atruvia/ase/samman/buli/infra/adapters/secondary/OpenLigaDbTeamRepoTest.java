@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 import de.atruvia.ase.samman.buli.domain.Team;
-import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
+import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 
 class OpenLigaDbTeamRepoTest {
 
@@ -29,8 +29,8 @@ class OpenLigaDbTeamRepoTest {
 		});
 	}
 
-	Optional<Team> teamByIdentifier(List<Team> teams, TeamIdentifier identifier) {
-		return teams.stream().filter(t -> identifier.equals(t.identifier())).findFirst();
+	Optional<Team> teamByIdentifier(List<Team> teams, TeamId teamId) {
+		return teams.stream().filter(t -> teamId.equals(t.id())).findFirst();
 	}
 
 	List<Team> teams(String league, String season) {

@@ -1,6 +1,6 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
-import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static java.net.URI.create;
 import static java.util.Arrays.stream;
 import static lombok.AccessLevel.PUBLIC;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Team;
-import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
+import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.TeamRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -39,14 +39,14 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 		String teamIconUrl;
 
 		Team toDomain() {
-			return Team.builder().identifier(toIdentifier(teamId)) //
+			return Team.builder().id(toTeamId(teamId)) //
 					.name(teamName) //
 					.wappen(toURI(teamIconUrl)) //
 					.build();
 		}
 
-		private static TeamIdentifier toIdentifier(Number teamId) {
-			return teamId == null ? null : teamIdentifier(teamId.toString());
+		private static TeamId toTeamId(Number teamId) {
+			return teamId == null ? null : teamId(teamId.toString());
 		}
 
 		private static URI toURI(String wappen) {
