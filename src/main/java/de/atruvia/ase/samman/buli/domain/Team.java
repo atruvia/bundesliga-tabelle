@@ -4,12 +4,9 @@ import static lombok.AccessLevel.PRIVATE;
 
 import java.net.URI;
 
-import org.jmolecules.ddd.annotation.Entity;
-import org.jmolecules.ddd.annotation.Identity;
-import org.jmolecules.ddd.types.AggregateRoot;
+import org.jmolecules.ddd.annotation.ValueObject;
 import org.jmolecules.ddd.types.Identifier;
 
-import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -18,8 +15,8 @@ import lombok.experimental.Accessors;
 @Value
 @Accessors(fluent = true)
 @Builder
-@Entity
-public class Team implements AggregateRoot<Team, TeamId> {
+@ValueObject
+public class Team {
 
 	@Value
 	@RequiredArgsConstructor(access = PRIVATE)
@@ -36,7 +33,6 @@ public class Team implements AggregateRoot<Team, TeamId> {
 		}
 	}
 
-	@Identity
 	TeamId id;
 	String name;
 	URI wappen;
@@ -45,11 +41,6 @@ public class Team implements AggregateRoot<Team, TeamId> {
 		this.id = id == null ? new TeamId(name) : id;
 		this.name = name;
 		this.wappen = wappen;
-	}
-
-	@Override
-	public TeamId getId() {
-		return id;
 	}
 
 }
