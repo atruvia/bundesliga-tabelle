@@ -3,6 +3,7 @@ package de.atruvia.ase.samman.buli.util;
 import static de.atruvia.ase.samman.buli.util.Merger.checkUnique;
 import static de.atruvia.ase.samman.buli.util.Merger.lastNonNull;
 import static de.atruvia.ase.samman.buli.util.Merger.merge;
+import static de.atruvia.ase.samman.buli.util.Merger.sum;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -19,17 +20,29 @@ class MergerTest {
 	@Test
 	void testMerge() {
 		@RequiredArgsConstructor
-		final class StringMergable implements Mergeable<StringMergable> {
+		class TestMergable implements Mergeable<TestMergable> {
 
-			private final String value;
+			private final int someInt;
+			private final List<Integer> someIntValues;
+			private final List<String> someStrings;
 
 			@Override
-			public StringMergable mergeWith(StringMergable other) {
-				return new StringMergable(value + "->" + other.value);
+			public TestMergable mergeWith(TestMergable other) {
+				return new TestMergable(//
+						sum(someInt, other.someInt), //
+						merge(someIntValues, other.someIntValues), //
+						merge(someStrings, other.someStrings) //
+				);
 			}
 		}
-		var merged = Merger.merge(new StringMergable("a"), new StringMergable("b"));
-		assertThat(merged.value).isEqualTo("a->b");
+		var merged = Merger.merge( //
+				new TestMergable(42, List.of(1, 2, 3), List.of("a")), //
+				new TestMergable(43, List.of(4, 5), List.of("b", "c")) //
+		);
+
+		assertThat(merged.someInt).isEqualTo(42 + 43);
+		assertThat(merged.someIntValues).isEqualTo(List.of(1, 2, 3, 4, 5));
+		assertThat(merged.someStrings).isEqualTo(List.of("a", "b", "c"));
 	}
 
 	@Test
