@@ -18,8 +18,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.jmolecules.ddd.annotation.Entity;
-
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
@@ -29,8 +27,9 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
-// it's not a value object since it contains mutable state (could be solved by creating new table instanced on #add) nor it's an entity since it doesn't have an identity. 
-@Entity
+// TODO it's not a value object since it contains mutable state (could be solved by creating new table instanced on #add) nor it's an entity since it doesn't have an identity. 
+//@Entity
+//@ValueObject
 public class Tabelle {
 
 	@Value

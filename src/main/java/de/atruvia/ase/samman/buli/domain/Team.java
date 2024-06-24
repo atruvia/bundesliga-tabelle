@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PRIVATE;
 import java.net.URI;
 
 import org.jmolecules.ddd.annotation.Entity;
+import org.jmolecules.ddd.annotation.Identity;
 import org.jmolecules.ddd.types.AggregateRoot;
 import org.jmolecules.ddd.types.Identifier;
 
@@ -35,6 +36,7 @@ public class Team implements AggregateRoot<Team, TeamId> {
 		}
 	}
 
+	@Identity
 	TeamId id;
 	String name;
 	URI wappen;

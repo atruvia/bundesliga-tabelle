@@ -4,7 +4,9 @@ import static com.tngtech.archunit.lang.SimpleConditionEvent.violated;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 import static java.lang.String.format;
-import static org.jmolecules.archunit.JMoleculesArchitectureRules.ensureHexagonal;
+
+import org.jmolecules.archunit.JMoleculesArchitectureRules;
+import org.jmolecules.archunit.JMoleculesDddRules;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaType;
@@ -26,7 +28,10 @@ class ArchitectureTest {
 	ArchRule noCycles = slices().matching(BASE + ".(*)..").should().beFreeOfCycles();
 
 	@ArchTest
-	ArchRule hexagonalArchitecture = ensureHexagonal();
+	ArchRule jMoleculesDddRules = JMoleculesDddRules.all();
+
+	@ArchTest
+	ArchRule hexagonalArchitecture = JMoleculesArchitectureRules.ensureHexagonal();
 
 	@ArchTest
 	ArchRule primaryPortImplementationHasToImplementThePrimaryPort = classes().that()
