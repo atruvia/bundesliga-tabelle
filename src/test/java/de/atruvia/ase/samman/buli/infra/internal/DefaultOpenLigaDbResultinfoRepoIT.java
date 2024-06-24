@@ -1,6 +1,6 @@
 package de.atruvia.ase.samman.buli.infra.internal;
 
-import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo.endergebnisType;
+import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo.endergebnisType;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junitpioneer.jupiter.cartesian.CartesianTest;

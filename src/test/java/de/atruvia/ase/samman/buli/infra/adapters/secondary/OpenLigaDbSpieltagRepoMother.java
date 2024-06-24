@@ -7,8 +7,8 @@ import static lombok.AccessLevel.PRIVATE;
 import java.util.List;
 
 import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo;
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo;
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo.GlobalResultInfo;
+import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
+import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo.GlobalResultInfo;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -30,8 +30,8 @@ public final class OpenLigaDbSpieltagRepoMother {
 		return (__league, __season) -> List.of(resultinfo(globalResultInfoId));
 	}
 
-	private static Resultinfo resultinfo(int globalResultInfoId) {
-		Resultinfo resultinfo = new Resultinfo();
+	private static OpenligaDbResultinfo resultinfo(int globalResultInfoId) {
+		OpenligaDbResultinfo resultinfo = new OpenligaDbResultinfo();
 		resultinfo.orderId = 42;
 		resultinfo.globalResultInfo = globalResultInfo(globalResultInfoId);
 		return resultinfo;

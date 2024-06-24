@@ -17,15 +17,15 @@ public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 	private final RestTemplate restTemplate;
 	private final AvailableLeagueRepo availableLeagueRepo;
 
-	public List<Resultinfo> getResultinfos(String league, String season) {
+	public List<OpenligaDbResultinfo> getResultinfos(String league, String season) {
 		AvailableLeague availableLeague = availableLeagueRepo.getAvailableLeague(league, season)
 				.orElseThrow(() -> new AvailableLeagueNotFoundException(league, season));
 		return getResultinfos(availableLeague.leagueId);
 	}
 
-	private List<Resultinfo> getResultinfos(int leagueId) {
+	private List<OpenligaDbResultinfo> getResultinfos(int leagueId) {
 		return stream(restTemplate.getForObject("https://api.openligadb.de/getresultinfos/{leagueId}",
-				Resultinfo[].class, leagueId)).toList();
+				OpenligaDbResultinfo[].class, leagueId)).toList();
 	}
 
 }

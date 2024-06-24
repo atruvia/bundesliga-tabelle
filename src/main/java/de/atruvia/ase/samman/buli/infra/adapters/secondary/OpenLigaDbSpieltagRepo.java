@@ -4,7 +4,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.LAUFEND;
 import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
-import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo.endergebnisType;
+import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo.endergebnisType;
 import static de.atruvia.ase.samman.buli.util.Streams.toOnlyElement;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
@@ -22,9 +22,9 @@ import org.springframework.web.client.RestTemplate;
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
-import de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbTeamRepo.JsonTeam;
+import de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbTeamRepo.OpenligaDbTeam;
 import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo;
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo;
+import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -42,13 +42,13 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@ToString
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
-	private static class MatchResult {
+	private static class OpenligaDbMatchResult {
 		int resultTypeID;
 		int pointsTeam1;
 		int pointsTeam2;
 
-		private static Optional<MatchResult> endergebnisOf(Stream<MatchResult> matchResults,
-				List<Resultinfo> resultinfos) {
+		private static Optional<OpenligaDbMatchResult> endergebnisOf(Stream<OpenligaDbMatchResult> matchResults,
+				List<OpenligaDbResultinfo> resultinfos) {
 			int endergebnisResultTypeId = endergebnisType(resultinfos).globalResultInfo.id;
 			return matchResults.filter(t -> t.resultTypeID == endergebnisResultTypeId).reduce(toOnlyElement());
 		}
@@ -76,18 +76,18 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@ToString
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
-	private static class Match {
-		JsonTeam team1;
-		JsonTeam team2;
+	private static class OpenligaDbMatch {
+		OpenligaDbTeam team1;
+		OpenligaDbTeam team2;
 		boolean matchIsFinished;
-		MatchResult[] matchResults;
+		OpenligaDbMatchResult[] matchResults;
 		Goal[] goals;
 
-		private Paarung toDomain(List<Resultinfo> resultinfos) {
+		private Paarung toDomain(List<OpenligaDbResultinfo> resultinfos) {
 			var ergebnisTyp = ergebnisTyp();
 			var paarung = paarung(team1.toDomain(), team2.toDomain()).ergebnisTyp(ergebnisTyp);
 			if (ergebnisTyp == BEENDET) {
-				var endergebnis = MatchResult.endergebnisOf(stream(matchResults), resultinfos)
+				var endergebnis = OpenligaDbMatchResult.endergebnisOf(stream(matchResults), resultinfos)
 						.orElseThrow(() -> new IllegalStateException("No final result found in finished game " + this));
 				paarung = paarung.goals(endergebnis.pointsTeam1, endergebnis.pointsTeam2);
 			} else if (ergebnisTyp == LAUFEND) {
@@ -117,8 +117,8 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@Override
 	public List<Paarung> lade(String league, String season) {
-		List<Resultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
-		return stream(restTemplate.getForObject(SERVICE_URI, Match[].class, league, season))
+		List<OpenligaDbResultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
+		return stream(restTemplate.getForObject(SERVICE_URI, OpenligaDbMatch[].class, league, season))
 				.map(t -> t.toDomain(resultinfos)).toList();
 	}
 

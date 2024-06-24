@@ -1,6 +1,6 @@
 package de.atruvia.ase.samman.buli.infra.internal;
 
-import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo.endergebnisType;
+import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo.endergebnisType;
 import static de.atruvia.ase.samman.buli.springframework.ResponseFromResourcesSupplier.responseFromResources;
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restTemplateMock;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo;
+import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
 
 class DefaultOpenLigaDbResultinfoRepoTest {
 
@@ -28,7 +28,7 @@ class DefaultOpenLigaDbResultinfoRepoTest {
 
 	@Test
 	void endergebnisType2022() {
-		List<Resultinfo> resultinfos = sut.getResultinfos("bl1", "2022");
+		List<OpenligaDbResultinfo> resultinfos = sut.getResultinfos("bl1", "2022");
 		assertSoftly(s -> assertThat(resultinfos).satisfiesExactly( //
 				r -> {
 					s.assertThat(r).isSameAs(endergebnisType(resultinfos));
@@ -42,7 +42,7 @@ class DefaultOpenLigaDbResultinfoRepoTest {
 
 	@Test
 	void endergebnisType2023() {
-		List<Resultinfo> resultinfos = sut.getResultinfos("bl1", "2023");
+		List<OpenligaDbResultinfo> resultinfos = sut.getResultinfos("bl1", "2023");
 		assertSoftly(s -> assertThat(resultinfos).satisfiesExactly( //
 				r -> {
 					s.assertThat(r).isSameAs(endergebnisType(resultinfos));

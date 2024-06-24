@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo;
+import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
 
 @SpringBootTest
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
@@ -106,14 +106,14 @@ class CachingOpenLigaDbResultinfoRepoTest {
 			whenCachingRepoIsQueriedTheResultIs(second);
 		}
 
-		private void whenCachingRepoIsQueriedTheResultIs(List<Resultinfo> resultinfos) {
+		private void whenCachingRepoIsQueriedTheResultIs(List<OpenligaDbResultinfo> resultinfos) {
 			for (int i = 0; i < 3; i++) {
 				assertThat(cachingRepo.getResultinfos(league, season)).isSameAs(resultinfos);
 			}
 		}
 
-		private static Resultinfo resultinfo(String name) {
-			Resultinfo resultinfo = new Resultinfo();
+		private static OpenligaDbResultinfo resultinfo(String name) {
+			OpenligaDbResultinfo resultinfo = new OpenligaDbResultinfo();
 			resultinfo.name = name;
 			return resultinfo;
 		}

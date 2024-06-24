@@ -15,7 +15,7 @@ public interface OpenLigaDbResultinfoRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
-	class Resultinfo {
+	class OpenligaDbResultinfo {
 
 		@ToString
 		@FieldDefaults(level = PUBLIC)
@@ -23,24 +23,24 @@ public interface OpenLigaDbResultinfoRepo {
 			int id;
 		}
 
-		private static final Comparator<Resultinfo> byGlobalResultId = comparing(r -> r.globalResultInfo.id);
+		private static final Comparator<OpenligaDbResultinfo> byGlobalResultId = comparing(r -> r.globalResultInfo.id);
 
 		int id;
 		String name;
 		int orderId;
 		GlobalResultInfo globalResultInfo;
 
-		public static Resultinfo endergebnisType(Collection<Resultinfo> resultinfos) {
+		public static OpenligaDbResultinfo endergebnisType(Collection<OpenligaDbResultinfo> resultinfos) {
 			return tryEndergebnisType(resultinfos)
 					.orElseThrow(() -> new IllegalArgumentException("resultinfos is empty"));
 		}
 
-		private static Optional<Resultinfo> tryEndergebnisType(Collection<Resultinfo> resultinfos) {
+		private static Optional<OpenligaDbResultinfo> tryEndergebnisType(Collection<OpenligaDbResultinfo> resultinfos) {
 			return resultinfos.stream().max(byGlobalResultId);
 		}
 
 	}
 
-	List<Resultinfo> getResultinfos(String league, String season);
+	List<OpenligaDbResultinfo> getResultinfos(String league, String season);
 
 }

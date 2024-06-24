@@ -33,7 +33,7 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 	@SecondaryAdapter
 	// the structure of teams are identical in the Team- and the MatchRepos.
 	// Copy/duplicate this class if they start diverging!
-	static class JsonTeam {
+	static class OpenligaDbTeam {
 		Number teamId;
 		String teamName;
 		String teamIconUrl;
@@ -57,8 +57,8 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 
 	@Override
 	public List<Team> getTeams(String league, String season) {
-		return stream(restTemplate.getForObject(SERVICE_URI, JsonTeam[].class, league, season)).map(JsonTeam::toDomain)
-				.toList();
+		return stream(restTemplate.getForObject(SERVICE_URI, OpenligaDbTeam[].class, league, season))
+				.map(OpenligaDbTeam::toDomain).toList();
 	}
 
 }

@@ -27,7 +27,7 @@ public class CachingOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 
 	@Override
 	@Cacheable(CACHE_NAME)
-	public List<Resultinfo> getResultinfos(String league, String season) {
+	public List<OpenligaDbResultinfo> getResultinfos(String league, String season) {
 		return delegate.getResultinfos(league, season);
 	}
 
