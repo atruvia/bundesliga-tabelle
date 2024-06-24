@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import java.net.URI;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
@@ -27,6 +26,7 @@ import org.approvaltests.core.Options.FileOptions;
 import org.junit.jupiter.api.Test;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
+import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 
 public class DefaultTabellenServiceTest {
@@ -76,11 +76,11 @@ public class DefaultTabellenServiceTest {
 		verifyTabelle(sut.erstelleTabelle("bl1", "2023-games-running-correct-final-result"));
 	}
 
-	private static void verifyTabelle(List<TabellenPlatz> tabelle) {
+	private static void verifyTabelle(Tabelle tabelle) {
 		var headerNames = attributes.keySet().toArray(String[]::new);
 		var headerRow = Stream.of(markdownRow(headerNames));
 		var separatorRow = Stream.of(markdownSeparator(headerNames));
-		var contentRows = tabelle.stream().map(DefaultTabellenServiceTest::print);
+		var contentRows = tabelle.getEntries().stream().map(DefaultTabellenServiceTest::print);
 		verify(concat(headerRow, separatorRow, contentRows).collect(joining("\n")), markdown());
 	}
 

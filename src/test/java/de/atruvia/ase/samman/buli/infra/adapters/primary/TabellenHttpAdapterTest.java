@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
@@ -76,7 +77,7 @@ class TabellenHttpAdapterTest {
 
 		TabellenPlatz platz1 = platzWithBase(10, platzWith(SIEG, UNENTSCHIEDEN, NIEDERLAGE).toBuilder());
 		TabellenPlatz platz2 = platzWithBase(20, platzWith().toBuilder());
-		when(tabellenService.erstelleTabelle(league, season)).thenReturn(List.of(platz1, platz2));
+		when(tabellenService.erstelleTabelle(league, season)).thenReturn(tabelleWithEntries(List.of(platz1, platz2)));
 
 		// TODO Streng genommen testen wir hier auch wieder mehr als wir sollten, denn
 		// wir testen hier auch wieder die TabellenPlatz::merge Funktionalität mit ab
@@ -125,7 +126,7 @@ class TabellenHttpAdapterTest {
 		String league = "bl1";
 		String season = "2022";
 
-		when(tabellenService.erstelleTabelle(league, season)).thenReturn(emptyList());
+		when(tabellenService.erstelleTabelle(league, season)).thenReturn(tabelleWithEntries(emptyList()));
 
 		mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
 				.andDo(print()) //
@@ -159,6 +160,15 @@ class TabellenHttpAdapterTest {
 				.andDo(print()) //
 				.andExpect(status().isNotFound()) //
 		;
+	}
+
+	static Tabelle tabelleWithEntries(List<TabellenPlatz> result) {
+		return new Tabelle() {
+			@Override
+			public List<TabellenPlatz> getEntries() {
+				return result;
+			}
+		};
 	}
 
 	static TabellenPlatz platzWithBase(int base, TabellenPlatzBuilder builder) {
