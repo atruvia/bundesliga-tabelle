@@ -20,15 +20,15 @@ class MergerTest {
 	@Test
 	void testMerge() {
 		@RequiredArgsConstructor
-		class TestMergable implements Mergeable<TestMergable> {
+		class FooBar implements Mergeable<FooBar> {
 
 			private final int someInt;
 			private final List<Integer> someIntValues;
 			private final List<String> someStrings;
 
 			@Override
-			public TestMergable mergeWith(TestMergable other) {
-				return new TestMergable(//
+			public FooBar mergeWith(FooBar other) {
+				return new FooBar(//
 						sum(someInt, other.someInt), //
 						merge(someIntValues, other.someIntValues), //
 						merge(someStrings, other.someStrings) //
@@ -36,8 +36,8 @@ class MergerTest {
 			}
 		}
 		var merged = Merger.merge( //
-				new TestMergable(42, List.of(1, 2, 3), List.of("a")), //
-				new TestMergable(43, List.of(4, 5), List.of("b", "c")) //
+				new FooBar(42, List.of(1, 2, 3), List.of("a")), //
+				new FooBar(43, List.of(4, 5), List.of("b", "c")) //
 		);
 
 		assertThat(merged.someInt).isEqualTo(42 + 43);
