@@ -11,7 +11,26 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
+import lombok.RequiredArgsConstructor;
+
 class MergerTest {
+
+	@Test
+	void testMerge() {
+		@RequiredArgsConstructor
+		final class StringMergable implements Mergeable<StringMergable> {
+
+			private final String value;
+
+			@Override
+			public StringMergable mergeWith(StringMergable other) {
+				return new StringMergable(value + "->" + other.value);
+			}
+		}
+		var merged = Merger.merge(new StringMergable("a"), new StringMergable("b"));
+		assertThat(merged.value).isEqualTo("a->b");
+	}
 
 	@Test
 	void testCheckUnique_empty() {
