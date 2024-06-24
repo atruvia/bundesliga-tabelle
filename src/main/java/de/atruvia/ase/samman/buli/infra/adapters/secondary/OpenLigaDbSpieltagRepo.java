@@ -3,6 +3,7 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.LAUFEND;
+import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
 import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Resultinfo.endergebnisType;
 import static de.atruvia.ase.samman.buli.util.Streams.toOnlyElement;
 import static java.util.Arrays.stream;
@@ -19,9 +20,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
-import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
-import de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
 import de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbTeamRepo.JsonTeam;
 import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo;
@@ -85,13 +84,12 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 		Goal[] goals;
 
 		private Paarung toDomain(List<Resultinfo> resultinfos) {
-			ErgebnisTyp ergebnisTyp = ergebnisTyp();
-			PaarungBuilder builder = Paarung.builder().ergebnisTyp(ergebnisTyp) //
-					.heim(new Entry(team1.toDomain(), 0)).gast(new Entry(team2.toDomain(), 0));
+			var ergebnisTyp = ergebnisTyp();
+			var paarung = paarung(team1.toDomain(), team2.toDomain()).ergebnisTyp(ergebnisTyp);
 			if (ergebnisTyp == BEENDET) {
-				MatchResult endergebnis = MatchResult.endergebnisOf(stream(matchResults), resultinfos)
+				var endergebnis = MatchResult.endergebnisOf(stream(matchResults), resultinfos)
 						.orElseThrow(() -> new IllegalStateException("No final result found in finished game " + this));
-				builder = builder.goals(endergebnis.pointsTeam1, endergebnis.pointsTeam2);
+				paarung = paarung.goals(endergebnis.pointsTeam1, endergebnis.pointsTeam2);
 			} else if (ergebnisTyp == LAUFEND) {
 				// a final result is always present on started games, but in some cases it has
 				// been 0:0 while there have already been shot some goals. Of course, we always
@@ -99,10 +97,10 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 				// prefer using the final result if it's present.
 				// In the meanwhile we have seen everything at started games! e.g. a half-time
 				// score of 3:2 with a final score of 0:0 and goals where missing (0:1, 0:3)
-				Goal lastGoal = Goal.lastGoalOf(goals);
-				builder = builder.goals(lastGoal.scoreTeam1, lastGoal.scoreTeam2);
+				var lastGoal = Goal.lastGoalOf(goals);
+				paarung = paarung.goals(lastGoal.scoreTeam1, lastGoal.scoreTeam2);
 			}
-			return builder.build();
+			return paarung.build();
 		}
 
 		private ErgebnisTyp ergebnisTyp() {

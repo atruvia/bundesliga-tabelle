@@ -151,11 +151,15 @@ public class Paarung {
 	public static class PaarungBuilder {
 
 		public static PaarungBuilder paarung(String heim, String gast) {
-			return Paarung.builder().heim(entry(heim)).gast(entry(gast));
+			return paarung(team(heim), team(gast));
 		}
 
-		private static Entry entry(String team) {
-			return Entry.builder().team(Team.builder().name(team).build()).build();
+		private static Team team(String name) {
+			return Team.builder().name(name).build();
+		}
+
+		public static PaarungBuilder paarung(Team heim, Team gast) {
+			return Paarung.builder().heim(entry(heim)).gast(entry(gast));
 		}
 
 		public PaarungBuilder endergebnis(int toreHeim, int toreGast) {
@@ -168,6 +172,10 @@ public class Paarung {
 
 		PaarungBuilder ergebnis(ErgebnisTyp ergebnisTyp, int toreHeim, int toreGast) {
 			return ergebnisTyp(ergebnisTyp).goals(toreHeim, toreGast);
+		}
+
+		private static Entry entry(Team team) {
+			return Entry.builder().team(team).build();
 		}
 
 		public PaarungBuilder goals(int toreHeim, int toreGast) {
