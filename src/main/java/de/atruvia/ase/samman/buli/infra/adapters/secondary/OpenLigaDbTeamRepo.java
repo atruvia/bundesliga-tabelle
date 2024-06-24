@@ -1,6 +1,7 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier.teamIdentifier;
+import static java.net.URI.create;
 import static java.util.Arrays.stream;
 import static lombok.AccessLevel.PUBLIC;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Team;
+import de.atruvia.ase.samman.buli.domain.Team.TeamIdentifier;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.TeamRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -29,17 +31,26 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 	@ToString
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
-	private static class JsonTeam {
-		long teamId;
+	// the structure of teams are identical in the Team- and the MatchRepos.
+	// Copy/duplicate this class if they start diverging!
+	static class JsonTeam {
+		Number teamId;
 		String teamName;
 		String teamIconUrl;
 
 		Team toDomain() {
-			return Team.builder().identifier(teamIdentifier(teamId)).name(teamName).wappen(toURI(teamIconUrl)).build();
+			return Team.builder().identifier(toIdentifier(teamId)) //
+					.name(teamName) //
+					.wappen(toURI(teamIconUrl)) //
+					.build();
+		}
+
+		private static TeamIdentifier toIdentifier(Number teamId) {
+			return teamId == null ? null : teamIdentifier(teamId.toString());
 		}
 
 		private static URI toURI(String wappen) {
-			return wappen == null ? null : URI.create(wappen);
+			return wappen == null ? null : create(wappen);
 		}
 
 	}
