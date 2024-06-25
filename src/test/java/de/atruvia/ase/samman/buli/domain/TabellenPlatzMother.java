@@ -3,6 +3,7 @@ package de.atruvia.ase.samman.buli.domain;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.paarung;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static java.util.Arrays.asList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -48,7 +49,8 @@ public final class TabellenPlatzMother {
 	}
 
 	public static TabellenPlatz merge(Stream<TabellenPlatz> tabellenPlaetze) {
-		return tabellenPlaetze.reduce(TabellenPlatz::mergeWith).orElseGet(() -> TabellenPlatz.builder().build());
+		return tabellenPlaetze.reduce(TabellenPlatz::mergeWith)
+				.orElseGet(() -> TabellenPlatz.builder().identifier(teamId("someTeamId")).build());
 	}
 
 	private static TabellenPlatz platzWith(Ergebnis ergebnis) {

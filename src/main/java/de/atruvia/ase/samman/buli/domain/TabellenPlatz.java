@@ -30,6 +30,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
 import lombok.With;
@@ -60,6 +61,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 
 	}
 
+	@NonNull
 	TeamId identifier;
 	URI wappen;
 	@With
@@ -68,9 +70,12 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	String teamName;
 	int spiele;
 	@Singular(value = "paarung")
+	@NonNull
 	List<PaarungView> paarungen;
 	int punkte;
+	@NonNull
 	Map<ViewDirection, Integer> tore;
+	@NonNull
 	Map<ViewDirection, Integer> gegentore;
 	PaarungView laufendesSpiel;
 

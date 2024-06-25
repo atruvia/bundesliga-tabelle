@@ -1,6 +1,7 @@
 package de.atruvia.ase.samman.buli.domain;
 
 import static com.google.common.collect.Streams.concat;
+import static de.atruvia.ase.samman.buli.domain.Paarung.Entry.entry;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
@@ -27,6 +28,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung.Entry.EntryBuilder;
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.Tendenz;
+import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 
 class TabelleTest {
 
@@ -240,11 +242,11 @@ class TabelleTest {
 	void beiAenderndemMannschaftsnamenWirdDerLetzteUebernommen() {
 		String team1 = "Team 1";
 		String team2 = "Team 2";
-		var heimAlt = team(team1, team1);
-		var gastAlt = team(team2 + "-A", team2);
+		var heimAlt = team(team1, teamId(team1));
+		var gastAlt = team(team2 + "-A", teamId(team2));
 
-		var heimNeu = team(team1, team1);
-		var gastNeu = team(team2 + "-B", team2);
+		var heimNeu = team(team1, teamId(team1));
+		var gastNeu = team(team2 + "-B", teamId(team2));
 		gegebenSeienDiePaarungen(paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
@@ -257,11 +259,11 @@ class TabelleTest {
 	void beiAenderndemMannschaftsnamenNullWirdNichtUebernommen() {
 		String team1 = "Team 1";
 		String team2 = "Team 2";
-		var heimAlt = team(team1, team1);
-		var gastAlt = team(team2, team2);
+		var heimAlt = team(team1, teamId(team1));
+		var gastAlt = team(team2, teamId(team2));
 
-		var heimNeu = team(team1, team1);
-		var gastNeu = team(null, team2);
+		var heimNeu = team(team1, teamId(team1));
+		var gastNeu = team(null, teamId(team2));
 		gegebenSeienDiePaarungen( //
 				paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
@@ -343,17 +345,17 @@ class TabelleTest {
 	}
 
 	private static PaarungBuilder paarung(String teamHeim, String teamGast) {
-		return paarung(team(teamHeim, teamHeim), team(teamGast, teamGast));
+		return paarung(team(teamHeim, teamId(teamHeim)), team(teamGast, teamId(teamGast)));
 	}
 
 	private static PaarungBuilder paarung(String teamHeim, String teamGast, URI wappenHeim, URI wappenGast) {
 		return Paarung.builder()
-				.heim(Entry.builder().team(Team.builder().name(teamHeim).wappen(wappenHeim).build()).build())
-				.gast(Entry.builder().team(Team.builder().name(teamGast).wappen(wappenGast).build()).build());
+				.heim(entry(Team.builder().id(teamId(teamHeim)).name(teamHeim).wappen(wappenHeim).build()))
+				.gast(entry(Team.builder().id(teamId(teamGast)).name(teamGast).wappen(wappenGast).build()));
 	}
 
-	private static EntryBuilder team(String team, String teamid) {
-		return Entry.builder().team(Team.builder().id(teamId(teamid)).name(team).build());
+	private static EntryBuilder team(String team, TeamId teamId) {
+		return Entry.builder().team(Team.builder().id(teamId).name(team).build());
 	}
 
 	private static PaarungBuilder paarung(EntryBuilder heim, EntryBuilder gast) {

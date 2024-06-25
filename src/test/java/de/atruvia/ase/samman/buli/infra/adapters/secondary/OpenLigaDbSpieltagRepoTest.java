@@ -36,8 +36,8 @@ class OpenLigaDbSpieltagRepoTest {
 		RestTemplate restTemplate = restTemplateMock(__ -> """
 				[
 				  {
-					"team1": { "teamName": "Team 1", "teamIconUrl": "teamIconUrl1" },
-					"team2": { "teamName": "Team 2", "teamIconUrl": "teamIconUrl2" },
+					"team1": { "teamId": 42, "teamName": "Team 1", "teamIconUrl": "teamIconUrl1" },
+					"team2": { "teamId": 43, "teamName": "Team 2", "teamIconUrl": "teamIconUrl2" },
 					"matchIsFinished": true,
 				    "matchResults": [ { "resultTypeID": 2 }, { "resultTypeID": 2 } ]
 				  }

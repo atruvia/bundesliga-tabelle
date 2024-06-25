@@ -8,6 +8,7 @@ import org.jmolecules.ddd.annotation.ValueObject;
 import org.jmolecules.ddd.types.Identifier;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -22,6 +23,7 @@ public class Team {
 	@RequiredArgsConstructor(access = PRIVATE)
 	public static class TeamId implements Identifier {
 
+		@NonNull
 		String value;
 
 		public static TeamId teamId(long value) {
@@ -33,14 +35,9 @@ public class Team {
 		}
 	}
 
+	@NonNull
 	TeamId id;
 	String name;
 	URI wappen;
-
-	public Team(TeamId id, String name, URI wappen) {
-		this.id = id == null ? new TeamId(name) : id;
-		this.name = name;
-		this.wappen = wappen;
-	}
 
 }

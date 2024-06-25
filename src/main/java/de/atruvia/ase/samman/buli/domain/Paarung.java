@@ -8,6 +8,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.LAUFEND;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 
 import java.util.function.Function;
 
@@ -15,6 +16,7 @@ import org.jmolecules.ddd.annotation.ValueObject;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.With;
@@ -113,7 +115,15 @@ public class Paarung {
 		@With
 		int tore;
 
-		public Entry(Team team, int tore) {
+		public static Entry entry(Team team) {
+			return entry(team, 0);
+		}
+
+		public static Entry entry(Team team, int tore) {
+			return new Entry(team, tore);
+		}
+
+		private Entry(Team team, int tore) {
 			if (tore < 0) {
 				throw new IllegalArgumentException("Tore darf nicht negativ sein, ist aber " + tore);
 			}
@@ -124,8 +134,10 @@ public class Paarung {
 	}
 
 	@Builder.Default
+	@NonNull
 	ErgebnisTyp ergebnisTyp = GEPLANT;
 
+	@NonNull
 	Entry heim, gast;
 
 	public boolean isGeplant() {
@@ -155,7 +167,7 @@ public class Paarung {
 		}
 
 		private static Team team(String name) {
-			return Team.builder().name(name).build();
+			return Team.builder().id(teamId(name)).name(name).build();
 		}
 
 		public static PaarungBuilder paarung(Team heim, Team gast) {

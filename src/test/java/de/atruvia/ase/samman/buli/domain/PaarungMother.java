@@ -1,6 +1,8 @@
 package de.atruvia.ase.samman.buli.domain;
 
+import static de.atruvia.ase.samman.buli.domain.Paarung.Entry.entry;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.function.Predicate.not;
 import static java.util.stream.IntStream.range;
@@ -9,7 +11,6 @@ import static java.util.stream.IntStream.rangeClosed;
 import java.net.URI;
 import java.util.List;
 
-import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder;
@@ -43,8 +44,8 @@ public final class PaarungMother {
 
 	public static Paarung paarungWithAllAttributesSet() {
 		return new Paarung(BEENDET, //
-				new Entry(Team.builder().name("Heim").wappen(URI.create("WappenHeim")).build(), 1), //
-				new Entry(Team.builder().name("Gast").wappen(URI.create("WappenGast")).build(), 2) //
+				entry(Team.builder().id(teamId("Heim")).name("Heim").wappen(URI.create("WappenHeim")).build(), 1), //
+				entry(Team.builder().id(teamId("Gast")).name("Gast").wappen(URI.create("WappenGast")).build(), 2) //
 		);
 	}
 
