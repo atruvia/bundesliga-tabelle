@@ -39,33 +39,30 @@ class DefaultTabelleTest {
 	void zweiMannschaftenKeinSpiel() {
 		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2"), paarung("Team 2", "Team 1"));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle(
-				"""
-						platz|teamName|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1    |Team 1  |     0|    0|            0|          0|     0|         0|              0|           0
-						1    |Team 2  |     0|    0|            0|          0|     0|         0|              0|           0""");
+		dannIstDieTabelle("""
+				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+				1    |Team 1|     0|    0|            0|          0|     0|         0|              0|           0
+				1    |Team 2|     0|    0|            0|          0|     0|         0|              0|           0""");
 	}
 
 	@Test
 	void zweiMannschaftenEinSpielKeineTore() {
 		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2").endergebnis(0, 0), paarung("Team 2", "Team 1"));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle(
-				"""
-						platz|teamName|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1    |Team 1  |     1|    0|            1|          0|     1|         0|              0|           0
-						1    |Team 2  |     1|    0|            1|          0|     1|         0|              0|           0""");
+		dannIstDieTabelle("""
+				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+				1    |Team 1|     1|    0|            1|          0|     1|         0|              0|           0
+				1    |Team 2|     1|    0|            1|          0|     1|         0|              0|           0""");
 	}
 
 	@Test
 	void mannschaftMitMehrPunktenIstWeiterOben() {
 		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2").endergebnis(0, 1), paarung("Team 2", "Team 1"));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle(
-				"""
-						platz|teamName|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1    |Team 2  |     1|    1|            0|          0|     3|         1|              0|           1
-						2    |Team 1  |     1|    0|            0|          1|     0|         0|              1|          -1""");
+		dannIstDieTabelle("""
+				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+				1    |Team 2|     1|    1|            0|          0|     3|         1|              0|           1
+				2    |Team 1|     1|    0|            0|          1|     0|         0|              1|          -1""");
 	}
 
 	@Test
@@ -75,11 +72,10 @@ class DefaultTabelleTest {
 				paarung("Team 2", "Team 1").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle(
-				"""
-						platz|teamName|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1    |Team 1  |     2|    1|            0|          1|     3|         1|              1|           0
-						1    |Team 2  |     2|    1|            0|          1|     3|         1|              1|           0""");
+		dannIstDieTabelle("""
+				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+				1    |Team 1|     2|    1|            0|          1|     3|         1|              1|           0
+				1    |Team 2|     2|    1|            0|          1|     3|         1|              1|           0""");
 	}
 
 	@Test
@@ -94,12 +90,11 @@ class DefaultTabelleTest {
 				paarung("Team 2", "Team 3").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle(
-				"""
-						platz|teamName|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1    |Team 1  |     3|    2|            0|          1|     6|         2|              1|           1
-						1    |Team 2  |     3|    2|            0|          1|     6|         2|              1|           1
-						3    |Team 3  |     2|    0|            0|          2|     0|         0|              2|          -2""");
+		dannIstDieTabelle("""
+				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+				1    |Team 1|     3|    2|            0|          1|     6|         2|              1|           1
+				1    |Team 2|     3|    2|            0|          1|     6|         2|              1|           1
+				3    |Team 3|     2|    0|            0|          2|     0|         0|              2|          -2""");
 	}
 
 	@Test
@@ -140,7 +135,7 @@ class DefaultTabelleTest {
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle(
 				"""
-						platz|teamName        |spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						platz|verein          |spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
 						1    |Team GegnerXvon2|1     |1    |0            |0          |3     |1         |0              |1
 						2    |Team 2          |2     |1    |0            |1          |3     |1         |1              |0
 						3    |Team 1          |2     |1    |0            |1          |3     |1         |1              |0
@@ -394,7 +389,7 @@ class DefaultTabelleTest {
 	}
 
 	private static String print(List<TabellenPlatz> plaetze) {
-		List<String> attribs = asList("platz", "teamName", "spiele", "siege", "unentschieden", "niederlagen", "punkte",
+		List<String> attribs = asList("platz", "verein", "spiele", "siege", "unentschieden", "niederlagen", "punkte",
 				"gesamtTore", "gesamtGegentore", "torDifferenz");
 		Stream<String> header = Stream.of(line(attribs.stream()));
 		Stream<String> values = plaetze.stream().map(t -> print(t, attribs));
@@ -411,12 +406,8 @@ class DefaultTabelleTest {
 
 	private static List<Object> values(List<String> attribs, TabellenPlatz platz) {
 		List<Method> declaredMethods = asList(platz.getClass().getDeclaredMethods());
-		return attribs.stream().map(a -> {
-			if (a.equals("teamName")) {
-				return platz.team().name();
-			}
-			return readValue(platz, declaredMethods, a);
-		}).toList();
+		return attribs.stream()
+				.map(a -> a.equals("verein") ? platz.team().name() : readValue(platz, declaredMethods, a)).toList();
 	}
 
 	private static Object readValue(Object bean, List<Method> declaredMethods, String attribName) {
