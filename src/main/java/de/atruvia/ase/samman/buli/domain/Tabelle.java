@@ -2,6 +2,7 @@ package de.atruvia.ase.samman.buli.domain;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
+import static java.util.Collections.emptyMap;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.groupingBy;
 import static lombok.AccessLevel.PRIVATE;
@@ -18,6 +19,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jmolecules.ddd.annotation.ValueObject;
+
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
@@ -27,9 +30,7 @@ import lombok.Value;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
-// TODO it's not a value object since it contains mutable state (could be solved by creating new table instanced on #add) nor it's an entity since it doesn't have an identity. 
-//@Entity
-//@ValueObject
+@ValueObject
 public class Tabelle {
 
 	@Value
@@ -98,18 +99,25 @@ public class Tabelle {
 
 	}
 
-	private final Map<TeamId, TabellenPlatz> eintraege = new HashMap<>();
+	private final Map<TeamId, TabellenPlatz> entries;
 
-	public void add(Paarung paarung) {
-		addInternal(paarung.viewForTeam(HEIM));
-		addInternal(paarung.viewForTeam(AUSWAERTS));
+	public Tabelle() {
+		this(emptyMap());
 	}
 
-	private void addInternal(PaarungView paarung) {
-		eintraege.merge(paarung.self().team().id(), newEntry(paarung), TabellenPlatz::mergeWith);
+	public Tabelle add(Paarung paarung) {
+		Map<TeamId, TabellenPlatz> entries = new HashMap<>(this.entries);
+		entries = addInternal(entries, paarung.viewForTeam(HEIM));
+		entries = addInternal(entries, paarung.viewForTeam(AUSWAERTS));
+		return new Tabelle(Map.copyOf(entries));
 	}
 
-	private TabellenPlatz newEntry(PaarungView paarung) {
+	private static Map<TeamId, TabellenPlatz> addInternal(Map<TeamId, TabellenPlatz> entries, PaarungView paarung) {
+		entries.merge(paarung.self().team().id(), newEntry(paarung), TabellenPlatz::mergeWith);
+		return entries;
+	}
+
+	private static TabellenPlatz newEntry(PaarungView paarung) {
 		var team = paarung.self().team();
 		TabellenPlatzBuilder builder = TabellenPlatz.builder() //
 				.team(team.id(), team.name(), team.wappen());
@@ -129,7 +137,7 @@ public class Tabelle {
 	public List<TabellenPlatz> getEntries() {
 		// TODO make it side-affect-free, does it work W/O zip!?
 		AtomicInteger platz = new AtomicInteger(1);
-		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = eintraege.values().stream()
+		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = entries.values().stream()
 				.collect(groupingBy(OrdnungsElement::new));
 		return platzGruppen.entrySet().stream() //
 				.sorted(Entry.comparingByKey()) //

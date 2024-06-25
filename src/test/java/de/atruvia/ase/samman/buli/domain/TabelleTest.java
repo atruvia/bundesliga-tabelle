@@ -371,7 +371,7 @@ class TabelleTest {
 	}
 
 	private void wennDieTabelleBerechnetWird() {
-		stream(this.paarungen).forEach(sut::add);
+		sut = stream(this.paarungen).reduce(sut, Tabelle::add, (t1, t2) -> t1);
 	}
 
 	private void dannIstDieTabelle(String expected) {
