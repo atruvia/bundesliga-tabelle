@@ -13,7 +13,6 @@ import static de.atruvia.ase.samman.buli.util.Merger.sum;
 import static java.util.Arrays.asList;
 import static java.util.stream.Stream.generate;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
 import de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection;
-import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
 import lombok.Builder;
 import lombok.NonNull;
@@ -62,12 +60,9 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	}
 
 	@NonNull
-	TeamId identifier;
-	URI wappen;
+	Team team;
 	@With
 	int platz;
-	@With
-	String teamName;
 	int spiele;
 	@Singular(value = "paarung")
 	@NonNull
@@ -129,10 +124,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 
 	public TabellenPlatzBuilder toBuilder() {
 		TabellenPlatzBuilder builder = new TabellenPlatzBuilder();
-		builder.identifier = identifier;
-		builder.wappen = wappen;
 		builder.platz = platz;
-		builder.teamName = teamName;
+		builder.team = team;
 		builder.spiele = spiele;
 		builder.paarungen = new ArrayList<>(paarungen);
 		builder.punkte = punkte;
@@ -150,10 +143,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			gegentore = new HashMap<>();
 		}
 
-		public TabellenPlatzBuilder team(TeamId identifier, String name, URI wappen) {
-			this.identifier = identifier;
-			this.teamName = name;
-			this.wappen = wappen;
+		public TabellenPlatzBuilder team(Team team) {
+			this.team = team;
 			return this;
 		}
 
@@ -172,16 +163,21 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	@Override
 	public TabellenPlatz mergeWith(TabellenPlatz other) {
 		return builder() //
-				.identifier(checkUnique(identifier, other.identifier)) //
-				.teamName(lastNonNull(teamName, other.teamName)) //
+				.team(mergeTeams(team, other.team)) //
 				.paarungen(merge(paarungen, other.paarungen)) //
 				.spiele(sum(spiele, other.spiele)) //
 				.punkte(sum(punkte, other.punkte)) //
 				.tore(merge(Integer::sum, tore, other.tore)) //
 				.gegentore(merge(Integer::sum, gegentore, other.gegentore)) //
-				.wappen(lastNonNull(wappen, other.wappen)) //
 				.laufendesSpiel(lastNonNull(laufendesSpiel, other.laufendesSpiel)) //
 				.build();
+	}
+
+	private Team mergeTeams(Team team1, Team team2) {
+		return team1.equals(team2) //
+				? team1 //
+				: new Team(checkUnique(team1.id(), team.id()), lastNonNull(team1.name(), team2.name()),
+						lastNonNull(team1.wappen(), team2.wappen()));
 	}
 
 	public int siege() {

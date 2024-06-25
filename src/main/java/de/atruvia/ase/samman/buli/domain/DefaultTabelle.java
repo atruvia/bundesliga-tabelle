@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.jmolecules.ddd.annotation.ValueObject;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
-import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +61,7 @@ public class DefaultTabelle implements Tabelle {
 		}
 
 		private static TeamId identifier(OrdnungsElement ordnungsElement) {
-			return ordnungsElement.tabellenPlatz.identifier();
+			return ordnungsElement.tabellenPlatz.team().id();
 		}
 
 		private static Predicate<PaarungView> gegnerIs(TeamId gegner) {
@@ -97,7 +96,7 @@ public class DefaultTabelle implements Tabelle {
 
 		@Override
 		public int compareTo(OrdnungsElement other) {
-			return comparator.thenComparing(comparing(e -> e.tabellenPlatz().teamName())).compare(this, other);
+			return comparator.thenComparing(comparing(e -> e.tabellenPlatz().team().name())).compare(this, other);
 		}
 
 	}
@@ -113,12 +112,12 @@ public class DefaultTabelle implements Tabelle {
 		var existing = entries().stream();
 		var toAdd = Stream.of(newEntry(paarung.viewForTeam(HEIM)), newEntry(paarung.viewForTeam(AUSWAERTS)));
 		return new DefaultTabelle(concat(existing, toAdd)
-				.collect(toMap(TabellenPlatz::identifier, identity(), TabellenPlatz::mergeWith)).values());
+				.collect(toMap(t -> t.team().id(), identity(), TabellenPlatz::mergeWith)).values());
 	}
 
 	private static TabellenPlatz newEntry(PaarungView paarung) {
 		var team = paarung.self().team();
-		var builder = TabellenPlatz.builder().team(team.id(), team.name(), team.wappen());
+		var builder = TabellenPlatz.builder().team(team);
 		return (paarung.isGeplant() //
 				? builder
 				: builder.spiele(1) //

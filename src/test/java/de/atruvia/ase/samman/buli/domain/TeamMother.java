@@ -3,6 +3,8 @@ package de.atruvia.ase.samman.buli.domain;
 import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static java.net.URI.create;
 
+import java.net.URI;
+
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,9 @@ public final class TeamMother {
 	public static final TeamId idMuenchen = teamId(40);
 	public static final TeamId idFrankfurt = teamId(91);
 	public static final TeamId idBremen = teamId(134);
+
+	public static Team anyTeam = Team.builder().id(teamId("anyIdentifier")).name("team1")
+			.wappen(URI.create("proto://wappen1")).build();
 
 	public static final Team teamMuenchen = Team.builder().id(idMuenchen).name("FC Bayern München")
 			.wappen(create("https://i.imgur.com/jJEsJrj.png")).build();

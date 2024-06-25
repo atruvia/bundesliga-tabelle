@@ -115,15 +115,15 @@ class DefaultTabelleTest {
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> {
-					assertThat(e1.teamName()).isEqualTo("Team 1");
+					assertThat(e1.team().name()).isEqualTo("Team 1");
 					assertThat(e1.platz()).isEqualTo(1);
 				}, //
 				e2 -> {
-					assertThat(e2.teamName()).isEqualTo("Team 2");
+					assertThat(e2.team().name()).isEqualTo("Team 2");
 					assertThat(e2.platz()).isEqualTo(1);
 				}, //
 				e3 -> {
-					assertThat(e3.teamName()).isEqualTo("Team 3");
+					assertThat(e3.team().name()).isEqualTo("Team 3");
 					assertThat(e3.platz()).isEqualTo(3);
 				} //
 
@@ -159,8 +159,8 @@ class DefaultTabelleTest {
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.teamName()).isEqualTo("Team 2"), //
-				e2 -> assertThat(e2.teamName()).isEqualTo("Team 1"), //
+				e1 -> assertThat(e1.team().name()).isEqualTo("Team 2"), //
+				e2 -> assertThat(e2.team().name()).isEqualTo("Team 1"), //
 				e3 -> dontCare(), //
 				e4 -> dontCare() //
 		);
@@ -178,8 +178,8 @@ class DefaultTabelleTest {
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.teamName()).isEqualTo("Team 2"), //
-				e2 -> assertThat(e2.teamName()).isEqualTo("Team 1"), //
+				e1 -> assertThat(e1.team().name()).isEqualTo("Team 2"), //
+				e2 -> assertThat(e2.team().name()).isEqualTo("Team 1"), //
 				e3 -> dontCare(), //
 				e4 -> dontCare() //
 		);
@@ -196,8 +196,8 @@ class DefaultTabelleTest {
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.teamName()).isEqualTo("Team 2"), //
-				e2 -> assertThat(e2.teamName()).isEqualTo("Team 1") //
+				e1 -> assertThat(e1.team().name()).isEqualTo("Team 2"), //
+				e2 -> assertThat(e2.team().name()).isEqualTo("Team 1") //
 		);
 	}
 
@@ -208,8 +208,8 @@ class DefaultTabelleTest {
 				paarung("Team 2", "Team 1", create("proto://wappenNeu2"), create("proto://wappenNeu1")));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.wappen()).isEqualTo(create("proto://wappenNeu1")), //
-				e2 -> assertThat(e2.wappen()).isEqualTo(create("proto://wappenNeu2")) //
+				e1 -> assertThat(e1.team().wappen()).isEqualTo(create("proto://wappenNeu1")), //
+				e2 -> assertThat(e2.team().wappen()).isEqualTo(create("proto://wappenNeu2")) //
 		);
 	}
 
@@ -220,8 +220,8 @@ class DefaultTabelleTest {
 				paarung("Team 2", "Team 1", create("proto://wappenNeu2"), null));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.wappen()).isEqualTo(create("proto://wappenAlt1")), //
-				e2 -> assertThat(e2.wappen()).isEqualTo(create("proto://wappenNeu2")) //
+				e1 -> assertThat(e1.team().wappen()).isEqualTo(create("proto://wappenAlt1")), //
+				e2 -> assertThat(e2.team().wappen()).isEqualTo(create("proto://wappenNeu2")) //
 		);
 	}
 
@@ -233,8 +233,8 @@ class DefaultTabelleTest {
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.wappen()).isEqualTo(create("proto://wappen1")), //
-				e2 -> assertThat(e2.wappen()).isNull() //
+				e1 -> assertThat(e1.team().wappen()).isEqualTo(create("proto://wappen1")), //
+				e2 -> assertThat(e2.team().wappen()).isNull() //
 		);
 	}
 
@@ -250,8 +250,8 @@ class DefaultTabelleTest {
 		gegebenSeienDiePaarungen(paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.teamName()).isEqualTo(team1), //
-				e2 -> assertThat(e2.teamName()).isEqualTo(team2 + "-B") //
+				e1 -> assertThat(e1.team().name()).isEqualTo(team1), //
+				e2 -> assertThat(e2.team().name()).isEqualTo(team2 + "-B") //
 		);
 	}
 
@@ -268,8 +268,8 @@ class DefaultTabelleTest {
 				paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.teamName()).isEqualTo(team1), //
-				e2 -> assertThat(e2.teamName()).isEqualTo(team2) //
+				e1 -> assertThat(e1.team().name()).isEqualTo(team1), //
+				e2 -> assertThat(e2.team().name()).isEqualTo(team2) //
 		);
 	}
 
@@ -305,12 +305,12 @@ class DefaultTabelleTest {
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> {
-					assertThat(e1.teamName()).isEqualTo("Team 1");
+					assertThat(e1.team().name()).isEqualTo("Team 1");
 					assertThat(e1.laufendesSpiel().tore()).isEqualTo(1);
 					assertThat(e1.laufendesSpiel().gegentore()).isEqualTo(2);
 				}, //
 				e2 -> {
-					assertThat(e2.teamName()).isEqualTo("Team 2");
+					assertThat(e2.team().name()).isEqualTo("Team 2");
 					assertThat(e2.laufendesSpiel().tore()).isEqualTo(2);
 					assertThat(e2.laufendesSpiel().gegentore()).isEqualTo(1);
 				} //
@@ -388,7 +388,7 @@ class DefaultTabelleTest {
 	}
 
 	private Tendenz tendenzForTeam(String team) {
-		var tabellenPlatz = sut.entries().stream().filter(t -> t.teamName().equals(team)).findFirst()
+		var tabellenPlatz = sut.entries().stream().filter(t -> t.team().name().equals(team)).findFirst()
 				.orElseThrow(() -> new IllegalStateException("No entry for team " + team));
 		return tabellenPlatz.tendenz();
 	}
@@ -411,7 +411,12 @@ class DefaultTabelleTest {
 
 	private static List<Object> values(List<String> attribs, TabellenPlatz platz) {
 		List<Method> declaredMethods = asList(platz.getClass().getDeclaredMethods());
-		return attribs.stream().map(a -> readValue(platz, declaredMethods, a)).toList();
+		return attribs.stream().map(a -> {
+			if (a.equals("teamName")) {
+				return platz.team().name();
+			}
+			return readValue(platz, declaredMethods, a);
+		}).toList();
 	}
 
 	private static Object readValue(Object bean, List<Method> declaredMethods, String attribName) {

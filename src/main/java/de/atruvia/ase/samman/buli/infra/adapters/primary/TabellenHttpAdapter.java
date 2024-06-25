@@ -99,8 +99,8 @@ public class TabellenHttpAdapter {
 		private static JsonTabellenPlatz fromDomain(TabellenPlatz domain) {
 			JsonTabellenPlatz jsonTabellenPlatz = builder() //
 					.platz(domain.platz()) //
-					.wappen(domain.wappen() == null ? null : domain.wappen().toASCIIString()) //
-					.team(domain.teamName()) //
+					.wappen(domain.team().wappen() == null ? null : domain.team().wappen().toASCIIString()) //
+					.team(domain.team().name()) //
 					.spiele(domain.spiele()) //
 					.punkte(domain.punkte()) //
 					.tore(domain.gesamtTore()) //

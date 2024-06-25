@@ -3,7 +3,7 @@ package de.atruvia.ase.samman.buli.domain;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.PaarungMother.paarung;
-import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.anyTeam;
 import static java.util.Arrays.asList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -50,7 +50,7 @@ public final class TabellenPlatzMother {
 
 	public static TabellenPlatz merge(Stream<TabellenPlatz> tabellenPlaetze) {
 		return tabellenPlaetze.reduce(TabellenPlatz::mergeWith)
-				.orElseGet(() -> TabellenPlatz.builder().identifier(teamId("someTeamId")).build());
+				.orElseGet(() -> TabellenPlatz.builder().team(anyTeam).build());
 	}
 
 	private static TabellenPlatz platzWith(Ergebnis ergebnis) {
@@ -59,8 +59,7 @@ public final class TabellenPlatzMother {
 
 	public static TabellenPlatz platzWith(Ergebnis ergebnis, ErgebnisTyp ergebnisTyp) {
 		var paarung = paarung("same object for all", "opposite id", ergebnis, BEENDET);
-		return TabellenPlatz.builder().identifier(paarung.heim().team().id()).paarung(paarung.viewForTeam(HEIM))
-				.build();
+		return TabellenPlatz.builder().team(paarung.heim().team()).paarung(paarung.viewForTeam(HEIM)).build();
 	}
 
 }

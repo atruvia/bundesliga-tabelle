@@ -37,6 +37,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
+import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueNotFoundException;
 
@@ -90,8 +91,8 @@ class TabellenHttpAdapterTest {
 		mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
 				.andDo(print()) //
 				.andExpect(status().isOk()) //
-				.andExpect(jsonPath("$.[0].wappen", is(platz1.wappen().toASCIIString()))) //
-				.andExpect(jsonPath("$.[0].team", is(platz1.teamName()))) //
+				.andExpect(jsonPath("$.[0].wappen", is(platz1.team().wappen().toASCIIString()))) //
+				.andExpect(jsonPath("$.[0].team", is(platz1.team().name()))) //
 				.andExpect(jsonPath("$.[0].spiele", is(platz1.spiele()))) //
 				.andExpect(jsonPath("$.[0].siege", is(platz1.siege()))) //
 				.andExpect(jsonPath("$.[0].unentschieden", is(platz1.unentschieden()))) //
@@ -106,8 +107,8 @@ class TabellenHttpAdapterTest {
 				.andExpect(jsonPath("$.[0].tendenz.length()", is(3))) //
 				.andExpect(jsonPath("$.[0]*", not(hasKey("laufendesSpiel"))))
 				//
-				.andExpect(jsonPath("$.[1].wappen", is(platz2.wappen().toASCIIString()))) //
-				.andExpect(jsonPath("$.[1].team", is(platz2.teamName()))) //
+				.andExpect(jsonPath("$.[1].wappen", is(platz2.team().wappen().toASCIIString()))) //
+				.andExpect(jsonPath("$.[1].team", is(platz2.team().name()))) //
 				.andExpect(jsonPath("$.[1].spiele", is(platz2.spiele()))) //
 				.andExpect(jsonPath("$.[1].siege", is(platz2.siege()))) //
 				.andExpect(jsonPath("$.[1].unentschieden", is(platz2.unentschieden()))) //
@@ -181,7 +182,8 @@ class TabellenHttpAdapterTest {
 	static TabellenPlatz platzWithBase(int base, TabellenPlatzBuilder builder) {
 		int cnt = 0;
 		return builder //
-				.team(teamId("Identifier " + base + (++cnt)), "Team " + base, create("proto://wappen-team-" + base)) //
+				.team(Team.builder().id(teamId("Identifier " + base + (++cnt))).name("Team " + base)
+						.wappen(create("proto://wappen-team-" + base)).build()) //
 				.spiele(base + (++cnt)) //
 				.withTore(HEIM, base + (++cnt)) //
 				.withGegentore(HEIM, base + (++cnt)) //
