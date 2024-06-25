@@ -2,13 +2,16 @@ package de.atruvia.ase.samman.buli.domain;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparing;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Stream.concat;
 import static lombok.AccessLevel.PRIVATE;
 
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -99,23 +102,18 @@ public class DefaultTabelle implements Tabelle {
 
 	}
 
-	private final Map<TeamId, TabellenPlatz> entries;
+	private final Collection<TabellenPlatz> entries;
 
 	public DefaultTabelle() {
-		this(emptyMap());
+		this(emptyList());
 	}
 
 	@Override
 	public Tabelle add(Paarung paarung) {
-		Map<TeamId, TabellenPlatz> entries = new HashMap<>(this.entries);
-		entries = addInternal(entries, paarung.viewForTeam(HEIM));
-		entries = addInternal(entries, paarung.viewForTeam(AUSWAERTS));
-		return new DefaultTabelle(Map.copyOf(entries));
-	}
-
-	private static Map<TeamId, TabellenPlatz> addInternal(Map<TeamId, TabellenPlatz> entries, PaarungView paarung) {
-		entries.merge(paarung.self().team().id(), newEntry(paarung), TabellenPlatz::mergeWith);
-		return entries;
+		var existing = entries().stream();
+		var toAdd = Stream.of(newEntry(paarung.viewForTeam(HEIM)), newEntry(paarung.viewForTeam(AUSWAERTS)));
+		return new DefaultTabelle(concat(existing, toAdd)
+				.collect(toMap(TabellenPlatz::identifier, identity(), TabellenPlatz::mergeWith)).values());
 	}
 
 	private static TabellenPlatz newEntry(PaarungView paarung) {
@@ -138,7 +136,7 @@ public class DefaultTabelle implements Tabelle {
 	public List<TabellenPlatz> entries() {
 		// TODO make it side-affect-free, does it work W/O zip!?
 		AtomicInteger platz = new AtomicInteger(1);
-		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = entries.values().stream()
+		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = entries.stream()
 				.collect(groupingBy(OrdnungsElement::new));
 		return platzGruppen.entrySet().stream() //
 				.sorted(Entry.comparingByKey()) //
