@@ -2,6 +2,7 @@ package de.atruvia.ase.samman.buli.domain.ports.primary;
 
 import java.util.List;
 
+import de.atruvia.ase.samman.buli.domain.DefaultTabelle;
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
@@ -16,7 +17,7 @@ public class DefaultTabellenService implements TabellenService {
 
 	@Override
 	public Tabelle erstelleTabelle(String league, String season) {
-		return lade(league, season).stream().reduce(new Tabelle(), Tabelle::add, (t1, t2) -> t1);
+		return lade(league, season).stream().reduce(new DefaultTabelle(), Tabelle::add, (t1, t2) -> t1);
 	}
 
 	private List<Paarung> lade(String league, String season) {

@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
@@ -165,9 +166,15 @@ class TabellenHttpAdapterTest {
 	static Tabelle tabelleWithEntries(List<TabellenPlatz> result) {
 		return new Tabelle() {
 			@Override
+			public Tabelle add(Paarung paarung) {
+				throw new IllegalStateException("not supported");
+			}
+
+			@Override
 			public List<TabellenPlatz> getEntries() {
 				return result;
 			}
+
 		};
 	}
 

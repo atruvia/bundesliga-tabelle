@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import de.atruvia.ase.samman.buli.domain.DefaultTabelle;
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
@@ -39,7 +40,7 @@ public class StepDefs {
 	);
 
 	List<Paarung> paarungen = new ArrayList<>();
-	Tabelle tabelle = new Tabelle();
+	Tabelle tabelle = new DefaultTabelle();
 	List<TabellenPlatz> entries;
 
 	@Gegebensei("ein Spielplan")

@@ -30,10 +30,10 @@ import de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.Tendenz;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 
-class TabelleTest {
+class DefaultTabelleTest {
 
 	Paarung[] paarungen;
-	Tabelle sut = new Tabelle();
+	Tabelle sut = new DefaultTabelle();
 
 	@Test
 	void zweiMannschaftenKeinSpiel() {
