@@ -6,6 +6,6 @@ public interface Tabelle {
 
 	Tabelle add(Paarung paarung);
 
-	List<TabellenPlatz> getEntries();
+	List<TabellenPlatz> entries();
 
 }

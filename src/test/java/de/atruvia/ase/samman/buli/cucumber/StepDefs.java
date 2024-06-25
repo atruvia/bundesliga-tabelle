@@ -62,7 +62,7 @@ public class StepDefs {
 
 	@Wenn("die Tabelle berechnet wird")
 	public void die_tabelle_berechnet_wird() {
-		entries = paarungen.stream().reduce(tabelle, Tabelle::add, (t1, t2) -> t1).getEntries();
+		entries = paarungen.stream().reduce(tabelle, Tabelle::add, (t1, t2) -> t1).entries();
 	}
 
 	@Dann("ist die Tabelle")

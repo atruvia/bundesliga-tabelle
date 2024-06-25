@@ -171,7 +171,7 @@ class TabellenHttpAdapterTest {
 			}
 
 			@Override
-			public List<TabellenPlatz> getEntries() {
+			public List<TabellenPlatz> entries() {
 				return result;
 			}
 

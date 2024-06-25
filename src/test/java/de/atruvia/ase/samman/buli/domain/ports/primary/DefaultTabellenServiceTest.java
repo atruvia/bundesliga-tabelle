@@ -80,7 +80,7 @@ public class DefaultTabellenServiceTest {
 		var headerNames = attributes.keySet().toArray(String[]::new);
 		var headerRow = Stream.of(markdownRow(headerNames));
 		var separatorRow = Stream.of(markdownSeparator(headerNames));
-		var contentRows = tabelle.getEntries().stream().map(DefaultTabellenServiceTest::print);
+		var contentRows = tabelle.entries().stream().map(DefaultTabellenServiceTest::print);
 		verify(concat(headerRow, separatorRow, contentRows).collect(joining("\n")), markdown());
 	}
 

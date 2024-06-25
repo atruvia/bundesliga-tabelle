@@ -375,12 +375,12 @@ class DefaultTabelleTest {
 	}
 
 	private void dannIstDieTabelle(String expected) {
-		assertThat(print(sut.getEntries())).isEqualTo(line(stream(expected.split("\\|")).map(String::trim)));
+		assertThat(print(sut.entries())).isEqualTo(line(stream(expected.split("\\|")).map(String::trim)));
 	}
 
 	@SafeVarargs
 	private void dannIstDieTabelle(ThrowingConsumer<? super TabellenPlatz>... requirements) {
-		assertThat(sut.getEntries()).satisfiesExactly(requirements);
+		assertThat(sut.entries()).satisfiesExactly(requirements);
 	}
 
 	private void dannIstDieTendenz(String team, Ergebnis... tendenz) {
@@ -388,7 +388,7 @@ class DefaultTabelleTest {
 	}
 
 	private Tendenz tendenzForTeam(String team) {
-		var tabellenPlatz = sut.getEntries().stream().filter(t -> t.teamName().equals(team)).findFirst()
+		var tabellenPlatz = sut.entries().stream().filter(t -> t.teamName().equals(team)).findFirst()
 				.orElseThrow(() -> new IllegalStateException("No entry for team " + team));
 		return tabellenPlatz.tendenz();
 	}

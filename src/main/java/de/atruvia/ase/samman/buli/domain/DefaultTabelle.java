@@ -135,7 +135,7 @@ public class DefaultTabelle implements Tabelle {
 		return builder.build();
 	}
 
-	public List<TabellenPlatz> getEntries() {
+	public List<TabellenPlatz> entries() {
 		// TODO make it side-affect-free, does it work W/O zip!?
 		AtomicInteger platz = new AtomicInteger(1);
 		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = entries.values().stream()

@@ -140,7 +140,7 @@ public class TabellenHttpAdapter {
 	@GetMapping("/tabelle/{league}/{season}")
 	public ResponseEntity<List<JsonTabellenPlatz>> getTabelle(@PathVariable String league,
 			@PathVariable String season) {
-		var tabellenPlaetze = tabellenService.erstelleTabelle(league, season).getEntries().stream()
+		var tabellenPlaetze = tabellenService.erstelleTabelle(league, season).entries().stream()
 				.map(JsonTabellenPlatz::fromDomain).toList();
 		return tabellenPlaetze.isEmpty() //
 				? notFound().build() //
