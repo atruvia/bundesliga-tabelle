@@ -29,7 +29,6 @@ import de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection;
 import de.atruvia.ase.samman.buli.util.Merger.Mergeable;
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.Singular;
 import lombok.Value;
 import lombok.With;
 import lombok.experimental.Accessors;
@@ -64,7 +63,6 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	@With
 	int platz;
 	int spiele;
-	@Singular(value = "paarung")
 	@NonNull
 	List<PaarungView> paarungen;
 	int punkte;
@@ -143,9 +141,13 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 			gegentore = new HashMap<>();
 		}
 
-		public TabellenPlatzBuilder team(Team team) {
-			this.team = team;
-			return this;
+		public TabellenPlatzBuilder paarung(PaarungView paarung) {
+			this.paarungen.add(paarung);
+			return spiele(1) //
+					.punkte(paarung.ergebnis().punkte()) //
+					.withTore(paarung.direction(), paarung.tore()) //
+					.withGegentore(paarung.direction(), paarung.gegentore()) //
+					.laufendesSpiel(paarung.isLaufend() ? paarung : null);
 		}
 
 		public TabellenPlatzBuilder withTore(ViewDirection viewDirection, int anzahl) {

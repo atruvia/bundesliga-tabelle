@@ -116,17 +116,8 @@ public class DefaultTabelle implements Tabelle {
 	}
 
 	private static TabellenPlatz newEntry(PaarungView paarung) {
-		var team = paarung.self().team();
-		var builder = TabellenPlatz.builder().team(team);
-		return (paarung.isGeplant() //
-				? builder
-				: builder.spiele(1) //
-						.paarung(paarung) //
-						.punkte(paarung.ergebnis().punkte()) //
-						.withTore(paarung.direction(), paarung.tore()) //
-						.withGegentore(paarung.direction(), paarung.gegentore()) //
-						.laufendesSpiel(paarung.isLaufend() ? paarung : null))
-				.build();
+		var builder = TabellenPlatz.builder().team(paarung.self().team());
+		return (paarung.isGeplant() ? builder : builder.paarung(paarung)).build();
 	}
 
 	public List<TabellenPlatz> entries() {
