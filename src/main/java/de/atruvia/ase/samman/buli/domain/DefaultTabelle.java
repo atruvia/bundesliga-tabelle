@@ -134,7 +134,9 @@ public class DefaultTabelle implements Tabelle {
 
 	private static Stream<TabellenPlatz> makeGroup(AtomicInteger platz, List<TabellenPlatz> tabellenPlaetze) {
 		int no = platz.getAndAdd(tabellenPlaetze.size());
-		return tabellenPlaetze.stream().sorted(comparing(OrdnungsElement::new)).map(tp -> tp.withPlatz(no));
+		return tabellenPlaetze.stream() //
+				.sorted(comparing(OrdnungsElement::new)) //
+				.map(tp -> tp.withPlatz(no));
 	}
 
 }

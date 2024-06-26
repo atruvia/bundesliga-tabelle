@@ -57,8 +57,9 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 
 	@Override
 	public List<Team> getTeams(String league, String season) {
-		return stream(restTemplate.getForObject(SERVICE_URI, OpenligaDbTeam[].class, league, season))
-				.map(OpenligaDbTeam::toDomain).toList();
+		return stream(restTemplate.getForObject(SERVICE_URI, OpenligaDbTeam[].class, league, season)) //
+				.map(OpenligaDbTeam::toDomain) //
+				.toList();
 	}
 
 }

@@ -17,6 +17,8 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 public class AvailableLeagueRepo {
 
+	private static final String SERVICE_URI = "https://api.openligadb.de/getavailableleagues";
+
 	@ToString
 	@FieldDefaults(level = PUBLIC)
 	static class AvailableLeague {
@@ -28,8 +30,7 @@ public class AvailableLeagueRepo {
 	private final RestTemplate restTemplate;
 
 	public Optional<AvailableLeague> getAvailableLeague(String leagueShortcut, String leagueSeason) {
-		return stream(
-				restTemplate.getForObject("https://api.openligadb.de/getavailableleagues", AvailableLeague[].class)) //
+		return stream(restTemplate.getForObject(SERVICE_URI, AvailableLeague[].class)) //
 				.filter(l -> leagueShortcut.equals(l.leagueShortcut)) //
 				.filter(l -> leagueSeason.equals(l.leagueSeason)) //
 				.reduce(toOnlyElement());

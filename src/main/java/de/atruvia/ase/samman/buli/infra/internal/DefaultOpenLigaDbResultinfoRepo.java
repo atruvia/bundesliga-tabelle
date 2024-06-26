@@ -1,6 +1,6 @@
 package de.atruvia.ase.samman.buli.infra.internal;
 
-import static java.util.Arrays.stream;
+import static java.util.Arrays.asList;
 
 import java.util.List;
 
@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo {
 
+	private static final String SERVICE_URI = "https://api.openligadb.de/getresultinfos/{leagueId}";
+
 	private final RestTemplate restTemplate;
 	private final AvailableLeagueRepo availableLeagueRepo;
 
@@ -24,8 +26,7 @@ public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 	}
 
 	private List<OpenligaDbResultinfo> getResultinfos(int leagueId) {
-		return stream(restTemplate.getForObject("https://api.openligadb.de/getresultinfos/{leagueId}",
-				OpenligaDbResultinfo[].class, leagueId)).toList();
+		return asList(restTemplate.getForObject(SERVICE_URI, OpenligaDbResultinfo[].class, leagueId));
 	}
 
 }
