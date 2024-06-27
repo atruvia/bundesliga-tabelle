@@ -2,7 +2,7 @@ package de.atruvia.ase.samman.buli.infra.internal;
 
 import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo.endergebnisType;
 import static de.atruvia.ase.samman.buli.springframework.ResponseFromResourcesSupplier.responseFromResources;
-import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restTemplateMock;
+import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -18,12 +18,12 @@ class DefaultOpenLigaDbResultinfoRepoTest {
 	static final String ENDERGEBNIS = "Endergebnis";
 
 	OpenLigaDbResultinfoRepo sut = new DefaultOpenLigaDbResultinfoRepo(
-			restTemplateMock(responseFromResources(p -> "getresultinfos/%s.json".formatted(p[p.length - 1]))),
+			restClient(responseFromResources(p -> "getresultinfos/%s.json".formatted(p[p.length - 1]))),
 			availableLeagueRepo());
 
 	AvailableLeagueRepo availableLeagueRepo() {
 		return new AvailableLeagueRepo(
-				restTemplateMock(responseFromResources(__ -> "getavailableleagues/getavailableleagues.json")));
+				restClient(responseFromResources(__ -> "getavailableleagues/getavailableleagues.json")));
 	}
 
 	@Test

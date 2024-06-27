@@ -8,9 +8,9 @@ import static lombok.AccessLevel.PUBLIC;
 import java.net.URI;
 import java.util.List;
 
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.jmolecules.architecture.hexagonal.SecondaryAdapter;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
@@ -26,7 +26,7 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getavailableteams/{league}/{season}";
 
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
@@ -57,7 +57,7 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 
 	@Override
 	public List<Team> getTeams(String league, String season) {
-		OpenligaDbTeam[] teams = restTemplate.getForObject(SERVICE_URI, OpenligaDbTeam[].class, league, season);
+		OpenligaDbTeam[] teams = restClient.get(SERVICE_URI, OpenligaDbTeam[].class, league, season);
 		return stream(teams).map(OpenligaDbTeam::toDomain).toList();
 	}
 

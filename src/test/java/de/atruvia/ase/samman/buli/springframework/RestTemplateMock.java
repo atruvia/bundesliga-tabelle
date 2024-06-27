@@ -7,6 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.function.Function;
 
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.springframework.http.HttpRequest;
 import org.springframework.mock.http.client.MockClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +16,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class RestTemplateMock {
+
+	public static RestClient restClient(Function<HttpRequest, String> responseSupplier) {
+		return new RestClient(restTemplateMock(responseSupplier));
+	}
 
 	public static RestTemplate restTemplateMock(Function<HttpRequest, String> responseSupplier) {
 		return configureMock(new RestTemplate(), responseSupplier);

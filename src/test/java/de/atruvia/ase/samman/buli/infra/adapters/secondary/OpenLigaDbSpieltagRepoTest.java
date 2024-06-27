@@ -6,12 +6,12 @@ import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.resultinfoProvider;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
-import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restTemplateMock;
+import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.client.RestTemplate;
 
 class OpenLigaDbSpieltagRepoTest {
 
@@ -33,7 +33,7 @@ class OpenLigaDbSpieltagRepoTest {
 
 	@Test
 	void throwsExceptionIfThereAreMatchesWithMultipleFinalResults() {
-		RestTemplate restTemplate = restTemplateMock(__ -> """
+		RestClient restClient = restClient(__ -> """
 				[
 				  {
 					"team1": { "teamId": 42, "teamName": "Team 1", "teamIconUrl": "teamIconUrl1" },
@@ -43,7 +43,7 @@ class OpenLigaDbSpieltagRepoTest {
 				  }
 				 ]
 				""");
-		OpenLigaDbSpieltagRepo repo = new OpenLigaDbSpieltagRepo(restTemplate, resultinfoProvider(2));
+		OpenLigaDbSpieltagRepo repo = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2));
 		assertThatThrownBy(() -> repo.lade("any", "any")).hasMessageContaining("at most one element");
 	}
 

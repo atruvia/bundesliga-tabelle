@@ -1,7 +1,7 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.springframework.ResponseFromResourcesSupplier.responseFromResources;
-import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restTemplateMock;
+import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
@@ -16,13 +16,13 @@ public final class OpenLigaDbSpieltagRepoMother {
 
 	public static OpenLigaDbSpieltagRepo spieltagFsRepo() {
 		return new OpenLigaDbSpieltagRepo(
-				restTemplateMock(responseFromResources(
+				restClient(responseFromResources(
 						p -> "getmatchdata/%s/%s.json".formatted(p[p.length - 2], p[p.length - 1]))),
 				resultinfoProvider(2));
 	}
 
 	public static OpenLigaDbTeamRepo teamFsRepo() {
-		return new OpenLigaDbTeamRepo(restTemplateMock(responseFromResources(
+		return new OpenLigaDbTeamRepo(restClient(responseFromResources(
 				p -> "getavailableteams/%s/%s.json".formatted(p[p.length - 2], p[p.length - 1]))));
 	}
 

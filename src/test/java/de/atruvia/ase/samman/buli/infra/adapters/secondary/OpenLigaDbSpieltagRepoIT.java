@@ -7,6 +7,7 @@ import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
@@ -46,9 +47,9 @@ class OpenLigaDbSpieltagRepoIT {
 	}
 
 	OpenLigaDbSpieltagRepo repo() {
-		RestTemplate restTemplate = new RestTemplate();
-		return new OpenLigaDbSpieltagRepo(restTemplate,
-				new DefaultOpenLigaDbResultinfoRepo(restTemplate, new AvailableLeagueRepo(restTemplate)));
+		RestClient restClient = new RestClient(new RestTemplate());
+		return new OpenLigaDbSpieltagRepo(restClient,
+				new DefaultOpenLigaDbResultinfoRepo(restClient, new AvailableLeagueRepo(restClient)));
 	}
 
 	int matchesOfFullSeasonOfTeams(int teams) {
