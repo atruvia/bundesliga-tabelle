@@ -10,10 +10,12 @@ import static de.atruvia.ase.samman.buli.util.Merger.checkUnique;
 import static de.atruvia.ase.samman.buli.util.Merger.lastNonNull;
 import static de.atruvia.ase.samman.buli.util.Merger.merge;
 import static de.atruvia.ase.samman.buli.util.Merger.sum;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.stream.Stream.generate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.stream.Stream;
 
 import org.jmolecules.ddd.annotation.ValueObject;
 
+import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
@@ -171,8 +174,23 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 				.punkte(sum(punkte, other.punkte)) //
 				.tore(merge(Integer::sum, tore, other.tore)) //
 				.gegentore(merge(Integer::sum, gegentore, other.gegentore)) //
-				.laufendesSpiel(lastNonNull(laufendesSpiel, other.laufendesSpiel).orElse(laufendesSpiel)) //
+				.laufendesSpiel(mergeLaufendesSpiel(other)) //
 				.build();
+	}
+
+	private PaarungView mergeLaufendesSpiel(TabellenPlatz other) {
+		var nonNulls = Stream.of(laufendesSpiel, other.laufendesSpiel) //
+				.filter(Objects::nonNull) //
+				.distinct() //
+				.toArray(PaarungView[]::new);
+		if (nonNulls.length == 0) {
+			return null;
+		} else if (nonNulls.length == 1) {
+			return nonNulls[0];
+		}
+		throw new IllegalStateException(
+				format("Team %s has several matches at the same time (%s)", team.name(),
+						Arrays.stream(nonNulls).map(PaarungView::gegner).map(Entry::team).map(Team::name).toList()));
 	}
 
 	private Team mergeTeams(Team team1, Team team2) {
