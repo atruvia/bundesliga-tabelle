@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.stream.IntStream;
@@ -44,17 +45,17 @@ public final class Merger {
 	}
 
 	@SafeVarargs
-	public static <T> T lastNonNull(T... objects) {
+	public static <T> Optional<T> lastNonNull(T... objects) {
 		// could be done with streams as well, but then we would consume much more
 		// elements than we have to
 		// stream(objects).filter(Objects::nonNull).reduce(lastElement()).orElse(null);
 		for (var it = asList(objects).listIterator(objects.length); it.hasPrevious();) {
 			T prev;
 			if ((prev = it.previous()) != null) {
-				return prev;
+				return Optional.of(prev);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	@SafeVarargs

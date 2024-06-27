@@ -171,7 +171,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 				.punkte(sum(punkte, other.punkte)) //
 				.tore(merge(Integer::sum, tore, other.tore)) //
 				.gegentore(merge(Integer::sum, gegentore, other.gegentore)) //
-				.laufendesSpiel(lastNonNull(laufendesSpiel, other.laufendesSpiel)) //
+				.laufendesSpiel(lastNonNull(laufendesSpiel, other.laufendesSpiel).orElse(laufendesSpiel)) //
 				.build();
 	}
 
@@ -179,8 +179,9 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		return Objects.equals(team1, team2) //
 				? team1 //
 				: new Team(checkUnique(team1.id(), team2.id()), //
-						lastNonNull(team1.name(), team2.name()), //
-						lastNonNull(team1.wappen(), team2.wappen()));
+						lastNonNull(team1.name(), team2.name()).orElse(null), //
+						lastNonNull(team1.wappen(), team2.wappen()).orElse(null) //
+				);
 	}
 
 	public int siege() {
