@@ -30,7 +30,8 @@ public class AvailableLeagueRepo {
 	private final RestTemplate restTemplate;
 
 	public Optional<AvailableLeague> getAvailableLeague(String leagueShortcut, String leagueSeason) {
-		return stream(restTemplate.getForObject(SERVICE_URI, AvailableLeague[].class)) //
+		AvailableLeague[] availableLeagues = restTemplate.getForObject(SERVICE_URI, AvailableLeague[].class);
+		return stream(availableLeagues) //
 				.filter(l -> leagueShortcut.equals(l.leagueShortcut)) //
 				.filter(l -> leagueSeason.equals(l.leagueSeason)) //
 				.reduce(toOnlyElement());

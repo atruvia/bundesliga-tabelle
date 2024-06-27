@@ -118,9 +118,8 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@Override
 	public List<Paarung> lade(String league, String season) {
 		List<OpenligaDbResultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
-		return stream(restTemplate.getForObject(SERVICE_URI, OpenligaDbMatch[].class, league, season)) //
-				.map(t -> t.toDomain(resultinfos)) //
-				.toList();
+		OpenligaDbMatch[] matches = restTemplate.getForObject(SERVICE_URI, OpenligaDbMatch[].class, league, season);
+		return stream(matches).map(t -> t.toDomain(resultinfos)).toList();
 	}
 
 }

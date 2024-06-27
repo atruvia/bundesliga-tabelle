@@ -26,7 +26,8 @@ public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 	}
 
 	private List<OpenligaDbResultinfo> getResultinfos(int leagueId) {
-		return asList(restTemplate.getForObject(SERVICE_URI, OpenligaDbResultinfo[].class, leagueId));
+		OpenligaDbResultinfo[] results = restTemplate.getForObject(SERVICE_URI, OpenligaDbResultinfo[].class, leagueId);
+		return asList(results);
 	}
 
 }

@@ -178,7 +178,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	private Team mergeTeams(Team team1, Team team2) {
 		return Objects.equals(team1, team2) //
 				? team1 //
-				: new Team(checkUnique(team1.id(), team2.id()), lastNonNull(team1.name(), team2.name()),
+				: new Team(checkUnique(team1.id(), team2.id()), //
+						lastNonNull(team1.name(), team2.name()), //
 						lastNonNull(team1.wappen(), team2.wappen()));
 	}
 
