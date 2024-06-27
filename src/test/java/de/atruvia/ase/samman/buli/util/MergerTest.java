@@ -62,9 +62,9 @@ class MergerTest {
 
 	@Test
 	void testLastNonNull() {
-		assertThat(lastNonNull("a", "b", null)).isEqualTo("b");
+		assertThat(lastNonNull("a", "b", null)).hasValue("b");
 		var lastNonNull = lastNonNull(null, null, null);
-		assertThat(lastNonNull).isNull();
+		assertThat(lastNonNull).isEmpty();
 	}
 
 	@Test
