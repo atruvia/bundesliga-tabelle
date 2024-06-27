@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
+import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -140,8 +141,10 @@ public class TabellenHttpAdapter {
 	@GetMapping("/tabelle/{league}/{season}")
 	public ResponseEntity<List<JsonTabellenPlatz>> getTabelle(@PathVariable String league,
 			@PathVariable String season) {
-		var tabellenPlaetze = tabellenService.erstelleTabelle(league, season).entries().stream()
-				.map(JsonTabellenPlatz::fromDomain).toList();
+		Tabelle tabelle = tabellenService.erstelleTabelle(league, season);
+		List<JsonTabellenPlatz> tabellenPlaetze = tabelle.entries().stream() //
+				.map(JsonTabellenPlatz::fromDomain) //
+				.toList();
 		return tabellenPlaetze.isEmpty() //
 				? notFound().build() //
 				: ok(tabellenPlaetze);

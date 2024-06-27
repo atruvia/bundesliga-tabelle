@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Optional;
 
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,7 +52,7 @@ class OpenLigaDbTeamRepoIT {
 	}
 
 	OpenLigaDbTeamRepo repo() {
-		return new OpenLigaDbTeamRepo(new RestTemplate());
+		return new OpenLigaDbTeamRepo(new RestClient(new RestTemplate()));
 	}
 
 }

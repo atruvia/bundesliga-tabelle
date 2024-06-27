@@ -7,7 +7,6 @@ import static lombok.AccessLevel.PUBLIC;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -27,10 +26,11 @@ public class AvailableLeagueRepo {
 		String leagueSeason;
 	}
 
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 
 	public Optional<AvailableLeague> getAvailableLeague(String leagueShortcut, String leagueSeason) {
-		return stream(restTemplate.getForObject(SERVICE_URI, AvailableLeague[].class)) //
+		AvailableLeague[] availableLeagues = restClient.get(SERVICE_URI, AvailableLeague[].class);
+		return stream(availableLeagues) //
 				.filter(l -> leagueShortcut.equals(l.leagueShortcut)) //
 				.filter(l -> leagueSeason.equals(l.leagueSeason)) //
 				.reduce(toOnlyElement());

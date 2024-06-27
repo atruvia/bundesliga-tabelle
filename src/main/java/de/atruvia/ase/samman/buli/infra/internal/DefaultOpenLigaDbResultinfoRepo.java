@@ -5,7 +5,6 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueRepo.AvailableLeague;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getresultinfos/{leagueId}";
 
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 	private final AvailableLeagueRepo availableLeagueRepo;
 
 	public List<OpenligaDbResultinfo> getResultinfos(String league, String season) {
@@ -26,7 +25,8 @@ public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo
 	}
 
 	private List<OpenligaDbResultinfo> getResultinfos(int leagueId) {
-		return asList(restTemplate.getForObject(SERVICE_URI, OpenligaDbResultinfo[].class, leagueId));
+		OpenligaDbResultinfo[] results = restClient.get(SERVICE_URI, OpenligaDbResultinfo[].class, leagueId);
+		return asList(results);
 	}
 
 }
