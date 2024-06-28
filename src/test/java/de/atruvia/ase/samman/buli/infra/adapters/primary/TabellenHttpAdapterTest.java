@@ -13,7 +13,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,10 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
@@ -45,28 +41,14 @@ import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueNotFoundExceptio
 @AutoConfigureMockMvc
 class TabellenHttpAdapterTest {
 
-	// TODO MockMvc fails without explicitly setting an ExceptionHandler (which is
-	// there when running the application so it seems, that we are testing our
-	// "mock" here) :/
-	@ControllerAdvice
-	static class GlobalExceptionHandler {
-
-		@ExceptionHandler(Exception.class)
-		public ResponseEntity<String> handleException(Exception e) {
-			return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(e.getMessage());
-		}
-	}
-
 	@Autowired
 	TabellenHttpAdapter sut;
 
 	MockMvc mockMvc;
-	MockMvc mockMvcForInternalServerError;
 
 	@BeforeEach
 	void setup() {
 		mockMvc = standaloneSetup(sut).build();
-		mockMvcForInternalServerError = standaloneSetup(sut).setControllerAdvice(new GlobalExceptionHandler()).build();
 	}
 
 	@MockBean
@@ -120,7 +102,6 @@ class TabellenHttpAdapterTest {
 				.andExpect(jsonPath("$.[1].tendenz.length()", is(0))) //
 				.andExpect(jsonPath("$.[1]*", not(hasKey("laufendesSpiel")))) //
 		;
-
 	}
 
 	@Test
@@ -133,20 +114,6 @@ class TabellenHttpAdapterTest {
 		mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
 				.andDo(print()) //
 				.andExpect(status().isNotFound()) //
-		;
-	}
-
-	@Test
-	void failsWith500WhenServiceThrowsException() throws Exception {
-		String league = "bl1";
-		String season = "2022";
-
-		String message = "Some service exception";
-		when(tabellenService.erstelleTabelle(league, season)).thenThrow(new RuntimeException(message));
-
-		mockMvcForInternalServerError.perform(get("/tabelle/" + league + "/" + season)) //
-				.andDo(print()) //
-				.andExpect(status().is5xxServerError()) //
 		;
 	}
 
