@@ -23,6 +23,7 @@ import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
+import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueNotFoundException;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -141,13 +142,21 @@ public class TabellenHttpAdapter {
 	@GetMapping("/tabelle/{league}/{season}")
 	public ResponseEntity<List<JsonTabellenPlatz>> getTabelle(@PathVariable String league,
 			@PathVariable String season) {
+		try {
+			List<JsonTabellenPlatz> tabellenPlaetze = getTabellenPlaetze(league, season);
+			return tabellenPlaetze.isEmpty() //
+					? notFound().build() //
+					: ok(tabellenPlaetze);
+		} catch (AvailableLeagueNotFoundException e) {
+			return notFound().build();
+		}
+	}
+
+	private List<JsonTabellenPlatz> getTabellenPlaetze(String league, String season) {
 		Tabelle tabelle = tabellenService.erstelleTabelle(league, season);
-		List<JsonTabellenPlatz> tabellenPlaetze = tabelle.entries().stream() //
+		return tabelle.entries().stream() //
 				.map(JsonTabellenPlatz::fromDomain) //
 				.toList();
-		return tabellenPlaetze.isEmpty() //
-				? notFound().build() //
-				: ok(tabellenPlaetze);
 	}
 
 }
