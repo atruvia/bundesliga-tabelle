@@ -5,6 +5,7 @@ import static de.atruvia.ase.samman.buli.springframework.ResponseFromResourcesSu
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import java.util.List;
@@ -57,12 +58,24 @@ class DefaultOpenLigaDbResultinfoRepoTest {
 
 	@Test
 	void runtimeExceptionOnUnknownLeague() {
-		assertThatThrownBy(() -> sut.getResultinfos("XXX", "2023")).hasMessageContainingAll("XXX", "2023", "not found");
+		AvailableLeagueNotFoundException ex = catchThrowableOfType( //
+				() -> sut.getResultinfos("XXX", "2023"), //
+				AvailableLeagueNotFoundException.class //
+		);
+		assertThat(ex.getLeague()).isEqualTo("XXX");
+		assertThat(ex.getSeason()).isEqualTo("2023");
+		assertThat(ex).hasMessageContainingAll("XXX", "2023", "not found");
 	}
 
 	@Test
 	void runtimeExceptionOnUnknownSeason() {
-		assertThatThrownBy(() -> sut.getResultinfos("bl1", "0000")).hasMessageContainingAll("bl1", "0000", "not found");
+		AvailableLeagueNotFoundException ex = catchThrowableOfType( //
+				() -> sut.getResultinfos("bl1", "0000"), //
+				AvailableLeagueNotFoundException.class //
+		);
+		assertThat(ex.getLeague()).isEqualTo("bl1");
+		assertThat(ex.getSeason()).isEqualTo("0000");
+		assertThat(ex).hasMessageContainingAll("bl1", "0000", "not found");
 	}
 
 }
