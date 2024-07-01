@@ -5,7 +5,6 @@ import static lombok.AccessLevel.PRIVATE;
 import java.net.URI;
 
 import org.jmolecules.ddd.annotation.ValueObject;
-import org.jmolecules.ddd.types.Identifier;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -21,7 +20,7 @@ public class Team {
 
 	@Value
 	@RequiredArgsConstructor(access = PRIVATE)
-	public static class TeamId implements Identifier {
+	public static class TeamId {
 
 		@NonNull
 		String value;
