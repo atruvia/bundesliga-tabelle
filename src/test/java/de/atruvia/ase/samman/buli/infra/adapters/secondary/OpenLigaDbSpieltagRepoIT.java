@@ -17,7 +17,6 @@ import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueRepo;
 import de.atruvia.ase.samman.buli.infra.internal.DefaultOpenLigaDbResultinfoRepo;
 import de.atruvia.ase.samman.buli.infra.internal.RestClient;
-import lombok.NonNull;
 
 class OpenLigaDbSpieltagRepoIT {
 
