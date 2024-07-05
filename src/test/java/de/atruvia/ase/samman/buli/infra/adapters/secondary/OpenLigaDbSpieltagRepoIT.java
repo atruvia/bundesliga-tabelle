@@ -6,15 +6,16 @@ import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
+import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueRepo;
 import de.atruvia.ase.samman.buli.infra.internal.DefaultOpenLigaDbResultinfoRepo;
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 
 class OpenLigaDbSpieltagRepoIT {
 
@@ -41,9 +42,25 @@ class OpenLigaDbSpieltagRepoIT {
 	}
 
 	@Test
-	@ExpectedToFail("no data for 2024/25 yet --- add assertions for match #0 when available")
 	void canRetrieveDataOf2024() {
-		assertThat(repo().lade("bl1", "2024")).isNotEmpty();
+		var paarungen = repo().lade("bl1", "2024");
+		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18));
+		assertThat(paarungen).element(94).satisfies(p -> matchIs(p, teamFrankfurt, teamBremen));
+		assertThat(paarungen).element(245).satisfies(p -> matchIs(p, teamBremen, teamFrankfurt));
+	}
+
+	private static void matchIs(Paarung paarung, Team expectedHeim, Team expectedGast) {
+		assertSoftly(s -> {
+			assertTeamIs(paarung, expectedHeim, paarung.heim().team());
+			assertTeamIs(paarung, expectedGast, paarung.gast().team());
+		});
+	}
+
+	private static void assertTeamIs(Paarung paarung, Team expectedTeam, Team actualTeam) {
+		assertSoftly(s -> {
+			s.assertThat(actualTeam.id()).isEqualTo(expectedTeam.id());
+			s.assertThat(actualTeam.name()).isEqualTo(expectedTeam.name());
+		});
 	}
 
 	OpenLigaDbSpieltagRepo repo() {
