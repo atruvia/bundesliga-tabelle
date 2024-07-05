@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IMAGE_NAME=$1
-RESOURCE_PATH="/tabelle/bl1/2023"
+RESOURCE_PATH="/tabelle/bl1/2024"
 
 is_port_available() {
   local port=$1
