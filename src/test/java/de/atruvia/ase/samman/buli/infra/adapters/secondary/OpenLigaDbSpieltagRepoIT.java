@@ -12,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
+import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueRepo;
 import de.atruvia.ase.samman.buli.infra.internal.DefaultOpenLigaDbResultinfoRepo;
 import de.atruvia.ase.samman.buli.infra.internal.RestClient;
+import lombok.NonNull;
 
 class OpenLigaDbSpieltagRepoIT {
 
@@ -51,9 +53,13 @@ class OpenLigaDbSpieltagRepoIT {
 
 	void matchIs(Paarung paarung, Team expectedHeim, Team expectedGast) {
 		assertSoftly(s -> {
-			assertThat(paarung.heim().team()).isEqualTo(expectedHeim);
-			assertThat(paarung.gast().team()).isEqualTo(expectedGast);
+			teamIs(paarung.heim(), expectedHeim);
+			teamIs(paarung.gast(), expectedGast);
 		});
+	}
+
+	void teamIs(Entry entry, Team expectedTeam) {
+		assertThat(entry.team()).isEqualTo(expectedTeam);
 	}
 
 	OpenLigaDbSpieltagRepo repo() {
