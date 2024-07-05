@@ -51,15 +51,8 @@ class OpenLigaDbSpieltagRepoIT {
 
 	void matchIs(Paarung paarung, Team expectedHeim, Team expectedGast) {
 		assertSoftly(s -> {
-			assertTeamIs(paarung, expectedHeim, paarung.heim().team());
-			assertTeamIs(paarung, expectedGast, paarung.gast().team());
-		});
-	}
-
-	void assertTeamIs(Paarung paarung, Team expectedTeam, Team actualTeam) {
-		assertSoftly(s -> {
-			s.assertThat(actualTeam.id()).isEqualTo(expectedTeam.id());
-			s.assertThat(actualTeam.name()).isEqualTo(expectedTeam.name());
+			assertThat(paarung.heim().team()).isEqualTo(expectedHeim);
+			assertThat(paarung.gast().team()).isEqualTo(expectedGast);
 		});
 	}
 
