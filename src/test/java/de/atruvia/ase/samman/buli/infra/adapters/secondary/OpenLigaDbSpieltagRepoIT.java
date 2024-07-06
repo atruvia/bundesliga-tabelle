@@ -51,9 +51,10 @@ class OpenLigaDbSpieltagRepoIT {
 	void canRetrieveDataOf2024() {
 		var paarungen = repo().lade("bl1", "2024");
 		checkPropertiesOfFullSeason(paarungen, 18);
-
-		assertThat(paarungen).element(94).satisfies(p -> matchIs(p, teamFrankfurt, teamBremen));
-		assertThat(paarungen).element(245).satisfies(p -> matchIs(p, teamBremen, teamFrankfurt));
+		assertThat(paarungen).elements(94, 245).satisfiesExactly( //
+				p -> matchIs(p, teamFrankfurt, teamBremen), //
+				p -> matchIs(p, teamBremen, teamFrankfurt) //
+		);
 	}
 
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen, int teams) {
@@ -62,7 +63,7 @@ class OpenLigaDbSpieltagRepoIT {
 		var byGast = paarungen.stream().collect(groupingBy(p -> p.gast().team()));
 		assertThat(byHeim.keySet()).containsExactlyInAnyOrderElementsOf(byGast.keySet());
 		assertThat(byHeim).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams)));
-		assertThat(byGast).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams) / 2));
+		assertThat(byGast).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams)));
 	}
 
 	void matchIs(Paarung paarung, Team expectedHeim, Team expectedGast) {
