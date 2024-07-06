@@ -69,7 +69,10 @@ class OpenLigaDbSpieltagRepoIT {
 //				.gast(entry(teamFrankfurt, 0)) //
 //				.build();
 //		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(2).isEqualTo(expected0);
-		assertThat(paarungen).element(2).satisfies(p -> assertThat(p.isGeplant() || p.isLaufend()).isTrue());
+		assertThat(paarungen).element(2).satisfies(p -> {
+			assertThat(p.isGeplant()).isFalse();
+			assertThat(p.isLaufend()).isFalse();
+		});
 	}
 
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen, int teams) {
