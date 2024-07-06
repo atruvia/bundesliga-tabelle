@@ -26,7 +26,7 @@ class OpenLigaDbSpieltagRepoIT {
 	@Test
 	void canRetrieveDataOf2022() {
 		var paarungen = repo().lade("bl1", "2022");
-		checkPropertiesOfFullSeason(paarungen);
+		checkPropertiesOfFullSeason(paarungen, 18);
 		var expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
 				.heim(entry(teamFrankfurt, 1)) //
@@ -38,7 +38,7 @@ class OpenLigaDbSpieltagRepoIT {
 	@Test
 	void canRetrieveDataOf2023() {
 		var paarungen = repo().lade("bl1", "2023");
-		checkPropertiesOfFullSeason(paarungen);
+		checkPropertiesOfFullSeason(paarungen, 18);
 		var expected0 = Paarung.builder() //
 				.ergebnisTyp(BEENDET) //
 				.heim(entry(teamBremen, 0)) //
@@ -50,19 +50,19 @@ class OpenLigaDbSpieltagRepoIT {
 	@Test
 	void canRetrieveDataOf2024() {
 		var paarungen = repo().lade("bl1", "2024");
-		checkPropertiesOfFullSeason(paarungen);
+		checkPropertiesOfFullSeason(paarungen, 18);
 
 		assertThat(paarungen).element(94).satisfies(p -> matchIs(p, teamFrankfurt, teamBremen));
 		assertThat(paarungen).element(245).satisfies(p -> matchIs(p, teamBremen, teamFrankfurt));
 	}
 
-	void checkPropertiesOfFullSeason(List<Paarung> paarungen) {
-		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18));
+	void checkPropertiesOfFullSeason(List<Paarung> paarungen, int teams) {
+		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(teams));
 		var byHeim = paarungen.stream().collect(groupingBy(p -> p.heim().team()));
 		var byGast = paarungen.stream().collect(groupingBy(p -> p.gast().team()));
 		assertThat(byHeim.keySet()).containsExactlyInAnyOrderElementsOf(byGast.keySet());
-		assertThat(byHeim).hasSize(18).allSatisfy((k, v) -> assertThat(v).hasSize(matchdays(18) / 2));
-		assertThat(byGast).hasSize(18).allSatisfy((k, v) -> assertThat(v).hasSize(matchdays(18) / 2));
+		assertThat(byHeim).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams)));
+		assertThat(byGast).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams) / 2));
 	}
 
 	void matchIs(Paarung paarung, Team expectedHeim, Team expectedGast) {
@@ -83,11 +83,15 @@ class OpenLigaDbSpieltagRepoIT {
 	}
 
 	int matchesOfFullSeasonOfTeams(int teams) {
-		return matchesPerMatchday(teams) * matchdays(teams);
+		return matchesPerMatchday(teams) * matchdaysPerSeason(teams);
 	}
 
-	int matchdays(int teams) {
-		return (teams - 1) * 2;
+	int matchdaysPerSeason(int teams) {
+		return matchdaysPerRound(teams) * 2;
+	}
+
+	int matchdaysPerRound(int teams) {
+		return teams - 1;
 	}
 
 	int matchesPerMatchday(int teams) {
