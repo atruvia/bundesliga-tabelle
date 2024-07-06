@@ -12,12 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TeamMother {
 
+	public static final TeamId idDortmund = teamId(7);
 	public static final TeamId idMuenchen = teamId(40);
 	public static final TeamId idFrankfurt = teamId(91);
 	public static final TeamId idBremen = teamId(134);
 
 	public static Team anyTeam = Team.builder().id(teamId("anyIdentifier")).name("team1")
 			.wappen(URI.create("proto://wappen1")).build();
+
+	public static final Team teamDortmund = Team.builder().id(idDortmund).name("Borussia Dortmund").wappen(create(
+			"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/560px-Borussia_Dortmund_logo.svg.png"))
+			.build();
 
 	public static final Team teamMuenchen = Team.builder().id(idMuenchen).name("FC Bayern München")
 			.wappen(create("https://i.imgur.com/jJEsJrj.png")).build();
