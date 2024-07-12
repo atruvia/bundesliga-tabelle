@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -37,19 +37,15 @@ import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueNotFoundException;
 
-@SpringBootTest
+@WebMvcTest
 @AutoConfigureMockMvc
 class TabellenHttpAdapterTest {
 
 	@Autowired
 	TabellenHttpAdapter sut;
 
+	@Autowired
 	MockMvc mockMvc;
-
-	@BeforeEach
-	void setup() {
-		mockMvc = standaloneSetup(sut).build();
-	}
 
 	@MockBean
 	TabellenService tabellenService;
