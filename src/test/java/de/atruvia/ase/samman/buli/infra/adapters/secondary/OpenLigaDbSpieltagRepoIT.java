@@ -3,6 +3,7 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Entry.entry;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.teamDortmund;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
 import static java.util.stream.Collectors.groupingBy;
@@ -12,7 +13,6 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
@@ -49,30 +49,15 @@ class OpenLigaDbSpieltagRepoIT {
 	}
 
 	@Test
-	void canRetrieveDataOf2024Temp() {
-		var paarungen = repo().lade("bl1", "2024");
-		checkPropertiesOfFullSeason(paarungen, 18);
-		assertThat(paarungen).elements(94, 245).satisfiesExactly( //
-				p -> matchIs(p, teamFrankfurt, teamBremen), //
-				p -> matchIs(p, teamBremen, teamFrankfurt) //
-		);
-	}
-
-	@ExpectedToFail("fix after first matchday (remove canRetrieveDataOf2024Temp then)")
-	@Test
 	void canRetrieveDataOf2024() {
 		var paarungen = repo().lade("bl1", "2024");
-//		checkPropertiesOfFullSeason(paarungen, 18);
-//		var expected0 = Paarung.builder() //
-//				.ergebnisTyp(BEENDET) //
-//				.heim(entry(teamDortmund, 0)) //
-//				.gast(entry(teamFrankfurt, 0)) //
-//				.build();
-//		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(2).isEqualTo(expected0);
-		assertThat(paarungen).element(2).satisfies(p -> {
-			assertThat(p.isGeplant()).isFalse();
-			assertThat(p.isLaufend()).isFalse();
-		});
+		checkPropertiesOfFullSeason(paarungen, 18);
+		var expected0 = Paarung.builder() //
+				.ergebnisTyp(BEENDET) //
+				.heim(entry(teamDortmund, 2)) //
+				.gast(entry(teamFrankfurt, 0)) //
+				.build();
+		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(6).isEqualTo(expected0);
 	}
 
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen, int teams) {
