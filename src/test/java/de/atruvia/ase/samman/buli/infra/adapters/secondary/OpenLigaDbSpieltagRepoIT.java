@@ -11,6 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
@@ -62,8 +64,8 @@ class OpenLigaDbSpieltagRepoIT {
 
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen, int teams) {
 		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(teams));
-		var byHeim = paarungen.stream().collect(groupingBy(p -> p.heim().team()));
-		var byGast = paarungen.stream().collect(groupingBy(p -> p.gast().team()));
+		var byHeim = teams(paarungen, p -> p.heim().team());
+		var byGast = teams(paarungen, p -> p.gast().team());
 		assertThat(byHeim.keySet()).containsExactlyInAnyOrderElementsOf(byGast.keySet());
 		assertThat(byHeim).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams)));
 		assertThat(byGast).hasSize(teams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(teams)));
@@ -74,6 +76,10 @@ class OpenLigaDbSpieltagRepoIT {
 			teamIs(paarung.heim(), expectedHeim);
 			teamIs(paarung.gast(), expectedGast);
 		});
+	}
+
+	Map<Team, List<Paarung>> teams(List<Paarung> paarungen, Function<Paarung, Team> classifier) {
+		return paarungen.stream().collect(groupingBy(classifier));
 	}
 
 	void teamIs(Entry entry, Team expectedTeam) {
