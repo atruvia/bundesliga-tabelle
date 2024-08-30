@@ -8,14 +8,15 @@ import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo
 import static de.atruvia.ase.samman.buli.util.Streams.toOnlyElement;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
+import static java.util.Objects.nonNull;
+import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.jmolecules.architecture.hexagonal.SecondaryAdapter;
 import org.springframework.stereotype.Repository;
 
@@ -25,8 +26,11 @@ import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
 import de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbTeamRepo.OpenligaDbTeam;
 import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo;
 import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 @Repository
@@ -57,19 +61,45 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
+	@Getter(value = PRIVATE)
+	@Accessors(fluent = true)
 	@SecondaryAdapter
 	private static class Goal {
 
-		private static final Comparator<Goal> inChronologicalOrder = comparing(g -> g.goalID);
 		private static final Goal NULL = new Goal();
 
 		private static Goal lastGoalOf(Goal[] goals) {
-			return stream(goals).max(inChronologicalOrder).orElse(NULL);
+			var goalsWithMinutes = goalsWithMinuteAttribute(goals).toList();
+			assert orderedByIdMatchesOrderedByMinute(goals, goalsWithMinutes)
+					: "goals sorted by id not in same order like sorted by minute: " + Arrays.toString(goals);
+			boolean allGoalsHaveMinutes = goalsWithMinutes.size() == goals.length;
+			var comparator = allGoalsHaveMinutes //
+					? comparing(Goal::matchMinute) //
+					: comparing(Goal::goalID);
+			return stream(goals).max(comparator).orElse(NULL);
+		}
+
+		private static Stream<Goal> goalsWithMinuteAttribute(Goal[] goals) {
+			return stream(goals).filter(g -> nonNull(g.matchMinute()));
+		}
+
+		private static boolean orderedByIdMatchesOrderedByMinute(Goal[] goals, List<Goal> goalsWithMinutes) {
+			var byId = goalsWithMinutes.stream().sorted(comparing(Goal::goalID)).toList();
+			var byMinute = goalsWithMinutes.stream().sorted(comparing(Goal::matchMinute)).toList();
+			return byId.equals(byMinute);
 		}
 
 		int goalID;
 		int scoreTeam1;
 		int scoreTeam2;
+		/**
+		 * Field is optional, not present in any case/league, so we depend on the
+		 * {@link #goalID} rather than the {@link #matchMinute} for sorting. Since there
+		 * is no contract/guarantee that {@link #goalID} are in chronological ordered we
+		 * added the assert to verify the assumption, that the IDs are sorted
+		 * chronologically.
+		 */
+		Integer matchMinute;
 
 	}
 
