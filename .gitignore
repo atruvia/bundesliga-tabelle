@@ -10,3 +10,4 @@ build
 *.ipr
 /target/
 .jqwik-database
+.approval_tests_temp
