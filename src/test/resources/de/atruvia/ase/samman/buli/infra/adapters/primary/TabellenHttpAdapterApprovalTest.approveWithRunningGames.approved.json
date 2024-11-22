@@ -68,7 +68,7 @@
   {
     "platz": 4,
     "wappen": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Fortuna_D%C3%BCsseldorf.svg/150px-Fortuna_D%C3%BCsseldorf.svg.png",
-    "team": "Fortuna DÃ¼sseldorf",
+    "team": "Fortuna Düsseldorf",
     "spiele": 27,
     "punkte": 43,
     "tore": 56,
@@ -154,7 +154,7 @@
   {
     "platz": 8,
     "wappen": "https://i.imgur.com/pwuVbKr.png",
-    "team": "SpVgg Greuther FÃ¼rth",
+    "team": "SpVgg Greuther Fürth",
     "spiele": 26,
     "punkte": 38,
     "tore": 37,
@@ -220,7 +220,7 @@
   {
     "platz": 11,
     "wappen": "https://upload.wikimedia.org/wikipedia/commons/f/fa/1._FC_N%C3%BCrnberg_logo.svg",
-    "team": "1. FC NÃ¼rnberg",
+    "team": "1. FC Nürnberg",
     "spiele": 26,
     "punkte": 36,
     "tore": 35,
@@ -258,7 +258,7 @@
     ],
     "laufendesSpiel": {
       "ergebnis": "S",
-      "gegner": "Fortuna DÃ¼sseldorf",
+      "gegner": "Fortuna Düsseldorf",
       "tore": 1,
       "toreGegner": 0
     }
@@ -378,7 +378,7 @@
   {
     "platz": 18,
     "wappen": "https://upload.wikimedia.org/wikipedia/commons/2/24/Logo_Vfl_Osnabrueck_2017.png",
-    "team": "VfL OsnabrÃ¼ck",
+    "team": "VfL Osnabrück",
     "spiele": 26,
     "punkte": 18,
     "tore": 24,
