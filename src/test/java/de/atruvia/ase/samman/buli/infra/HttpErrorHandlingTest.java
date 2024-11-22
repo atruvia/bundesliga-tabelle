@@ -9,11 +9,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
 
@@ -26,7 +26,7 @@ class HttpErrorHandlingTest {
 	@Autowired
 	private TestRestTemplate httpClient;
 
-	@MockBean
+	@MockitoBean
 	TabellenService tabellenService;
 
 	@ParameterizedTest

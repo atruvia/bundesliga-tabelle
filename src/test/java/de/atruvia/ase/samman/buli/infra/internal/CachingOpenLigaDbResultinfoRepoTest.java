@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
 
@@ -36,7 +36,7 @@ class CachingOpenLigaDbResultinfoRepoTest {
 	@SpringBootTest(properties = CachingOpenLigaDbResultinfoRepo.CACHECLEAR + "=60000")
 	class LongCacheEvict {
 
-		@MockBean
+		@MockitoBean
 		@Qualifier("defaultOpenLigaDbResultinfoRepo")
 		OpenLigaDbResultinfoRepo delegateMock;
 
@@ -84,7 +84,7 @@ class CachingOpenLigaDbResultinfoRepoTest {
 
 		static final int EVICT_MS = 1000;
 
-		@MockBean
+		@MockitoBean
 		@Qualifier("defaultOpenLigaDbResultinfoRepo")
 		OpenLigaDbResultinfoRepo delegateMock;
 
