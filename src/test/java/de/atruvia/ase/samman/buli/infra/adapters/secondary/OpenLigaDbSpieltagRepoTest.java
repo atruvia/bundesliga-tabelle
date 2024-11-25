@@ -1,6 +1,7 @@
 package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
+import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
@@ -10,8 +11,10 @@ import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restCl
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import org.junit.jupiter.api.Test;
+
+import de.atruvia.ase.samman.buli.domain.Team;
+import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 
 class OpenLigaDbSpieltagRepoTest {
 
@@ -45,6 +48,28 @@ class OpenLigaDbSpieltagRepoTest {
 				""");
 		OpenLigaDbSpieltagRepo repo = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2));
 		assertThatThrownBy(() -> repo.lade("any", "any")).hasMessageContaining("at most one element");
+	}
+
+	@Test
+	void goalsInSameMinuteGetSortedUsingGoalId() {
+		RestClient restClient = restClient(__ -> """
+				[
+				  {
+					"team1": { "teamId": 42, "teamName": "Team 1" },
+					"team2": { "teamId": 43, "teamName": "Team 2" },
+				    "matchResults": [ { "resultTypeID": 2 } ],
+				    "goals": [
+						{ "matchMinute": 42, "goalID": 2, "scoreTeam1": 98, "scoreTeam2": 99 },
+						{ "matchMinute": 42, "goalID": 1, "scoreTeam1":  1, "scoreTeam2":  1 }
+					]
+				  }
+				 ]
+				""");
+		var paarungen = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any");
+		var heim = Team.builder().id(teamId(42)).name("Team 1").build();
+		var gast = Team.builder().id(teamId(43)).name("Team 2").build();
+		var expected0 = paarung(heim, gast).zwischenergebnis(98, 99).build();
+		assertThat(paarungen).hasSize(1).element(0).isEqualTo(expected0);
 	}
 
 	OpenLigaDbSpieltagRepo repo() {

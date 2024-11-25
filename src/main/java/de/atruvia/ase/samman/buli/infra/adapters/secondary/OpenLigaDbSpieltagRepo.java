@@ -13,6 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -67,15 +68,16 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	private static class Goal {
 
 		private static final Goal NULL = new Goal();
+		private static final Comparator<Goal> compareById = comparing(Goal::goalID);
+		private static final Comparator<Goal> compareByMinuteThenById = comparing(Goal::matchMinute)
+				.thenComparing(compareById);
 
 		private static Goal lastGoalOf(Goal[] goals) {
 			var goalsWithMinutes = goalsWithMinuteAttribute(goals).toList();
 			assert orderedByIdMatchesOrderedByMinute(goals, goalsWithMinutes)
 					: "goals sorted by id not in same order like sorted by minute: " + Arrays.toString(goals);
 			boolean allGoalsHaveMinutes = goalsWithMinutes.size() == goals.length;
-			var comparator = allGoalsHaveMinutes //
-					? comparing(Goal::matchMinute) //
-					: comparing(Goal::goalID);
+			var comparator = allGoalsHaveMinutes ? compareByMinuteThenById : compareById;
 			return stream(goals).max(comparator).orElse(NULL);
 		}
 
@@ -84,9 +86,9 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 		}
 
 		private static boolean orderedByIdMatchesOrderedByMinute(Goal[] goals, List<Goal> goalsWithMinutes) {
-			var byId = goalsWithMinutes.stream().sorted(comparing(Goal::goalID)).toList();
-			var byMinute = goalsWithMinutes.stream().sorted(comparing(Goal::matchMinute)).toList();
-			return byId.equals(byMinute);
+			var byId = goalsWithMinutes.stream().sorted(compareById).toList();
+			var byMinuteThenById = goalsWithMinutes.stream().sorted(compareByMinuteThenById).toList();
+			return byId.equals(byMinuteThenById);
 		}
 
 		int goalID;
