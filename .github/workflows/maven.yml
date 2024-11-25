@@ -32,7 +32,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package jib:dockerBuild verify -DignoreSurefireErrors=true --file pom.xml
+      run: mvn -B package jib:dockerBuild verify --file pom.xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5.0.7
