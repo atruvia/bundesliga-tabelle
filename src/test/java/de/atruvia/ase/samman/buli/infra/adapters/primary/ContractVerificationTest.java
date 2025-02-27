@@ -63,8 +63,8 @@ class ContractVerificationTest {
 	void runningGame() {
 		when(spieltagRepoMock.lade(anyString(), anyString())).thenReturn( //
 				paarungen( 
-					paarung("Team 1", "Team 4").zwischenergebnis(MAX_VALUE, 0), //
-					paarung("Team 2", "Team 3").endergebnis(0, 0) //
+					paarung("Team-A", "Team-D").zwischenergebnis(MAX_VALUE, 0), //
+					paarung("Team-B", "Team-C").endergebnis(0, 0) //
 				)
 		);
 	}

@@ -38,45 +38,45 @@ class DefaultTabelleTest {
 
 	@Test
 	void zweiMannschaftenKeinSpiel() {
-		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2"), paarung("Team 2", "Team 1"));
+		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B"), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle("""
 				rank|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1   |Team 1|     0|    0|            0|          0|     0|         0|              0|           0
-				1   |Team 2|     0|    0|            0|          0|     0|         0|              0|           0""");
+				1   |Team-A|     0|    0|            0|          0|     0|         0|              0|           0
+				1   |Team-B|     0|    0|            0|          0|     0|         0|              0|           0""");
 	}
 
 	@Test
 	void zweiMannschaftenEinSpielKeineTore() {
-		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2").endergebnis(0, 0), paarung("Team 2", "Team 1"));
+		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B").endergebnis(0, 0), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle("""
 				rank|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1   |Team 1|     1|    0|            1|          0|     1|         0|              0|           0
-				1   |Team 2|     1|    0|            1|          0|     1|         0|              0|           0""");
+				1   |Team-A|     1|    0|            1|          0|     1|         0|              0|           0
+				1   |Team-B|     1|    0|            1|          0|     1|         0|              0|           0""");
 	}
 
 	@Test
 	void mannschaftMitMehrPunktenIstWeiterOben() {
-		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2").endergebnis(0, 1), paarung("Team 2", "Team 1"));
+		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B").endergebnis(0, 1), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle("""
 				rank|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1   |Team 2|     1|    1|            0|          0|     3|         1|              0|           1
-				2   |Team 1|     1|    0|            0|          1|     0|         0|              1|          -1""");
+				1   |Team-B|     1|    1|            0|          0|     3|         1|              0|           1
+				2   |Team-A|     1|    0|            0|          1|     0|         0|              1|          -1""");
 	}
 
 	@Test
 	void zweiMannschaftenZweiSpieleMitToren() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 0), //
-				paarung("Team 2", "Team 1").endergebnis(1, 0) //
+				paarung("Team-A", "Team-B").endergebnis(1, 0), //
+				paarung("Team-B", "Team-A").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle("""
 				rank|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1   |Team 1|     2|    1|            0|          1|     3|         1|              1|           0
-				1   |Team 2|     2|    1|            0|          1|     3|         1|              1|           0""");
+				1   |Team-A|     2|    1|            0|          1|     3|         1|              1|           0
+				1   |Team-B|     2|    1|            0|          1|     3|         1|              1|           0""");
 	}
 
 	@Test
@@ -85,17 +85,17 @@ class DefaultTabelleTest {
 		// ob die Platznummerierung (1,1,3) stimmt
 		// Diesen Test gibt es auch als Cucumber Test
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 0), //
-				paarung("Team 2", "Team 1").endergebnis(1, 0), //
-				paarung("Team 1", "Team 3").endergebnis(1, 0), //
-				paarung("Team 2", "Team 3").endergebnis(1, 0) //
+				paarung("Team-A", "Team-B").endergebnis(1, 0), //
+				paarung("Team-B", "Team-A").endergebnis(1, 0), //
+				paarung("Team-A", "Team-C").endergebnis(1, 0), //
+				paarung("Team-B", "Team-C").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle("""
 				rank|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1   |Team 1|     3|    2|            0|          1|     6|         2|              1|           1
-				1   |Team 2|     3|    2|            0|          1|     6|         2|              1|           1
-				3   |Team 3|     2|    0|            0|          2|     0|         0|              2|          -2""");
+				1   |Team-A|     3|    2|            0|          1|     6|         2|              1|           1
+				1   |Team-B|     3|    2|            0|          1|     6|         2|              1|           1
+				3   |Team-C|     2|    0|            0|          2|     0|         0|              2|          -2""");
 	}
 
 	@Test
@@ -103,23 +103,23 @@ class DefaultTabelleTest {
 		// Diesen Test gibt es auch als Cucumber Test (und dieser lässt sich besser
 		// lesen)
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 0), //
-				paarung("Team 2", "Team 1").endergebnis(1, 0), //
-				paarung("Team 1", "Team 3").endergebnis(1, 0), //
-				paarung("Team 2", "Team 3").endergebnis(1, 0) //
+				paarung("Team-A", "Team-B").endergebnis(1, 0), //
+				paarung("Team-B", "Team-A").endergebnis(1, 0), //
+				paarung("Team-A", "Team-C").endergebnis(1, 0), //
+				paarung("Team-B", "Team-C").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> {
-					assertThat(e1.team().name()).isEqualTo("Team 1");
+					assertThat(e1.team().name()).isEqualTo("Team-A");
 					assertThat(e1.rank().value()).isEqualTo(1);
 				}, //
 				e2 -> {
-					assertThat(e2.team().name()).isEqualTo("Team 2");
+					assertThat(e2.team().name()).isEqualTo("Team-B");
 					assertThat(e2.rank().value()).isEqualTo(1);
 				}, //
 				e3 -> {
-					assertThat(e3.team().name()).isEqualTo("Team 3");
+					assertThat(e3.team().name()).isEqualTo("Team-C");
 					assertThat(e3.rank().value()).isEqualTo(3);
 				} //
 
@@ -129,34 +129,34 @@ class DefaultTabelleTest {
 	@Test
 	void team2IstImDirektenVergleichBesserAlsTeam1() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(0, 1), //
-				paarung("Team GegnerXvon1", "Team 1").endergebnis(0, 1), //
-				paarung("Team 2", "Team GegnerXvon2").endergebnis(0, 1) //
+				paarung("Team-A", "Team-B").endergebnis(0, 1), //
+				paarung("Team GegnerXvonA", "Team-A").endergebnis(0, 1), //
+				paarung("Team-B", "Team GegnerXvonB").endergebnis(0, 1) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle(
 				"""
 						rank|verein          |spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1   |Team GegnerXvon2|1     |1    |0            |0          |3     |1         |0              |1
-						2   |Team 2          |2     |1    |0            |1          |3     |1         |1              |0
-						3   |Team 1          |2     |1    |0            |1          |3     |1         |1              |0
-						4   |Team GegnerXvon1|1     |0    |0            |1          |0     |0         |1              |-1""");
+						1   |Team GegnerXvonB|1     |1    |0            |0          |3     |1         |0              |1
+						2   |Team-B          |2     |1    |0            |1          |3     |1         |1              |0
+						3   |Team-A          |2     |1    |0            |1          |3     |1         |1              |0
+						4   |Team GegnerXvonA|1     |0    |0            |1          |0     |0         |1              |-1""");
 	}
 
 	@Test
 	void anzahlAuswaertsToreImDirektenVergleichZiehtVorDenGesamtAuswaertsToren() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 2", "Team 1").endergebnis(0, 1), //
-				paarung("Team 1", "Team 2").endergebnis(1, 2), // <-- Team 2 hat 2, Team 1 hat 1 Auswärtstor
-				paarung("Team GegnerXvon1", "Team 1").endergebnis(0, 9), //
-				paarung("Team 1", "Team GegnerXvon1").endergebnis(9, 0), //
-				paarung("Team GegnerXvon2", "Team 2").endergebnis(0, 8), //
-				paarung("Team 2", "Team GegnerXvon2").endergebnis(10, 0) //
+				paarung("Team-B", "Team-A").endergebnis(0, 1), //
+				paarung("Team-A", "Team-B").endergebnis(1, 2), // <-- Team-B hat 2, Team-A hat 1 Auswärtstor
+				paarung("Team GegnerXvonA", "Team-A").endergebnis(0, 9), //
+				paarung("Team-A", "Team GegnerXvonA").endergebnis(9, 0), //
+				paarung("Team GegnerXvonB", "Team-B").endergebnis(0, 8), //
+				paarung("Team-B", "Team GegnerXvonB").endergebnis(10, 0) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.team().name()).isEqualTo("Team 2"), //
-				e2 -> assertThat(e2.team().name()).isEqualTo("Team 1"), //
+				e1 -> assertThat(e1.team().name()).isEqualTo("Team-B"), //
+				e2 -> assertThat(e2.team().name()).isEqualTo("Team-A"), //
 				e3 -> dontCare(), //
 				e4 -> dontCare() //
 		);
@@ -165,17 +165,17 @@ class DefaultTabelleTest {
 	@Test
 	void tordifferenzToreDirekterVergleichIDentischDannZaehlenMehrAuswaertsTore() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 2", "Team 1").endergebnis(0, 1), //
-				paarung("Team 1", "Team 2").endergebnis(0, 1), //
-				paarung("Team 1", "Team GegnerXvon1").endergebnis(3, 0), //
-				paarung("Team GegnerXvon1", "Team 1").endergebnis(3, 0), //
-				paarung("Team 2", "Team GegnerXvon2").endergebnis(2, 1), //
-				paarung("Team GegnerXvon2", "Team 2").endergebnis(2, 1) //
+				paarung("Team-B", "Team-A").endergebnis(0, 1), //
+				paarung("Team-A", "Team-B").endergebnis(0, 1), //
+				paarung("Team-A", "Team GegnerXvonA").endergebnis(3, 0), //
+				paarung("Team GegnerXvonA", "Team-A").endergebnis(3, 0), //
+				paarung("Team-B", "Team GegnerXvonB").endergebnis(2, 1), //
+				paarung("Team GegnerXvonB", "Team-B").endergebnis(2, 1) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.team().name()).isEqualTo("Team 2"), //
-				e2 -> assertThat(e2.team().name()).isEqualTo("Team 1"), //
+				e1 -> assertThat(e1.team().name()).isEqualTo("Team-B"), //
+				e2 -> assertThat(e2.team().name()).isEqualTo("Team-A"), //
 				e3 -> dontCare(), //
 				e4 -> dontCare() //
 		);
@@ -187,21 +187,21 @@ class DefaultTabelleTest {
 	@Test
 	void punktUndTorGleichAberMehrAuswärtsTore() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 2), //
-				paarung("Team 2", "Team 1").endergebnis(0, 1) //
+				paarung("Team-A", "Team-B").endergebnis(1, 2), //
+				paarung("Team-B", "Team-A").endergebnis(0, 1) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.team().name()).isEqualTo("Team 2"), //
-				e2 -> assertThat(e2.team().name()).isEqualTo("Team 1") //
+				e1 -> assertThat(e1.team().name()).isEqualTo("Team-B"), //
+				e2 -> assertThat(e2.team().name()).isEqualTo("Team-A") //
 		);
 	}
 
 	@Test
 	void wappenIstImmerDasDerLetztenPaarung() {
 		gegebenSeienDiePaarungen(
-				paarung("Team 1", "Team 2", create("proto://wappenAlt1"), create("proto://wappenAlt2")),
-				paarung("Team 2", "Team 1", create("proto://wappenNeu2"), create("proto://wappenNeu1")));
+				paarung("Team-A", "Team-B", create("proto://wappenAlt1"), create("proto://wappenAlt2")),
+				paarung("Team-B", "Team-A", create("proto://wappenNeu2"), create("proto://wappenNeu1")));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> assertThat(e1.team().wappen()).isEqualTo(create("proto://wappenNeu1")), //
@@ -212,8 +212,8 @@ class DefaultTabelleTest {
 	@Test
 	void nullWappenWerdenNichtUebernommen() {
 		gegebenSeienDiePaarungen(
-				paarung("Team 1", "Team 2", create("proto://wappenAlt1"), create("proto://wappenAlt2")),
-				paarung("Team 2", "Team 1", create("proto://wappenNeu2"), null));
+				paarung("Team-A", "Team-B", create("proto://wappenAlt1"), create("proto://wappenAlt2")),
+				paarung("Team-B", "Team-A", create("proto://wappenNeu2"), null));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> assertThat(e1.team().wappen()).isEqualTo(create("proto://wappenAlt1")), //
@@ -236,8 +236,8 @@ class DefaultTabelleTest {
 
 	@Test
 	void beiAenderndemMannschaftsnamenWirdDerLetzteUebernommen() {
-		String team1 = "Team 1";
-		String team2 = "Team 2";
+		String team1 = "Team-A";
+		String team2 = "Team-B";
 		var heimAlt = team(team1, teamId(team1));
 		var gastAlt = team(team2 + "-A", teamId(team2));
 
@@ -253,8 +253,8 @@ class DefaultTabelleTest {
 
 	@Test
 	void beiAenderndemMannschaftsnamenNullWirdNichtUebernommen() {
-		String team1 = "Team 1";
-		String team2 = "Team 2";
+		String team1 = "Team-A";
+		String team2 = "Team-B";
 		var heimAlt = team(team1, teamId(team1));
 		var gastAlt = team(team2, teamId(team2));
 
@@ -271,7 +271,7 @@ class DefaultTabelleTest {
 
 	@Test
 	void keineSpieleKeineErgebnisse() {
-		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2"), paarung("Team 2", "Team 1"));
+		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B"), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> assertThat(e1.ergebnisse()).isEmpty(), //
@@ -282,8 +282,8 @@ class DefaultTabelleTest {
 	@Test
 	void zweiSpieleErgebnisse_dieLetztePaarungIstVorneInDerListe() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 0), //
-				paarung("Team 2", "Team 1").endergebnis(1, 1) //
+				paarung("Team-A", "Team-B").endergebnis(1, 0), //
+				paarung("Team-B", "Team-A").endergebnis(1, 1) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
@@ -295,18 +295,18 @@ class DefaultTabelleTest {
 	@Test
 	void laufendeSpieleWerdenAusgewiesen() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 0), //
-				paarung("Team 2", "Team 1").zwischenergebnis(2, 1) //
+				paarung("Team-A", "Team-B").endergebnis(1, 0), //
+				paarung("Team-B", "Team-A").zwischenergebnis(2, 1) //
 		);
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
 				e1 -> {
-					assertThat(e1.team().name()).isEqualTo("Team 1");
+					assertThat(e1.team().name()).isEqualTo("Team-A");
 					assertThat(e1.laufendesSpiel().tore()).isEqualTo(1);
 					assertThat(e1.laufendesSpiel().gegentore()).isEqualTo(2);
 				}, //
 				e2 -> {
-					assertThat(e2.team().name()).isEqualTo("Team 2");
+					assertThat(e2.team().name()).isEqualTo("Team-B");
 					assertThat(e2.laufendesSpiel().tore()).isEqualTo(2);
 					assertThat(e2.laufendesSpiel().gegentore()).isEqualTo(1);
 				} //
@@ -326,24 +326,24 @@ class DefaultTabelleTest {
 
 	@Test
 	void tendenz_letzterSpieltagGanzVorneRestNull() {
-		gegebenSeienDiePaarungen(paarung("Team 1", "Team 2").endergebnis(1, 0));
+		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B").endergebnis(1, 0));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTendenz("Team 1", SIEG);
+		dannIstDieTendenz("Team-A", SIEG);
 	}
 
 	@Test
 	void tendenz_beinhaltetKeineLaufendenSpiele() {
 		gegebenSeienDiePaarungen( //
-				paarung("Team 1", "Team 2").endergebnis(1, 0), //
-				paarung("Team 2", "Team 1").zwischenergebnis(2, 1) //
+				paarung("Team-A", "Team-B").endergebnis(1, 0), //
+				paarung("Team-B", "Team-A").zwischenergebnis(2, 1) //
 		);
 		wennDieTabelleBerechnetWird();
-		dannIstDieTendenz("Team 1", SIEG);
+		dannIstDieTendenz("Team-A", SIEG);
 	}
 
 	@Test
 	void tendenz_letzterSpieltagGanzVorneMaximalFuenfElemente() {
-		var team = "Team 1";
+		var team = "Team-A";
 		gegebenSeienDiePaarungen(
 				createPaarungen(team, SIEG, SIEG, NIEDERLAGE, NIEDERLAGE, UNENTSCHIEDEN, UNENTSCHIEDEN));
 		wennDieTabelleBerechnetWird();

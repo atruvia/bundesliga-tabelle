@@ -39,8 +39,8 @@ class OpenLigaDbSpieltagRepoTest {
 		RestClient restClient = restClient(__ -> """
 				[
 				  {
-					"team1": { "teamId": 42, "teamName": "Team 1", "teamIconUrl": "teamIconUrl1" },
-					"team2": { "teamId": 43, "teamName": "Team 2", "teamIconUrl": "teamIconUrl2" },
+					"team1": { "teamId": 42, "teamName": "Team-A", "teamIconUrl": "teamIconUrl1" },
+					"team2": { "teamId": 43, "teamName": "Team-B", "teamIconUrl": "teamIconUrl2" },
 					"matchIsFinished": true,
 				    "matchResults": [ { "resultTypeID": 2 }, { "resultTypeID": 2 } ]
 				  }
@@ -55,8 +55,8 @@ class OpenLigaDbSpieltagRepoTest {
 		RestClient restClient = restClient(__ -> """
 				[
 				  {
-					"team1": { "teamId": 42, "teamName": "Team 1" },
-					"team2": { "teamId": 43, "teamName": "Team 2" },
+					"team1": { "teamId": 42, "teamName": "Team-A" },
+					"team2": { "teamId": 43, "teamName": "Team-B" },
 				    "matchResults": [ { "resultTypeID": 2 } ],
 				    "goals": [
 						{ "matchMinute": 42, "goalID": 2, "scoreTeam1": 98, "scoreTeam2": 99 },
@@ -66,8 +66,8 @@ class OpenLigaDbSpieltagRepoTest {
 				 ]
 				""");
 		var paarungen = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any");
-		var heim = Team.builder().id(teamId(42)).name("Team 1").build();
-		var gast = Team.builder().id(teamId(43)).name("Team 2").build();
+		var heim = Team.builder().id(teamId(42)).name("Team-A").build();
+		var gast = Team.builder().id(teamId(43)).name("Team-B").build();
 		var expected0 = paarung(heim, gast).zwischenergebnis(98, 99).build();
 		assertThat(paarungen).hasSize(1).element(0).isEqualTo(expected0);
 	}
