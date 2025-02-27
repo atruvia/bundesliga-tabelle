@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbResultInfo;
 import de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbResultInfo.GlobalResultInfo;
 
-class OldbResultInfoRepoTest {
+class OldbResultInfoTest {
 
 	@Test
 	void testEndergebnisTypeIsHighestGlobalResultInfo() {
@@ -19,13 +19,13 @@ class OldbResultInfoRepoTest {
 		assertThat(endergebnisType(List.of(r2, r1))).isSameAs(r2);
 	}
 
-	static OldbResultInfo resultInfo(int globalResultInfoId) {
+	private static OldbResultInfo resultInfo(int globalResultInfoId) {
 		OldbResultInfo resultInfo = new OldbResultInfo();
 		resultInfo.globalResultInfo = globalResultInfo(globalResultInfoId);
 		return resultInfo;
 	}
 
-	static GlobalResultInfo globalResultInfo(int globalResultInfoId) {
+	private static GlobalResultInfo globalResultInfo(int globalResultInfoId) {
 		GlobalResultInfo globalResultInfo = new GlobalResultInfo();
 		globalResultInfo.id = globalResultInfoId;
 		return globalResultInfo;

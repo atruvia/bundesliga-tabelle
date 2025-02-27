@@ -41,13 +41,10 @@ import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueNotFoundExceptio
 class TabellenHttpAdapterTest {
 
 	@Autowired
-	TabellenHttpAdapter sut;
-
-	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@MockitoBean
-	TabellenService tabellenService;
+	private TabellenService tabellenService;
 
 	@Test
 	void shouldReturnDefaultMessage() throws Exception {
@@ -126,7 +123,7 @@ class TabellenHttpAdapterTest {
 		;
 	}
 
-	static Tabelle tabelleWithEntries(List<TabellenPlatz> result) {
+	private static Tabelle tabelleWithEntries(List<TabellenPlatz> result) {
 		return new Tabelle() {
 			@Override
 			public Tabelle add(Paarung paarung) {
@@ -141,7 +138,7 @@ class TabellenHttpAdapterTest {
 		};
 	}
 
-	static TabellenPlatz platzWithBase(int base, TabellenPlatzBuilder builder) {
+	private static TabellenPlatz platzWithBase(int base, TabellenPlatzBuilder builder) {
 		int cnt = 0;
 		return builder //
 				.team(Team.builder().id(teamId("Identifier " + base + (++cnt))).name("Team " + base)
