@@ -4,7 +4,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.LAUFEND;
 import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
-import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo.endergebnisType;
+import static de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbResultInfo.endergebnisType;
 import static de.atruvia.ase.samman.buli.util.Streams.toOnlyElement;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
@@ -24,9 +24,9 @@ import org.springframework.stereotype.Repository;
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
 import de.atruvia.ase.samman.buli.domain.ports.secondary.SpieltagRepo;
-import de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbTeamRepo.OpenligaDbTeam;
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo;
-import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.OpenligaDbResultinfo;
+import de.atruvia.ase.samman.buli.infra.adapters.secondary.OldbTeamRepo.OldbTeam;
+import de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo;
+import de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbResultInfo;
 import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -34,27 +34,28 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
+/** Provides read access to match days from the Open Liga DB. */
 @Repository
 @RequiredArgsConstructor
 @SecondaryAdapter
-public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
+public class OldbSpieltagRepo implements SpieltagRepo {
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getmatchdata/{league}/{season}";
 
 	private final RestClient restClient;
-	private final OpenLigaDbResultinfoRepo resultinfoRepo;
+	private final OldbResultInfoRepo resultInfoRepo;
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
-	private static class OpenligaDbMatchResult {
+	private static class OldbMatchResult {
 		int resultTypeID;
 		int pointsTeam1;
 		int pointsTeam2;
 
-		private static Optional<OpenligaDbMatchResult> endergebnisOf(Stream<OpenligaDbMatchResult> matchResults,
-				List<OpenligaDbResultinfo> resultinfos) {
-			int endergebnisResultTypeId = endergebnisType(resultinfos).globalResultInfo.id;
+		private static Optional<OldbMatchResult> endergebnisOf(Stream<OldbMatchResult> matchResults,
+															   List<OldbResultInfo> resultInfos) {
+			int endergebnisResultTypeId = endergebnisType(resultInfos).globalResultInfo.id;
 			return matchResults.filter(t -> t.resultTypeID == endergebnisResultTypeId).reduce(toOnlyElement());
 		}
 
@@ -108,18 +109,18 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@ToString
 	@FieldDefaults(level = PUBLIC)
 	@SecondaryAdapter
-	private static class OpenligaDbMatch {
-		OpenligaDbTeam team1;
-		OpenligaDbTeam team2;
+	private static class OldbMatch {
+		OldbTeam team1;
+		OldbTeam team2;
 		boolean matchIsFinished;
-		OpenligaDbMatchResult[] matchResults;
+		OldbMatchResult[] matchResults;
 		Goal[] goals;
 
-		private Paarung toDomain(List<OpenligaDbResultinfo> resultinfos) {
+		private Paarung toDomain(List<OldbResultInfo> resultInfos) {
 			var ergebnisTyp = ergebnisTyp();
 			var paarung = paarung(team1.toDomain(), team2.toDomain()).ergebnisTyp(ergebnisTyp);
 			if (ergebnisTyp == BEENDET) {
-				var endergebnis = OpenligaDbMatchResult.endergebnisOf(stream(matchResults), resultinfos)
+				var endergebnis = OldbMatchResult.endergebnisOf(stream(matchResults), resultInfos)
 						.orElseThrow(() -> new IllegalStateException("No final result found in finished game " + this));
 				paarung = paarung.goals(endergebnis.pointsTeam1, endergebnis.pointsTeam2);
 			} else if (ergebnisTyp == LAUFEND) {
@@ -149,9 +150,9 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@Override
 	public List<Paarung> lade(String league, String season) {
-		List<OpenligaDbResultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
-		OpenligaDbMatch[] matches = restClient.get(SERVICE_URI, OpenligaDbMatch[].class, league, season);
-		return stream(matches).map(t -> t.toDomain(resultinfos)).toList();
+		List<OldbResultInfo> resultInfos = resultInfoRepo.getResultInfos(league, season);
+		OldbMatch[] matches = restClient.get(SERVICE_URI, OldbMatch[].class, league, season);
+		return stream(matches).map(t -> t.toDomain(resultInfos)).toList();
 	}
 
 }

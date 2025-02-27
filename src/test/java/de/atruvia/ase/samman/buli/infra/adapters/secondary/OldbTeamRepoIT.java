@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 
-class OpenLigaDbTeamRepoIT {
+class OldbTeamRepoIT {
 
 	@Test
 	void canRetrieveDataOf2022() {
@@ -51,8 +51,8 @@ class OpenLigaDbTeamRepoIT {
 		return repo().getTeams(league, season);
 	}
 
-	OpenLigaDbTeamRepo repo() {
-		return new OpenLigaDbTeamRepo(new RestClient(new RestTemplate()));
+	OldbTeamRepo repo() {
+		return new OldbTeamRepo(new RestClient(new RestTemplate()));
 	}
 
 }

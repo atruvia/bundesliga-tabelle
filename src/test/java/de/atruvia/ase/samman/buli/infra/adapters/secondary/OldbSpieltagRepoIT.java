@@ -21,17 +21,17 @@ import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Paarung.Entry;
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.infra.internal.AvailableLeagueRepo;
-import de.atruvia.ase.samman.buli.infra.internal.DefaultOpenLigaDbResultinfoRepo;
+import de.atruvia.ase.samman.buli.infra.internal.DefaultOldbResultInfoRepo;
 import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 
-class OpenLigaDbSpieltagRepoIT {
+class OldbSpieltagRepoIT {
 
-	private final OpenLigaDbSpieltagRepo sut = repo();
+	private final OldbSpieltagRepo sut = repo();
 
-	private static OpenLigaDbSpieltagRepo repo() {
+	private static OldbSpieltagRepo repo() {
 		RestClient restClient = new RestClient(new RestTemplate());
-		return new OpenLigaDbSpieltagRepo(restClient,
-				new DefaultOpenLigaDbResultinfoRepo(restClient, new AvailableLeagueRepo(restClient)));
+		return new OldbSpieltagRepo(restClient,
+				new DefaultOldbResultInfoRepo(restClient, new AvailableLeagueRepo(restClient)));
 	}
 
 	@Test

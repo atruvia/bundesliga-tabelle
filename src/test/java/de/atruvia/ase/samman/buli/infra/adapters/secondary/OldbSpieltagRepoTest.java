@@ -5,8 +5,8 @@ import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
-import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.resultinfoProvider;
-import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
+import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OldbSpieltagRepoMother.resultInfoProvider;
+import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OldbSpieltagRepoMother.spieltagFsRepo;
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 
-class OpenLigaDbSpieltagRepoTest {
+class OldbSpieltagRepoTest {
 
 	@Test
 	void canRetrieveDataOf2022() {
@@ -46,7 +46,7 @@ class OpenLigaDbSpieltagRepoTest {
 				  }
 				 ]
 				""");
-		OpenLigaDbSpieltagRepo repo = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2));
+		OldbSpieltagRepo repo = new OldbSpieltagRepo(restClient, resultInfoProvider(2));
 		assertThatThrownBy(() -> repo.lade("any", "any")).hasMessageContaining("at most one element");
 	}
 
@@ -65,14 +65,14 @@ class OpenLigaDbSpieltagRepoTest {
 				  }
 				 ]
 				""");
-		var paarungen = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any");
+		var paarungen = new OldbSpieltagRepo(restClient, resultInfoProvider(2)).lade("any", "any");
 		var heim = Team.builder().id(teamId(42)).name("Team-A").build();
 		var gast = Team.builder().id(teamId(43)).name("Team-B").build();
 		var expected0 = paarung(heim, gast).zwischenergebnis(98, 99).build();
 		assertThat(paarungen).hasSize(1).element(0).isEqualTo(expected0);
 	}
 
-	OpenLigaDbSpieltagRepo repo() {
+	OldbSpieltagRepo repo() {
 		return spieltagFsRepo();
 	}
 

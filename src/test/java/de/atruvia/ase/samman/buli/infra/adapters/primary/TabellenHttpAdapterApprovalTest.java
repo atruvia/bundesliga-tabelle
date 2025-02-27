@@ -1,6 +1,6 @@
 package de.atruvia.ase.samman.buli.infra.adapters.primary;
 
-import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
+import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OldbSpieltagRepoMother.spieltagFsRepo;
 import static org.approvaltests.JsonApprovals.verifyJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,7 +19,7 @@ import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
 
 @WebMvcTest
 @AutoConfigureMockMvc
-@Import(TabellenHttpAdapterApprovalTest.OpenLigaConfig.class)
+@Import(TabellenHttpAdapterApprovalTest.OldbConfig.class)
 class TabellenHttpAdapterApprovalTest {
 
 	@Autowired
@@ -38,7 +38,7 @@ class TabellenHttpAdapterApprovalTest {
 	}
 
 	@TestConfiguration
-	static class OpenLigaConfig {
+	static class OldbConfig {
 		@Bean
 		TabellenService tabellenService() {
 			return new DefaultTabellenService(spieltagFsRepo());
