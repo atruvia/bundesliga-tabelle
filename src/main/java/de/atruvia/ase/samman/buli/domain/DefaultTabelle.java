@@ -14,8 +14,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -111,8 +111,10 @@ public class DefaultTabelle implements Tabelle {
 	public Tabelle add(Paarung paarung) {
 		var existing = entries().stream();
 		var toAdd = Stream.of(newEntry(paarung.viewForTeam(HEIM)), newEntry(paarung.viewForTeam(AUSWAERTS)));
-		return new DefaultTabelle(concat(existing, toAdd)
-				.collect(toMap(t -> t.team().id(), identity(), TabellenPlatz::mergeWith)).values());
+		var newEntries = concat(existing, toAdd) //
+				.collect(toMap(t -> t.team().id(), identity(), TabellenPlatz::mergeWith)) //
+				.values();
+		return new DefaultTabelle(newEntries);
 	}
 
 	private static TabellenPlatz newEntry(PaarungView paarung) {
@@ -121,13 +123,11 @@ public class DefaultTabelle implements Tabelle {
 	}
 
 	public List<TabellenPlatz> entries() {
-		// TODO make it side-affect-free, does it work W/O zip!?
+		// TODO make it side-effect-free
 		AtomicInteger platz = new AtomicInteger(1);
 		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = entries.stream()
 				.collect(groupingBy(OrdnungsElement::new));
-		return platzGruppen.entrySet().stream() //
-				.sorted(Entry.comparingByKey()) //
-				.map(Entry::getValue) //
+		return new TreeMap<>(platzGruppen).values().stream() //
 				.flatMap(t -> makeGroup(platz, t)) //
 				.toList();
 	}
