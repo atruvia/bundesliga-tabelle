@@ -19,7 +19,7 @@ public class CachingOldbResultInfoRepo implements OldbResultInfoRepo {
 
 	public static final String CACHE_TTL = "resultInfosCacheTTL";
 	private static final String CACHE_NAME = "resultInfosCache";
-	private static final int ONE_HOUR = 60 * 60 * 1000;
+	private static final int ONE_HOUR_MILLIS = 60 * 60 * 1000;
 
 	private final OldbResultInfoRepo delegate;
 	private final CacheManager cacheManager;
@@ -30,7 +30,7 @@ public class CachingOldbResultInfoRepo implements OldbResultInfoRepo {
 		return delegate.getResultInfos(league, season);
 	}
 
-	@Scheduled(fixedRateString = "${" + CACHE_TTL + ":" + ONE_HOUR + "}")
+	@Scheduled(fixedRateString = "${" + CACHE_TTL + ":" + ONE_HOUR_MILLIS + "}")
 	public void evictCacheEntries() {
 		Optional.ofNullable(cacheManager.getCache(CACHE_NAME)).ifPresent(Cache::clear);
 	}

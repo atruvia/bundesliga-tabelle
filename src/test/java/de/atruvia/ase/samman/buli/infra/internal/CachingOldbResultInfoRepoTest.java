@@ -2,7 +2,6 @@ package de.atruvia.ase.samman.buli.infra.internal;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -24,11 +23,8 @@ import de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbResultIn
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 class CachingOldbResultInfoRepoTest {
 
-	@Autowired
-	OldbResultInfoRepo oldbResultInfoRepo;
-
 	@Test
-	void theOldbResultInfoRepoProvidedBySpringIsTheCachingOne() {
+	void theOldbResultInfoRepoProvidedBySpringIsTheCachingOne(@Autowired OldbResultInfoRepo oldbResultInfoRepo) {
 		assertThat(oldbResultInfoRepo).isInstanceOf(CachingOldbResultInfoRepo.class);
 	}
 
@@ -46,7 +42,7 @@ class CachingOldbResultInfoRepoTest {
 		@Test
 		void testCacheHits() {
 			queryResultInfosThreeTimes("bl1", "2022");
-			verify(delegateMock).getResultInfos(eq("bl1"), eq("2022"));
+			verify(delegateMock).getResultInfos("bl1", "2022");
 			verifyNoMoreInteractions(delegateMock);
 		}
 
@@ -55,8 +51,8 @@ class CachingOldbResultInfoRepoTest {
 			String season = "2022";
 			queryResultInfosThreeTimes("bl1", season);
 			queryResultInfosThreeTimes("bl2", season);
-			verify(delegateMock).getResultInfos(eq("bl1"), eq(season));
-			verify(delegateMock).getResultInfos(eq("bl2"), eq(season));
+			verify(delegateMock).getResultInfos("bl1", season);
+			verify(delegateMock).getResultInfos("bl2", season);
 			verifyNoMoreInteractions(delegateMock);
 		}
 
@@ -65,8 +61,8 @@ class CachingOldbResultInfoRepoTest {
 			String league = "bl1";
 			queryResultInfosThreeTimes(league, "2022");
 			queryResultInfosThreeTimes(league, "2023");
-			verify(delegateMock).getResultInfos(eq(league), eq("2022"));
-			verify(delegateMock).getResultInfos(eq(league), eq("2023"));
+			verify(delegateMock).getResultInfos(league, "2022");
+			verify(delegateMock).getResultInfos(league, "2023");
 			verifyNoMoreInteractions(delegateMock);
 		}
 
