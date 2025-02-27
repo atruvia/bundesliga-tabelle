@@ -124,19 +124,19 @@ public class DefaultTabelle implements Tabelle {
 
 	public List<TabellenPlatz> entries() {
 		// TODO make it side-effect-free
-		AtomicInteger platz = new AtomicInteger(1);
+		AtomicInteger counter = new AtomicInteger(1);
 		Map<OrdnungsElement, List<TabellenPlatz>> platzGruppen = entries.stream()
 				.collect(groupingBy(OrdnungsElement::new));
 		return new TreeMap<>(platzGruppen).values().stream() //
-				.flatMap(t -> makeGroup(platz, t)) //
+				.flatMap(t -> makeGroup(counter, t)) //
 				.toList();
 	}
 
-	private static Stream<TabellenPlatz> makeGroup(AtomicInteger platz, List<TabellenPlatz> tabellenPlaetze) {
-		int no = platz.getAndAdd(tabellenPlaetze.size());
+	private static Stream<TabellenPlatz> makeGroup(AtomicInteger counter, List<TabellenPlatz> tabellenPlaetze) {
+		Rank rank = new Rank(counter.getAndAdd(tabellenPlaetze.size()));
 		return tabellenPlaetze.stream() //
 				.sorted(comparing(OrdnungsElement::new)) //
-				.map(tp -> tp.withPlatz(no));
+				.map(tp -> tp.withRank(rank));
 	}
 
 }

@@ -36,7 +36,7 @@ public class DefaultTabellenServiceTest {
 
 	private static Stream<Entry<String, Function<TabellenPlatz, Object>>> attributeExtractors() {
 		return Stream.of( //
-				entry("Platz", TabellenPlatz::platz), //
+				entry("Platz", t -> t.rank().value()), //
 				entry("Logo", t -> image(t.team().wappen(), 32)), //
 				entry("Verein", t -> t.team().name()), //
 				entry("Sp", TabellenPlatz::spiele), //
