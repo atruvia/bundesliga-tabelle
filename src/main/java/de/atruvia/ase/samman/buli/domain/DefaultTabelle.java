@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.jmolecules.ddd.annotation.ValueObject;
 
 import de.atruvia.ase.samman.buli.domain.Paarung.PaarungView;
-import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -48,24 +47,24 @@ public class DefaultTabelle implements Tabelle {
 				.reversed();
 
 		private static Comparator<OrdnungsElement> direkterVergleichGesamt() {
-			return compareWithSwapped((that, other) -> whereToreIs(that.tabellenPlatz, gegnerIs(identifier(other))));
+			return compareWithSwapped((that, other) -> whereToreIs(that.tabellenPlatz, gegnerIs(other.team())));
 		}
 
 		private static Comparator<OrdnungsElement> direkterVergleichAuswaertsTore() {
 			return compareWithSwapped(
-					(that, other) -> whereToreIs(that.tabellenPlatz, gegnerIs(identifier(other)).and(isAuswaerts())));
+					(that, other) -> whereToreIs(that.tabellenPlatz, gegnerIs(other.team()).and(isAuswaerts())));
 		}
 
 		private static <T, R extends Comparable<R>> Comparator<T> compareWithSwapped(BiFunction<T, T, R> biFunction) {
 			return (o1, o2) -> biFunction.apply(o1, o2).compareTo(biFunction.apply(o2, o1));
 		}
 
-		private static TeamId identifier(OrdnungsElement ordnungsElement) {
-			return ordnungsElement.tabellenPlatz.team().id();
+		private Team team() {
+			return tabellenPlatz.team();
 		}
 
-		private static Predicate<PaarungView> gegnerIs(TeamId gegner) {
-			return e -> Objects.equals(e.gegner().team().id(), gegner);
+		private static Predicate<PaarungView> gegnerIs(Team gegner) {
+			return e -> Objects.equals(e.gegner().team().id(), gegner.id());
 		}
 
 		private static Predicate<PaarungView> isAuswaerts() {
