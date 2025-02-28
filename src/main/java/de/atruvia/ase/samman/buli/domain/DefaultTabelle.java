@@ -95,7 +95,7 @@ public class DefaultTabelle implements Tabelle {
 
 		@Override
 		public int compareTo(OrdnungsElement other) {
-			return comparator.thenComparing(comparing(e -> e.tabellenPlatz().team().name())).compare(this, other);
+			return comparator.thenComparing(e -> e.team().name()).compare(this, other);
 		}
 
 	}
