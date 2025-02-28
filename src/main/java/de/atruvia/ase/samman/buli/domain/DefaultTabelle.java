@@ -90,7 +90,10 @@ public class DefaultTabelle implements Tabelle {
 
 		@Override
 		public boolean equals(Object o) {
-			return comparator.compare(this, (OrdnungsElement) o) == 0;
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			OrdnungsElement other = (OrdnungsElement) o;
+			return comparator.compare(this, other) == 0;
 		}
 
 		@Override
