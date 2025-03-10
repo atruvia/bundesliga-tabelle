@@ -39,11 +39,12 @@ public class StepDefs {
 					.collect(joining())) //
 	);
 
-	private final List<Paarung> paarungen = new ArrayList<>();
-	private final Tabelle tabelle = new DefaultTabelle();
-	private List<TabellenPlatz> entries;
+	List<Paarung> paarungen = new ArrayList<>();
+	Tabelle tabelle = new DefaultTabelle();
+	List<TabellenPlatz> entries;
 
 	@Gegebensei("ein Spielplan")
+	@Gegebensei("der Spielplan")
 	public void der_spielplan(DataTable dataTable) {
 		for (var row : dataTable.asMaps()) {
 			einSpielGegenMitErgebnis(row.get("Heim"), row.get("Gast"), row.get("Ergebnis"));

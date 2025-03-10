@@ -96,9 +96,9 @@ public class Paarung {
 
 		public int punkte() {
 			return switch (this) {
-				case SIEG -> 3;
-				case UNENTSCHIEDEN -> 1;
-				case NIEDERLAGE -> 0;
+			case SIEG -> 3;
+			case UNENTSCHIEDEN -> 1;
+			case NIEDERLAGE -> 0;
 			};
 		}
 
@@ -138,9 +138,7 @@ public class Paarung {
 	ErgebnisTyp ergebnisTyp = GEPLANT;
 
 	@NonNull
-	Entry heim;
-	@NonNull
-	Entry gast;
+	Entry heim, gast;
 
 	public boolean isGeplant() {
 		return ergebnisTypIs(GEPLANT);
@@ -152,6 +150,14 @@ public class Paarung {
 
 	private boolean ergebnisTypIs(ErgebnisTyp ergebnisTyp) {
 		return this.ergebnisTyp == ergebnisTyp;
+	}
+
+	public Paarung withErgebnis(int toreHeim, int toreGast) {
+		return toBuilder().endergebnis(toreHeim, toreGast).build();
+	}
+
+	public ViewDirection viewDirection() {
+		return HEIM;
 	}
 
 	public static class PaarungBuilder {
