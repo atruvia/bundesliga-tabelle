@@ -4,6 +4,7 @@ import static de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbR
 import static de.atruvia.ase.samman.buli.springframework.ResponseFromResourcesSupplier.responseFromResources;
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -15,13 +16,13 @@ import de.atruvia.ase.samman.buli.infra.internal.OldbResultInfoRepo.OldbResultIn
 
 class DefaultOldbResultInfoRepoTest {
 
-	private static final String ENDERGEBNIS = "Endergebnis";
+	static final String ENDERGEBNIS = "Endergebnis";
 
-	private final OldbResultInfoRepo sut = new DefaultOldbResultInfoRepo(
+	OldbResultInfoRepo sut = new DefaultOldbResultInfoRepo(
 			restClient(responseFromResources(p -> "getresultinfos/%s.json".formatted(p[p.length - 1]))),
 			availableLeagueRepo());
 
-	private AvailableLeagueRepo availableLeagueRepo() {
+	AvailableLeagueRepo availableLeagueRepo() {
 		return new AvailableLeagueRepo(
 				restClient(responseFromResources(__ -> "getavailableleagues/getavailableleagues.json")));
 	}
@@ -58,9 +59,9 @@ class DefaultOldbResultInfoRepoTest {
 	@Test
 	void runtimeExceptionOnUnknownLeague() {
 		AvailableLeagueNotFoundException ex = catchThrowableOfType( //
-                AvailableLeagueNotFoundException.class, //
-                () -> sut.getResultInfos("XXX", "2023") //
-        );
+				() -> sut.getResultInfos("XXX", "2023"), //
+				AvailableLeagueNotFoundException.class //
+		);
 		assertThat(ex.getLeague()).isEqualTo("XXX");
 		assertThat(ex.getSeason()).isEqualTo("2023");
 		assertThat(ex).hasMessageContainingAll("XXX", "2023", "not found");
@@ -69,8 +70,8 @@ class DefaultOldbResultInfoRepoTest {
 	@Test
 	void runtimeExceptionOnUnknownSeason() {
 		AvailableLeagueNotFoundException ex = catchThrowableOfType( //
-				AvailableLeagueNotFoundException.class, //
-				() -> sut.getResultInfos("bl1", "0000") //
+				() -> sut.getResultInfos("bl1", "0000"), //
+				AvailableLeagueNotFoundException.class //
 		);
 		assertThat(ex.getLeague()).isEqualTo("bl1");
 		assertThat(ex.getSeason()).isEqualTo("0000");

@@ -72,7 +72,7 @@ class OldbSpieltagRepoTest {
 		assertThat(paarungen).hasSize(1).element(0).isEqualTo(expected0);
 	}
 
-	private OldbSpieltagRepo repo() {
+	OldbSpieltagRepo repo() {
 		return spieltagFsRepo();
 	}
 

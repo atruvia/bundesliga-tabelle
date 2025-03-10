@@ -20,7 +20,7 @@ public class AvailableLeagueRepo {
 
 	@ToString
 	@FieldDefaults(level = PUBLIC)
-	public static class AvailableLeague {
+	static class AvailableLeague {
 		int leagueId;
 		String leagueShortcut;
 		String leagueSeason;
