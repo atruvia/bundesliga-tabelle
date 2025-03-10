@@ -104,19 +104,19 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	}
 
 	public int heimtore() {
-		return tore.getOrDefault(HEIM, 0);
+		return tore().getOrDefault(HEIM, 0);
 	}
 
 	public int auswaertsTore() {
-		return tore.getOrDefault(AUSWAERTS, 0);
+		return tore().getOrDefault(AUSWAERTS, 0);
 	}
 
 	public int heimGegentore() {
-		return gegentore.getOrDefault(HEIM, 0);
+		return gegentore().getOrDefault(HEIM, 0);
 	}
 
 	public int auswaertsGegentore() {
-		return gegentore.getOrDefault(AUSWAERTS, 0);
+		return gegentore().getOrDefault(AUSWAERTS, 0);
 	}
 
 	public int torDifferenz() {
