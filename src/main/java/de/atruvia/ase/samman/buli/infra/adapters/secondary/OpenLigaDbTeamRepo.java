@@ -19,11 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-/** Provides read access to teams from the Open Liga DB. */
 @Repository
 @RequiredArgsConstructor
 @SecondaryAdapter
-class OldbTeamRepo implements TeamRepo {
+class OpenLigaDbTeamRepo implements TeamRepo {
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getavailableteams/{league}/{season}";
 
@@ -34,7 +33,7 @@ class OldbTeamRepo implements TeamRepo {
 	@SecondaryAdapter
 	// the structure of teams are identical in the Team- and the MatchRepos.
 	// Copy/duplicate this class if they start diverging!
-	static class OldbTeam {
+	static class OpenligaDbTeam {
 		Number teamId;
 		String teamName;
 		String teamIconUrl;
@@ -58,8 +57,8 @@ class OldbTeamRepo implements TeamRepo {
 
 	@Override
 	public List<Team> getTeams(String league, String season) {
-		OldbTeam[] teams = restClient.get(SERVICE_URI, OldbTeam[].class, league, season);
-		return stream(teams).map(OldbTeam::toDomain).toList();
+		OpenligaDbTeam[] teams = restClient.get(SERVICE_URI, OpenligaDbTeam[].class, league, season);
+		return stream(teams).map(OpenligaDbTeam::toDomain).toList();
 	}
 
 }

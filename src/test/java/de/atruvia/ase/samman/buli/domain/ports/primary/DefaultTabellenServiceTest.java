@@ -3,7 +3,7 @@ package de.atruvia.ase.samman.buli.domain.ports.primary;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.NIEDERLAGE;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.SIEG;
 import static de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis.UNENTSCHIEDEN;
-import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OldbSpieltagRepoMother.spieltagFsRepo;
+import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static de.atruvia.ase.samman.buli.util.Streams.concat;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;

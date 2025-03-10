@@ -25,7 +25,7 @@ public final class TeamMother {
 			.build();
 
 	public static final Team teamMuenchen = Team.builder().id(idMuenchen).name("FC Bayern München")
-			.wappen(create("https://i.imgur.com/jJEsJrj.png")).build();
+			.wappen(create("https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg")).build();
 
 	public static final Team teamFrankfurt = Team.builder().id(idFrankfurt).name("Eintracht Frankfurt")
 			.wappen(create("https://i.imgur.com/X8NFkOb.png")).build();

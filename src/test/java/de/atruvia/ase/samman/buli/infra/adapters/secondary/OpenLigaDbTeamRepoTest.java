@@ -2,7 +2,7 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.TeamMother.idFrankfurt;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.idMuenchen;
-import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OldbSpieltagRepoMother.teamFsRepo;
+import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.teamFsRepo;
 import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 
-class OldbTeamRepoTest {
+class OpenLigaDbTeamRepoTest {
 
 	@Test
 	void canRetrieveDataOf2022() {
@@ -37,7 +37,7 @@ class OldbTeamRepoTest {
 		return repo().getTeams(league, season);
 	}
 
-	OldbTeamRepo repo() {
+	OpenLigaDbTeamRepo repo() {
 		return teamFsRepo();
 	}
 

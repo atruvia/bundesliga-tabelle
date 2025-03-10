@@ -15,19 +15,19 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @Primary
 @RequiredArgsConstructor
-public class CachingOldbResultInfoRepo implements OldbResultInfoRepo {
+public class CachingOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo {
 
 	public static final String CACHE_TTL = "resultInfosCacheTTL";
 	private static final String CACHE_NAME = "resultInfosCache";
 	private static final int ONE_HOUR_MILLIS = 60 * 60 * 1000;
 
-	private final OldbResultInfoRepo delegate;
+	private final OpenLigaDbResultinfoRepo delegate;
 	private final CacheManager cacheManager;
 
 	@Override
 	@Cacheable(CACHE_NAME)
-	public List<OldbResultInfo> getResultInfos(String league, String season) {
-		return delegate.getResultInfos(league, season);
+	public List<OpenligaDbResultinfo> getResultinfos(String league, String season) {
+		return delegate.getResultinfos(league, season);
 	}
 
 	@Scheduled(fixedRateString = "${" + CACHE_TTL + ":" + ONE_HOUR_MILLIS + "}")

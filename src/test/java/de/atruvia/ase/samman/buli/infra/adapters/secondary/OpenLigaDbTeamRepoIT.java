@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.Team.TeamId;
 
-class OldbTeamRepoIT {
+class OpenLigaDbTeamRepoIT {
 
 	@Test
 	void canRetrieveDataOf2022() {
@@ -26,7 +26,7 @@ class OldbTeamRepoIT {
 		});
 		assertThat(teamByIdentifier(teams, idMuenchen)).hasValueSatisfying(t -> {
 			assertThat(t.name()).isEqualTo("FC Bayern München");
-			assertThat(t.wappen()).isEqualTo(create("https://i.imgur.com/jJEsJrj.png"));
+			assertThat(t.wappen()).isEqualTo(create("https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg"));
 		});
 	}
 
@@ -39,7 +39,7 @@ class OldbTeamRepoIT {
 		});
 		assertThat(teamByIdentifier(teams, idMuenchen)).hasValueSatisfying(t -> {
 			assertThat(t.name()).isEqualTo("FC Bayern München");
-			assertThat(t.wappen()).isEqualTo(create("https://i.imgur.com/jJEsJrj.png"));
+			assertThat(t.wappen()).isEqualTo(create("https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg"));
 		});
 	}
 
@@ -51,8 +51,8 @@ class OldbTeamRepoIT {
 		return repo().getTeams(league, season);
 	}
 
-	OldbTeamRepo repo() {
-		return new OldbTeamRepo(new RestClient(new RestTemplate()));
+	OpenLigaDbTeamRepo repo() {
+		return new OpenLigaDbTeamRepo(new RestClient(new RestTemplate()));
 	}
 
 }

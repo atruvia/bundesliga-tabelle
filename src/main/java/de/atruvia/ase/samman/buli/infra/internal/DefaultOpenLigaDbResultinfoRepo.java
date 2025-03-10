@@ -11,21 +11,21 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class DefaultOldbResultInfoRepo implements OldbResultInfoRepo {
+public class DefaultOpenLigaDbResultinfoRepo implements OpenLigaDbResultinfoRepo {
 
 	private static final String SERVICE_URI = "https://api.openligadb.de/getresultinfos/{leagueId}";
 
 	private final RestClient restClient;
 	private final AvailableLeagueRepo availableLeagueRepo;
 
-	public List<OldbResultInfo> getResultInfos(String league, String season) {
+	public List<OpenligaDbResultinfo> getResultinfos(String league, String season) {
 		AvailableLeague availableLeague = availableLeagueRepo.getAvailableLeague(league, season)
 				.orElseThrow(() -> new AvailableLeagueNotFoundException(league, season));
-		return getResultInfos(availableLeague.leagueId);
+		return getResultinfos(availableLeague.leagueId);
 	}
 
-	private List<OldbResultInfo> getResultInfos(int leagueId) {
-		OldbResultInfo[] results = restClient.get(SERVICE_URI, OldbResultInfo[].class, leagueId);
+	private List<OpenligaDbResultinfo> getResultinfos(int leagueId) {
+		OpenligaDbResultinfo[] results = restClient.get(SERVICE_URI, OpenligaDbResultinfo[].class, leagueId);
 		return asList(results);
 	}
 
