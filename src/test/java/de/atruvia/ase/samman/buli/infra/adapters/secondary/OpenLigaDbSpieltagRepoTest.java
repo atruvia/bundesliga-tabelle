@@ -5,6 +5,7 @@ import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.idMuenchen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
+import static de.atruvia.ase.samman.buli.domain.TeamMother.teamMuenchen;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.resultinfoProvider;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
