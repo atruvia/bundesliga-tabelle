@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
-import de.atruvia.ase.samman.buli.domain.Rank;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -152,7 +151,6 @@ class TabellenHttpAdapterTest {
 				.withTore(AUSWAERTS, base + (++cnt)) //
 				.withGegentore(AUSWAERTS, base + (++cnt)) //
 				.punkte(base + (++cnt)) //
-				.rank(new Rank(base)) //
 				.build();
 	}
 

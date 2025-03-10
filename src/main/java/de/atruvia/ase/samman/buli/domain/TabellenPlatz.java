@@ -64,7 +64,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	@NonNull
 	Team team;
 	@With
-	Rank rank;
+	int platz;
 	int spiele;
 	@NonNull
 	List<PaarungView> paarungen;
@@ -125,7 +125,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 
 	public TabellenPlatzBuilder toBuilder() {
 		TabellenPlatzBuilder builder = new TabellenPlatzBuilder();
-		builder.rank = rank;
+		builder.platz = platz;
 		builder.team = team;
 		builder.spiele = spiele;
 		builder.paarungen = new ArrayList<>(paarungen);
