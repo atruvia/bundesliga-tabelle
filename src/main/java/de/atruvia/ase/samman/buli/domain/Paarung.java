@@ -96,9 +96,9 @@ public class Paarung {
 
 		public int punkte() {
 			return switch (this) {
-			case SIEG -> 3;
-			case UNENTSCHIEDEN -> 1;
-			case NIEDERLAGE -> 0;
+				case SIEG -> 3;
+				case UNENTSCHIEDEN -> 1;
+				case NIEDERLAGE -> 0;
 			};
 		}
 
