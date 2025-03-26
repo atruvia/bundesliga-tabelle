@@ -24,6 +24,9 @@ import de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo.Openli
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 class CachingOpenLigaDbResultinfoRepoTest {
 
+	private static final int ONE_SECOND_IN_MS = 1000;
+	private static final int ONE_MINUTE_IN_MS = 60 * ONE_SECOND_IN_MS;
+
 	@Autowired
 	OpenLigaDbResultinfoRepo openLigaDbResultinfoRepo;
 
@@ -33,8 +36,9 @@ class CachingOpenLigaDbResultinfoRepoTest {
 	}
 
 	@Nested
-	@SpringBootTest(properties = CachingOpenLigaDbResultinfoRepo.CACHE_TTL + "=60000")
+	@SpringBootTest(properties = CachingOpenLigaDbResultinfoRepo.CACHE_TTL + "=" + ONE_MINUTE_IN_MS)
 	class LongCacheEvict {
+
 
 		@MockitoBean
 		@Qualifier("defaultOpenLigaDbResultinfoRepo")
@@ -79,10 +83,9 @@ class CachingOpenLigaDbResultinfoRepoTest {
 	}
 
 	@Nested
-	@SpringBootTest(properties = CachingOpenLigaDbResultinfoRepo.CACHE_TTL + "=" + ShortCacheEvict.EVICT_MS)
+	@SpringBootTest(properties = CachingOpenLigaDbResultinfoRepo.CACHE_TTL + "=" + ONE_SECOND_IN_MS)
 	class ShortCacheEvict {
 
-		static final int EVICT_MS = 1000;
 
 		@MockitoBean
 		@Qualifier("defaultOpenLigaDbResultinfoRepo")
@@ -101,7 +104,7 @@ class CachingOpenLigaDbResultinfoRepoTest {
 			when(delegateMock.getResultinfos(league, season)).thenReturn(first).thenReturn(second);
 
 			whenCachingRepoIsQueriedTheResultIs(first);
-			MILLISECONDS.sleep(EVICT_MS);
+			MILLISECONDS.sleep(ONE_SECOND_IN_MS);
 			MILLISECONDS.sleep(100);
 			whenCachingRepoIsQueriedTheResultIs(second);
 		}
