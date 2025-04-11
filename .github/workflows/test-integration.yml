@@ -1,0 +1,37 @@
+name: Nightly Integration Tests
+
+on:
+  schedule:
+    - cron: '7 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Integration Tests Only
+        run: mvn failsafe:integration-test failsafe:verify
+
+      - name: Integration Test Report
+        uses: dorny/test-reporter@6e6a65b7a0bd2c9197df7d0ae36ac5cee784230c
+        if: (success() || failure()) && github.actor != 'dependabot[bot]'
+        with:
+          name: Integration Tests Report
+          path: target/failsafe-reports/TEST-*.xml
+          reporter: java-junit
+
