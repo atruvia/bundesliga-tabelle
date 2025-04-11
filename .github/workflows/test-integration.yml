@@ -32,6 +32,6 @@ jobs:
         if: (success() || failure()) && github.actor != 'dependabot[bot]'
         with:
           name: Integration Tests Report
-          path: target/failsafe-reports/TEST-*.xml
+          path: target/*-reports/TEST-*.xml
           reporter: java-junit
 
