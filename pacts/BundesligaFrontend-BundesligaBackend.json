@@ -205,7 +205,7 @@
           "Accept": "application/json"
         },
         "method": "GET",
-        "path": "/tabelle/bl1/2023"
+        "path": "/tabelle/bl1/2024"
       },
       "response": {
         "body": [
