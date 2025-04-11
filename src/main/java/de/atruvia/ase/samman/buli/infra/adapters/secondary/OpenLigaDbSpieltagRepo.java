@@ -128,7 +128,7 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 				// could take the "goals" in account (this always is correct) but we should
 				// prefer using the final result if it's present.
 				// In the meanwhile we have seen everything at started games! e.g. a half-time
-				// score of 3:2 with a final score of 0:0 and goals were missing (0:1, 0:3)
+				// score of 3:2 with a final score of 0:0 and goals where missing (0:1, 0:3)
 				var lastGoal = Goal.lastGoalOf(goals);
 				paarung = paarung.goals(lastGoal.scoreTeam1, lastGoal.scoreTeam2);
 			}

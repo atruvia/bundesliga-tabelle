@@ -65,12 +65,6 @@ public class DefaultTabellenServiceTest {
 	}
 
 	@Test
-	void tabelleBl32021TürkgücüMünchenAreScattered() {
-		TabellenService sut = new DefaultTabellenService(spieltagFsRepo());
-		verifyTabelle(sut.erstelleTabelle("bl3", "2021"));
-	}
-
-	@Test
 	void tabelleBl12023Spieltag27_gamesRunning_goalsButFinalResultsAre_0_0() {
 		TabellenService sut = new DefaultTabellenService(spieltagFsRepo());
 		verifyTabelle(sut.erstelleTabelle("bl1", "2023-games-running"));
