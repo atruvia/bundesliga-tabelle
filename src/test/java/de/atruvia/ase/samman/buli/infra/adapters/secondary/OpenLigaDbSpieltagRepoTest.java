@@ -2,8 +2,6 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.PaarungBuilder.paarung;
 import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
-import static de.atruvia.ase.samman.buli.domain.TeamMother.idBremen;
-import static de.atruvia.ase.samman.buli.domain.TeamMother.idMuenchen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.resultinfoProvider;
 import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpieltagRepoMother.spieltagFsRepo;
@@ -15,15 +13,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 
 import de.atruvia.ase.samman.buli.domain.Team;
+import de.atruvia.ase.samman.buli.domain.TeamMother;
 import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 
 class OpenLigaDbSpieltagRepoTest {
 
-	static final Team teamMuenchen = Team.builder().id(idMuenchen).name("FC Bayern München")
-			.wappen(create("https://i.imgur.com/jJEsJrj.png")).build();
-	static final Team teamBremen = Team.builder().id(idBremen).name("Werder Bremen").wappen(create(
-			"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png"))
-			.build();
+	static final Team teamMuenchen = TeamMother.teamMuenchen.withWappen(create("https://i.imgur.com/jJEsJrj.png"));
+	static final Team teamBremen = TeamMother.teamBremen.withName("Werder Bremen");
 
 	@Test
 	void canRetrieveDataOf2022() {

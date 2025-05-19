@@ -10,11 +10,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.With;
 import lombok.experimental.Accessors;
 
 @Value
 @Accessors(fluent = true)
 @Builder
+@With
 @ValueObject
 public class Team {
 
