@@ -30,7 +30,7 @@ public final class TeamMother {
 	public static final Team teamFrankfurt = Team.builder().id(idFrankfurt).name("Eintracht Frankfurt")
 			.wappen(create("https://i.imgur.com/X8NFkOb.png")).build();
 
-	public static final Team teamBremen = Team.builder().id(idBremen).name("Werder Bremen").wappen(create(
+	public static final Team teamBremen = Team.builder().id(idBremen).name("SV Werder Bremen").wappen(create(
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png"))
 			.build();
 
