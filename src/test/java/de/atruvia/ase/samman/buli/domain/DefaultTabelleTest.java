@@ -12,6 +12,7 @@ import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,30 +41,33 @@ class DefaultTabelleTest {
 	void zweiMannschaftenKeinSpiel() {
 		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B"), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle("""
-				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1    |Team-A|     0|    0|            0|          0|     0|         0|              0|           0
-				1    |Team-B|     0|    0|            0|          0|     0|         0|              0|           0""");
+		dannIstDieTabelle(
+				"""
+						platz|verein|kurzname|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						1    |Team-A|A       |     0|    0|            0|          0|     0|         0|              0|           0
+						1    |Team-B|B       |     0|    0|            0|          0|     0|         0|              0|           0""");
 	}
 
 	@Test
 	void zweiMannschaftenEinSpielKeineTore() {
 		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B").endergebnis(0, 0), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle("""
-				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1    |Team-A|     1|    0|            1|          0|     1|         0|              0|           0
-				1    |Team-B|     1|    0|            1|          0|     1|         0|              0|           0""");
+		dannIstDieTabelle(
+				"""
+						platz|verein|kurzname|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						1    |Team-A|A       |     1|    0|            1|          0|     1|         0|              0|           0
+						1    |Team-B|B       |     1|    0|            1|          0|     1|         0|              0|           0""");
 	}
 
 	@Test
 	void mannschaftMitMehrPunktenIstWeiterOben() {
 		gegebenSeienDiePaarungen(paarung("Team-A", "Team-B").endergebnis(0, 1), paarung("Team-B", "Team-A"));
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle("""
-				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1    |Team-B|     1|    1|            0|          0|     3|         1|              0|           1
-				2    |Team-A|     1|    0|            0|          1|     0|         0|              1|          -1""");
+		dannIstDieTabelle(
+				"""
+						platz|verein|kurzname|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						1    |Team-B|B       |     1|    1|            0|          0|     3|         1|              0|           1
+						2    |Team-A|A       |     1|    0|            0|          1|     0|         0|              1|          -1""");
 	}
 
 	@Test
@@ -73,10 +77,11 @@ class DefaultTabelleTest {
 				paarung("Team-B", "Team-A").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle("""
-				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1    |Team-A|     2|    1|            0|          1|     3|         1|              1|           0
-				1    |Team-B|     2|    1|            0|          1|     3|         1|              1|           0""");
+		dannIstDieTabelle(
+				"""
+						platz|verein|kurzname|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						1    |Team-A|A       |     2|    1|            0|          1|     3|         1|              1|           0
+						1    |Team-B|B       |     2|    1|            0|          1|     3|         1|              1|           0""");
 	}
 
 	@Test
@@ -91,11 +96,12 @@ class DefaultTabelleTest {
 				paarung("Team-B", "Team-C").endergebnis(1, 0) //
 		);
 		wennDieTabelleBerechnetWird();
-		dannIstDieTabelle("""
-				platz|verein|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-				1    |Team-A|     3|    2|            0|          1|     6|         2|              1|           1
-				1    |Team-B|     3|    2|            0|          1|     6|         2|              1|           1
-				3    |Team-C|     2|    0|            0|          2|     0|         0|              2|          -2""");
+		dannIstDieTabelle(
+				"""
+						platz|verein|kurzname|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						1    |Team-A|A       |     3|    2|            0|          1|     6|         2|              1|           1
+						1    |Team-B|B       |     3|    2|            0|          1|     6|         2|              1|           1
+						3    |Team-C|C       |     2|    0|            0|          2|     0|         0|              2|          -2""");
 	}
 
 	@Test
@@ -136,11 +142,11 @@ class DefaultTabelleTest {
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle(
 				"""
-						platz|verein          |spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
-						1    |Team GegnerXvonB|1     |1    |0            |0          |3     |1         |0              |1
-						2    |Team-B          |2     |1    |0            |1          |3     |1         |1              |0
-						3    |Team-A          |2     |1    |0            |1          |3     |1         |1              |0
-						4    |Team GegnerXvonA|1     |0    |0            |1          |0     |0         |1              |-1""");
+						platz|verein          |kurzname|spiele|siege|unentschieden|niederlagen|punkte|gesamtTore|gesamtGegentore|torDifferenz
+						1    |Team GegnerXvonB|B       |1     |1    |0            |0          |3     |1         |0              |1
+						2    |Team-B          |B       |2     |1    |0            |1          |3     |1         |1              |0
+						3    |Team-A          |A       |2     |1    |0            |1          |3     |1         |1              |0
+						4    |Team GegnerXvonA|A       |1     |0    |0            |1          |0     |0         |1              |-1""");
 	}
 
 	@Test
@@ -239,16 +245,25 @@ class DefaultTabelleTest {
 		String team1 = "Team-A";
 		String team2 = "Team-B";
 		var heimAlt = team(team1, teamId(team1));
-		var gastAlt = team(team2 + "-A", teamId(team2));
+		var gastAlt = team(team2 + "-X", teamId(team2));
 
 		var heimNeu = team(team1, teamId(team1));
-		var gastNeu = team(team2 + "-B", teamId(team2));
+		var gastNeu = team(team2 + "-Y", teamId(team2));
 		gegebenSeienDiePaarungen(paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.team().name()).isEqualTo(team1), //
-				e2 -> assertThat(e2.team().name()).isEqualTo(team2 + "-B") //
-		);
+				e1 -> {
+					assertSoftly(s -> {
+						s.assertThat(e1.team().name()).isEqualTo(team1);
+						s.assertThat(e1.team().kurzname()).isEqualTo("A");
+					});
+				}, //
+				e2 -> {
+					assertSoftly(s -> {
+						s.assertThat(e2.team().kurzname()).isEqualTo("Y"); //
+						s.assertThat(e2.team().name()).isEqualTo(team2 + "-Y"); //
+					});
+				});
 	}
 
 	@Test
@@ -264,9 +279,18 @@ class DefaultTabelleTest {
 				paarung(heimAlt, gastAlt), paarung(heimNeu, gastNeu));
 		wennDieTabelleBerechnetWird();
 		dannIstDieTabelle( //
-				e1 -> assertThat(e1.team().name()).isEqualTo(team1), //
-				e2 -> assertThat(e2.team().name()).isEqualTo(team2) //
-		);
+				e1 -> {
+					assertSoftly(s -> {
+						s.assertThat(e1.team().name()).isEqualTo(team1);
+						s.assertThat(e1.team().kurzname()).isEqualTo("A");
+					});
+				}, //
+				e2 -> {
+					assertSoftly(s -> {
+						s.assertThat(e2.team().name()).isEqualTo(team2); //
+						s.assertThat(e2.team().kurzname()).isEqualTo("B"); //
+					});
+				});
 	}
 
 	@Test
@@ -361,7 +385,8 @@ class DefaultTabelleTest {
 	}
 
 	private static EntryBuilder team(String team, TeamId teamId) {
-		return Entry.builder().team(Team.builder().id(teamId).name(team).build());
+		return Entry.builder().team(Team.builder().id(teamId).name(team)
+				.kurzname(team == null ? null : team.substring(team.length() - 1)).build());
 	}
 
 	private static PaarungBuilder paarung(EntryBuilder heim, EntryBuilder gast) {
@@ -400,8 +425,8 @@ class DefaultTabelleTest {
 	}
 
 	private static String print(List<TabellenPlatz> plaetze) {
-		List<String> attribs = asList("platz", "verein", "spiele", "siege", "unentschieden", "niederlagen", "punkte",
-				"gesamtTore", "gesamtGegentore", "torDifferenz");
+		List<String> attribs = asList("platz", "verein", "kurzname", "spiele", "siege", "unentschieden", "niederlagen",
+				"punkte", "gesamtTore", "gesamtGegentore", "torDifferenz");
 		Stream<String> header = Stream.of(line(attribs.stream()));
 		Stream<String> values = plaetze.stream().map(t -> print(t, attribs));
 		return concat(header, values).collect(joining("\n"));
@@ -417,8 +442,15 @@ class DefaultTabelleTest {
 
 	private static List<Object> values(List<String> attribs, TabellenPlatz platz) {
 		List<Method> declaredMethods = asList(platz.getClass().getDeclaredMethods());
-		return attribs.stream()
-				.map(a -> a.equals("verein") ? platz.team().name() : readValue(platz, declaredMethods, a)).toList();
+		return attribs.stream().map(a -> {
+			if (a.equals("verein")) {
+				return platz.team().name();
+			} else if (a.equals("kurzname")) {
+				return platz.team().kurzname();
+			} else {
+				return readValue(platz, declaredMethods, a);
+			}
+		}).toList();
 	}
 
 	private static Object readValue(Object bean, List<Method> declaredMethods, String attribName) {

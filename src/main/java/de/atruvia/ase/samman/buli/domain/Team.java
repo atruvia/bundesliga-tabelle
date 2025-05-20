@@ -39,6 +39,7 @@ public class Team {
 	@NonNull
 	TeamId id;
 	String name;
+	String kurzname;
 	URI wappen;
 
 }
