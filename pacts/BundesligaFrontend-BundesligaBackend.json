@@ -20,6 +20,7 @@
             "niederlagen": 90,
             "platz": 12,
             "punkte": 34,
+            "shortName": "short name",
             "siege": 78,
             "spiele": 23,
             "team": "any team name",
@@ -37,6 +38,7 @@
             "niederlagen": 13,
             "platz": 13,
             "punkte": 13,
+            "shortName": "iloveorange",
             "siege": 13,
             "spiele": 13,
             "team": "iloveorange",
@@ -49,6 +51,7 @@
             "niederlagen": 13,
             "platz": 13,
             "punkte": 13,
+            "shortName": "iloveorange",
             "siege": 13,
             "spiele": 13,
             "team": "iloveorange",
@@ -61,6 +64,7 @@
             "niederlagen": 13,
             "platz": 13,
             "punkte": 13,
+            "shortName": "iloveorange",
             "siege": 13,
             "spiele": 13,
             "team": "iloveorange",
@@ -83,6 +87,9 @@
             "match": "type"
           },
           "$.body[0].punkte": {
+            "match": "type"
+          },
+          "$.body[0].shortName": {
             "match": "type"
           },
           "$.body[0].siege": {
@@ -115,6 +122,9 @@
           "$.body[1].punkte": {
             "match": "type"
           },
+          "$.body[1].shortName": {
+            "match": "type"
+          },
           "$.body[1].siege": {
             "match": "type"
           },
@@ -145,6 +155,9 @@
           "$.body[2].punkte": {
             "match": "type"
           },
+          "$.body[2].shortName": {
+            "match": "type"
+          },
           "$.body[2].siege": {
             "match": "type"
           },
@@ -173,6 +186,9 @@
             "match": "type"
           },
           "$.body[3].punkte": {
+            "match": "type"
+          },
+          "$.body[3].shortName": {
             "match": "type"
           },
           "$.body[3].siege": {
