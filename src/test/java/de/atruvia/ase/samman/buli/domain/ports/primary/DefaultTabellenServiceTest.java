@@ -39,6 +39,7 @@ public class DefaultTabellenServiceTest {
 				entry("Platz", TabellenPlatz::platz), //
 				entry("Logo", t -> image(t.team().wappen(), 32)), //
 				entry("Verein", t -> t.team().name()), //
+				entry("Kurzname", t -> t.team().kurzname()), //
 				entry("Sp", TabellenPlatz::spiele), //
 				entry("S", TabellenPlatz::siege), //
 				entry("U", TabellenPlatz::unentschieden), //

@@ -188,9 +188,8 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 		} else if (nonNulls.length == 1) {
 			return nonNulls[0];
 		}
-		throw new IllegalStateException(
-				format("Team %s has several matches at the same time (%s)", team.name(),
-						Arrays.stream(nonNulls).map(PaarungView::gegner).map(Entry::team).map(Team::name).toList()));
+		throw new IllegalStateException(format("Team %s has several matches at the same time (%s)", team.name(),
+				Arrays.stream(nonNulls).map(PaarungView::gegner).map(Entry::team).map(Team::name).toList()));
 	}
 
 	private Team mergeTeams(Team team1, Team team2) {
@@ -198,6 +197,7 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 				? team1 //
 				: new Team(checkUnique(team1.id(), team2.id()), //
 						lastNonNull(team1.name(), team2.name()).orElse(null), //
+						lastNonNull(team1.kurzname(), team2.kurzname()).orElse(null),
 						lastNonNull(team1.wappen(), team2.wappen()).orElse(null) //
 				);
 	}
