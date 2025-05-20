@@ -69,6 +69,7 @@ class TabellenHttpAdapterTest {
 				.andExpect(status().isOk()) //
 				.andExpect(jsonPath("$.[0].wappen", is(platz1.team().wappen().toASCIIString()))) //
 				.andExpect(jsonPath("$.[0].team", is(platz1.team().name()))) //
+				.andExpect(jsonPath("$.[0].shortName", is(platz1.team().kurzname()))) //
 				.andExpect(jsonPath("$.[0].spiele", is(platz1.spiele()))) //
 				.andExpect(jsonPath("$.[0].siege", is(platz1.siege()))) //
 				.andExpect(jsonPath("$.[0].unentschieden", is(platz1.unentschieden()))) //
@@ -85,6 +86,7 @@ class TabellenHttpAdapterTest {
 				//
 				.andExpect(jsonPath("$.[1].wappen", is(platz2.team().wappen().toASCIIString()))) //
 				.andExpect(jsonPath("$.[1].team", is(platz2.team().name()))) //
+				.andExpect(jsonPath("$.[1].shortName", is(platz2.team().kurzname()))) //
 				.andExpect(jsonPath("$.[1].spiele", is(platz2.spiele()))) //
 				.andExpect(jsonPath("$.[1].siege", is(platz2.siege()))) //
 				.andExpect(jsonPath("$.[1].unentschieden", is(platz2.unentschieden()))) //
@@ -144,7 +146,7 @@ class TabellenHttpAdapterTest {
 		int cnt = 0;
 		return builder //
 				.team(Team.builder().id(teamId("Identifier " + base + (++cnt))).name("Team " + base)
-						.wappen(create("proto://wappen-team-" + base)).build()) //
+						.kurzname("T" + base).wappen(create("proto://wappen-team-" + base)).build()) //
 				.spiele(base + (++cnt)) //
 				.withTore(HEIM, base + (++cnt)) //
 				.withGegentore(HEIM, base + (++cnt)) //

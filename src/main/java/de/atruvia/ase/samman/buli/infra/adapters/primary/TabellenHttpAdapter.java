@@ -88,6 +88,7 @@ public class TabellenHttpAdapter {
 		@Schema(description = "URI des Vereinswappens/-logos. Im Normallfall gesetzt, kann aber potentiell null sein. ", nullable = true)
 		String wappen;
 		String team;
+		String shortName;
 		int spiele;
 		int punkte;
 		int tore, gegentore, tordifferenz;
@@ -103,6 +104,7 @@ public class TabellenHttpAdapter {
 					.platz(domain.platz()) //
 					.wappen(domain.team().wappen() == null ? null : domain.team().wappen().toASCIIString()) //
 					.team(domain.team().name()) //
+					.shortName(domain.team().kurzname()) //
 					.spiele(domain.spiele()) //
 					.punkte(domain.punkte()) //
 					.tore(domain.gesamtTore()) //
