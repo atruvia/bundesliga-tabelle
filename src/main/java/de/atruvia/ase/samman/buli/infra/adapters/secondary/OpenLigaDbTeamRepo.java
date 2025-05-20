@@ -36,11 +36,13 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 	static class OpenligaDbTeam {
 		Number teamId;
 		String teamName;
+		String shortName;
 		String teamIconUrl;
 
 		Team toDomain() {
 			return Team.builder().id(toTeamId(teamId)) //
 					.name(teamName) //
+					.kurzname(shortName == null ? teamName : shortName) //
 					.wappen(toURI(teamIconUrl)) //
 					.build();
 		}
