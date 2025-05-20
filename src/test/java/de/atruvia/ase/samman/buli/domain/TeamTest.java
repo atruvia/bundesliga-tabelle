@@ -19,7 +19,8 @@ class TeamTest {
 
 	@Test
 	void ifShortnameIsLongerThanNameThenTheNameIsUsed() {
-		Team team = Team.builder().id(teamId(42)).name("12345").kurzname("123456").build();
+		String name = "ABC";
+		Team team = Team.builder().id(teamId(42)).name(name).kurzname(name + "X").build();
 		assertThat(team.kurzname()).isEqualTo(team.name());
 	}
 
