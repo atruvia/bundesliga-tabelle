@@ -42,4 +42,15 @@ public class Team {
 	String kurzname;
 	URI wappen;
 
+	public Team(@NonNull TeamId id, String name, String kurzname, URI wappen) {
+		this.id = id;
+		this.name = name;
+		this.kurzname = kurzname == null || kurzname.isEmpty() || strlen(name) < strlen(kurzname) ? name : kurzname;
+		this.wappen = wappen;
+	}
+
+	private static int strlen(String string) {
+		return string == null ? 0 : string.length();
+	}
+
 }

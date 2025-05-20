@@ -42,7 +42,7 @@ class OpenLigaDbTeamRepo implements TeamRepo {
 		Team toDomain() {
 			return Team.builder().id(toTeamId(teamId)) //
 					.name(teamName) //
-					.kurzname(shortName == null ? teamName : shortName) //
+					.kurzname(shortName) //
 					.wappen(toURI(teamIconUrl)) //
 					.build();
 		}

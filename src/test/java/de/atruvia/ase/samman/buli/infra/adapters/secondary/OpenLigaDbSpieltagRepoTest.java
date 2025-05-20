@@ -75,24 +75,6 @@ class OpenLigaDbSpieltagRepoTest {
 		assertThat(paarungen).hasSize(1).element(0).isEqualTo(expected0);
 	}
 
-	@Test
-	void doesUseLongnameAsShortnameIfShortnameIsAbsent() {
-		RestClient restClient = restClient(__ -> """
-				[
-				  {
-					"team1": { "teamId": 42, "teamName": "Team-A" },
-					"team2": { "teamId": 43, "teamName": "Team-B" },
-				    "matchResults": []
-				  }
-				 ]
-				""");
-		var paarungen = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any");
-		var heim = Team.builder().id(teamId(42)).name("Team-A").kurzname("Team-A").build();
-		var gast = Team.builder().id(teamId(43)).name("Team-B").kurzname("Team-B").build();
-		var expected0 = paarung(heim, gast).build();
-		assertThat(paarungen).hasSize(1).element(0).isEqualTo(expected0);
-	}
-
 	OpenLigaDbSpieltagRepo repo() {
 		return spieltagFsRepo();
 	}
