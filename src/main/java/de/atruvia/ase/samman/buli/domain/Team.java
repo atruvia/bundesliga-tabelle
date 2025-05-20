@@ -42,11 +42,16 @@ public class Team {
 	String kurzname;
 	URI wappen;
 
-	public Team(@NonNull TeamId id, String name, String kurzname, URI wappen) {
+	Team(@NonNull TeamId id, String name, String kurzname, URI wappen) {
 		this.id = id;
 		this.name = name;
-		this.kurzname = kurzname == null || kurzname.isEmpty() || strlen(name) < strlen(kurzname) ? name : kurzname;
+		this.kurzname = selectKurzname(name, kurzname);
 		this.wappen = wappen;
+	}
+
+	private static String selectKurzname(String name, String kurzname) {
+		boolean useName = kurzname == null || kurzname.isEmpty() || strlen(name) < strlen(kurzname);
+		return useName ? name : kurzname;
 	}
 
 	private static int strlen(String string) {
