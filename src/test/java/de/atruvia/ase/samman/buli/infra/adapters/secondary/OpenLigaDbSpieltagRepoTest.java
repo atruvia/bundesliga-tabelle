@@ -13,7 +13,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.http.client.MockClientHttpResponse;
-import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.TeamMother;
@@ -42,10 +41,7 @@ class OpenLigaDbSpieltagRepoTest {
 
 	@Test
 	void returnsEmptyListIfRestClientAnswered404() {
-		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getInterceptors()
-				.add((req, body, execution) -> new MockClientHttpResponse("".getBytes(), NOT_FOUND));
-		RestClient restClient = new RestClient(restTemplate);
+		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], NOT_FOUND));
 		assertThat(new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any")).isEmpty();
 	}
 
