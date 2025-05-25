@@ -9,6 +9,8 @@ import static de.atruvia.ase.samman.buli.util.Streams.toOnlyElement;
 import static java.util.Arrays.stream;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.nonNull;
+import static java.util.concurrent.CompletableFuture.allOf;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -17,6 +19,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import org.jmolecules.architecture.hexagonal.SecondaryAdapter;
@@ -151,8 +154,17 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 
 	@Override
 	public List<Paarung> lade(String league, String season) {
-		List<OpenligaDbResultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
-		return stream(ladeMatches(league, season)).map(t -> t.toDomain(resultinfos)).toList();
+		var resultInfosFuture = supplyAsync(() -> resultinfoRepo.getResultinfos(league, season));
+		var matchStreamFuture = supplyAsync(() -> stream(ladeMatches(league, season)));
+		var combinedFuture = allOf(resultInfosFuture, matchStreamFuture);
+		combinedFuture.join();
+
+		try {
+			var resultInfos = resultInfosFuture.get();
+			return matchStreamFuture.get().map(t -> t.toDomain(resultInfos)).toList();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private OpenligaDbMatch[] ladeMatches(String league, String season) {
