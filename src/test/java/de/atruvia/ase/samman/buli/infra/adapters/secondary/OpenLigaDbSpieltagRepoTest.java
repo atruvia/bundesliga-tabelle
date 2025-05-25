@@ -10,7 +10,11 @@ import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
+
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -48,12 +52,12 @@ class OpenLigaDbSpieltagRepoTest {
 	}
 
 	@Test
-	void throwsExceptionIfErrorWasNot404() {
-		HttpStatus httpCodeNot404 = METHOD_NOT_ALLOWED;
-		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], httpCodeNot404));
+	void throwsExceptionIfErrorButErrorNot404() {
+		HttpStatus notOkNorNotFound = httpStatusOtherThan(OK, NOT_FOUND);
+		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], notOkNorNotFound));
 		OpenLigaDbSpieltagRepo sut = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2));
 		assertThatRuntimeException().isThrownBy(() -> sut.lade("any", "any"))
-				.withMessageContaining(httpCodeNot404.getReasonPhrase());
+				.withMessageContaining(notOkNorNotFound.getReasonPhrase());
 	}
 
 	@Test
@@ -98,4 +102,9 @@ class OpenLigaDbSpieltagRepoTest {
 		return spieltagFsRepo();
 	}
 
+	private static HttpStatus httpStatusOtherThan(HttpStatus... otherThan) {
+		HttpStatus status = METHOD_NOT_ALLOWED;
+		assert !Arrays.asList(otherThan).contains(status);
+		return status;
+	}
 }
