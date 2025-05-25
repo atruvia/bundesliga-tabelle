@@ -11,8 +11,10 @@ import static java.util.Comparator.comparing;
 import static java.util.Objects.nonNull;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.stream.Stream;
 
 import org.jmolecules.architecture.hexagonal.SecondaryAdapter;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.HttpClientErrorException;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
 import de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp;
@@ -150,8 +153,15 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@Override
 	public List<Paarung> lade(String league, String season) {
 		List<OpenligaDbResultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
-		OpenligaDbMatch[] matches = restClient.get(SERVICE_URI, OpenligaDbMatch[].class, league, season);
-		return stream(matches).map(t -> t.toDomain(resultinfos)).toList();
+		try {
+			OpenligaDbMatch[] matches = restClient.get(SERVICE_URI, OpenligaDbMatch[].class, league, season);
+			return stream(matches).map(t -> t.toDomain(resultinfos)).toList();
+		} catch (HttpClientErrorException e) {
+			if (NOT_FOUND.equals(e.getStatusCode())) {
+				return Collections.emptyList();
+			}
+			throw e;
+		}
 	}
 
 }

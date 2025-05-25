@@ -9,8 +9,11 @@ import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restCl
 import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.http.client.MockClientHttpResponse;
+import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Team;
 import de.atruvia.ase.samman.buli.domain.TeamMother;
@@ -35,6 +38,15 @@ class OpenLigaDbSpieltagRepoTest {
 		var paarungen = repo().lade("bl1", "2023");
 		var expected0 = paarung(teamBremen, teamMuenchen).endergebnis(0, 4).build();
 		assertThat(paarungen).hasSize(9).element(0).isEqualTo(expected0);
+	}
+
+	@Test
+	void returnsEmptyListIfRestClientAnswered404() {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getInterceptors()
+				.add((req, body, execution) -> new MockClientHttpResponse("".getBytes(), NOT_FOUND));
+		RestClient restClient = new RestClient(restTemplate);
+		assertThat(new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any")).isEmpty();
 	}
 
 	@Test
