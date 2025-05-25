@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
@@ -70,14 +71,23 @@ class OpenLigaDbSpieltagRepoIT {
 		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(6).isEqualTo(expected);
 	}
 
+	@Test
+	@ExpectedToFail
+	void canRetrieveDataOf2025() {
+		// TODO add checks as in #canRetrieveDataOf2024 when data is available
+		assertThat(sut.lade("bl1", "2025")).isNotEmpty();
+	}
+
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen) {
 		int expectedTeams = 18;
 		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(expectedTeams));
 		var byHeim = teams(paarungen, p -> p.heim().team());
 		var byGast = teams(paarungen, p -> p.gast().team());
 		assertThat(byHeim.keySet()).containsExactlyInAnyOrderElementsOf(byGast.keySet());
-		assertThat(byHeim).hasSize(expectedTeams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(expectedTeams)));
-		assertThat(byGast).hasSize(expectedTeams).allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(expectedTeams)));
+		assertThat(byHeim).hasSize(expectedTeams)
+				.allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(expectedTeams)));
+		assertThat(byGast).hasSize(expectedTeams)
+				.allSatisfy((k, v) -> assertThat(v).hasSize(matchdaysPerRound(expectedTeams)));
 	}
 
 	void matchIs(Paarung paarung, Team expectedHeim, Team expectedGast) {
