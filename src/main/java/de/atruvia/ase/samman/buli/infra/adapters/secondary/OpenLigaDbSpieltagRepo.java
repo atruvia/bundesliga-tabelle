@@ -14,7 +14,6 @@ import static lombok.AccessLevel.PUBLIC;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -153,12 +152,15 @@ public class OpenLigaDbSpieltagRepo implements SpieltagRepo {
 	@Override
 	public List<Paarung> lade(String league, String season) {
 		List<OpenligaDbResultinfo> resultinfos = resultinfoRepo.getResultinfos(league, season);
+		return stream(ladeMatches(league, season)).map(t -> t.toDomain(resultinfos)).toList();
+	}
+
+	private OpenligaDbMatch[] ladeMatches(String league, String season) {
 		try {
-			OpenligaDbMatch[] matches = restClient.get(SERVICE_URI, OpenligaDbMatch[].class, league, season);
-			return stream(matches).map(t -> t.toDomain(resultinfos)).toList();
+			return restClient.get(SERVICE_URI, OpenligaDbMatch[].class, league, season);
 		} catch (HttpClientErrorException e) {
 			if (NOT_FOUND.equals(e.getStatusCode())) {
-				return Collections.emptyList();
+				return new OpenligaDbMatch[0];
 			}
 			throw e;
 		}

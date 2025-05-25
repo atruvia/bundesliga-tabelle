@@ -8,10 +8,12 @@ import static de.atruvia.ase.samman.buli.infra.adapters.secondary.OpenLigaDbSpie
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatRuntimeException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.client.MockClientHttpResponse;
 
 import de.atruvia.ase.samman.buli.domain.Team;
@@ -43,6 +45,15 @@ class OpenLigaDbSpieltagRepoTest {
 	void returnsEmptyListIfRestClientAnswered404() {
 		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], NOT_FOUND));
 		assertThat(new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2)).lade("any", "any")).isEmpty();
+	}
+
+	@Test
+	void throwsExceptionIfErrorWasNot404() {
+		HttpStatus httpCodeNot404 = METHOD_NOT_ALLOWED;
+		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], httpCodeNot404));
+		OpenLigaDbSpieltagRepo sut = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2));
+		assertThatRuntimeException().isThrownBy(() -> sut.lade("any", "any"))
+				.withMessageContaining(httpCodeNot404.getReasonPhrase());
 	}
 
 	@Test
