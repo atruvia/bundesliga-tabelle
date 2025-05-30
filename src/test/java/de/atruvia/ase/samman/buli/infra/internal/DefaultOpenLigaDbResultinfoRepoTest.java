@@ -58,8 +58,8 @@ class DefaultOpenLigaDbResultinfoRepoTest {
 	@Test
 	void runtimeExceptionOnUnknownLeague() {
 		AvailableLeagueNotFoundException ex = catchThrowableOfType( //
-				() -> sut.getResultinfos("XXX", "2023"), //
-				AvailableLeagueNotFoundException.class //
+				AvailableLeagueNotFoundException.class, //
+				() -> sut.getResultinfos("XXX", "2023") //
 		);
 		assertThat(ex.getLeague()).isEqualTo("XXX");
 		assertThat(ex.getSeason()).isEqualTo("2023");
@@ -69,8 +69,8 @@ class DefaultOpenLigaDbResultinfoRepoTest {
 	@Test
 	void runtimeExceptionOnUnknownSeason() {
 		AvailableLeagueNotFoundException ex = catchThrowableOfType( //
-				() -> sut.getResultinfos("bl1", "0000"), //
-				AvailableLeagueNotFoundException.class //
+				AvailableLeagueNotFoundException.class, //
+				() -> sut.getResultinfos("bl1", "0000") //
 		);
 		assertThat(ex.getLeague()).isEqualTo("bl1");
 		assertThat(ex.getSeason()).isEqualTo("0000");
