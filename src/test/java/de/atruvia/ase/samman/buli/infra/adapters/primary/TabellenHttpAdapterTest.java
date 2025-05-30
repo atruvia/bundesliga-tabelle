@@ -7,8 +7,10 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.AUSWAERTS;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.TabellenPlatzMother.platzWith;
 import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
+import static de.atruvia.ase.samman.buli.infra.adapters.primary.TabellenHttpAdapter.TENDENZ_PATTERN;
 import static java.net.URI.create;
 import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.not;
@@ -26,8 +28,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
+import de.atruvia.ase.samman.buli.domain.Paarung.Ergebnis;
 import de.atruvia.ase.samman.buli.domain.Tabelle;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz;
 import de.atruvia.ase.samman.buli.domain.TabellenPlatz.TabellenPlatzBuilder;
@@ -125,6 +132,31 @@ class TabellenHttpAdapterTest {
 				.andDo(print()) //
 				.andExpect(status().isNotFound()) //
 		;
+	}
+
+	@Test
+	void allErgebnisTendenzesMatchTheTendenzPattern() throws Exception {
+		String league = "bl1";
+		String season = "2022";
+
+		Ergebnis[] values = Ergebnis.values();
+		TabellenPlatz platz1 = platzWithBase(10, platzWith(values).toBuilder());
+		when(tabellenService.erstelleTabelle(league, season)).thenReturn(tabelleWithEntries(List.of(platz1)));
+
+		String content = mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
+				.andDo(print()) //
+				.andExpect(status().isOk()) //
+				.andReturn() //
+				.getResponse() //
+				.getContentAsString();
+		JsonNode tendenzArray = new ObjectMapper().readTree(content).get(0).get("tendenz");
+
+		assertThat(tendenzArray.size()).isEqualByComparingTo(values.length);
+		for (JsonNode entry : tendenzArray) {
+			assertThat(entry.asText())
+					.withFailMessage("Tendenz entry '%s' does not match pattern: %s", entry.asText(), TENDENZ_PATTERN)
+					.matches(TENDENZ_PATTERN);
+		}
 	}
 
 	static Tabelle tabelleWithEntries(List<TabellenPlatz> result) {

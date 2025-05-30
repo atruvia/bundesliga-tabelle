@@ -35,6 +35,9 @@ import lombok.Value;
 @PrimaryAdapter
 public class TabellenHttpAdapter {
 
+	static final int TENDENZ_MAX_LENGTH = 5;
+	static final String TENDENZ_PATTERN = "[SUN]";
+
 	@PrimaryAdapter
 	private enum JsonErgebnis {
 		N, U, S;
@@ -82,8 +85,6 @@ public class TabellenHttpAdapter {
 	@PrimaryAdapter
 	private static class JsonTabellenPlatz {
 
-		private static final int TENDENZ_MAX_LENGTH = 5;
-
 		int platz;
 		@Schema(description = "URI des Vereinswappens/-logos. Im Normallfall gesetzt, kann aber potentiell null sein. ", nullable = true)
 		String wappen;
@@ -93,8 +94,8 @@ public class TabellenHttpAdapter {
 		int punkte;
 		int tore, gegentore, tordifferenz;
 		int siege, unentschieden, niederlagen;
-		@ArraySchema(schema = @Schema(description = "Ergebnisse der letzten fünf Spiele. "
-				+ "Enthält 'S' (Sieg), 'U' (Unentschieden), 'N' (Niederlage). Nur beendete (nicht laufende) Spiele werden berücksichtigt. ", pattern = "[SUN]"), maxItems = TENDENZ_MAX_LENGTH)
+		@ArraySchema(schema = @Schema(description = "Ergebnisse der letzten fünf Spiele. Wurden weniger Spiele gespielt, sind entsprechend weniger Einträge enthalten. "
+				+ "Enthält 'S' (Sieg), 'U' (Unentschieden), 'N' (Niederlage). Nur beendete (nicht laufende) Spiele werden berücksichtigt. ", pattern = TENDENZ_PATTERN), minItems = 0, maxItems = TENDENZ_MAX_LENGTH)
 		List<JsonErgebnis> tendenz;
 		@Schema(description = "Information zum Spiel, falls dieses Team derzeit gegen einen andere Mannschaft in dieser Liga spielt, ansonsten nicht gesetzt. ", nullable = true)
 		JsonLaufendesSpiel laufendesSpiel;
