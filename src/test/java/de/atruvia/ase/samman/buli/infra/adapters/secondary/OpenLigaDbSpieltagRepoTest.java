@@ -52,12 +52,22 @@ class OpenLigaDbSpieltagRepoTest {
 	}
 
 	@Test
-	void throwsExceptionIfErrorButErrorNot404() {
+	void throwsExceptionIfErrorButErrorIsNot404() {
 		HttpStatus notOkNorNotFound = httpStatusOtherThan(OK, NOT_FOUND);
 		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], notOkNorNotFound));
 		OpenLigaDbSpieltagRepo sut = new OpenLigaDbSpieltagRepo(restClient, resultinfoProvider(2));
 		assertThatRuntimeException().isThrownBy(() -> sut.lade("any", "any"))
 				.withMessageContaining(notOkNorNotFound.getReasonPhrase());
+	}
+
+	@Test
+	void throwsExceptionIfResultInfoProviderThrowsException() {
+		String message = "Cannot load";
+		RestClient restClient = restClient(() -> new MockClientHttpResponse(new byte[0], OK));
+		OpenLigaDbSpieltagRepo sut = new OpenLigaDbSpieltagRepo(restClient, (__, ___) -> {
+			throw new IllegalStateException(message);
+		});
+		assertThatRuntimeException().isThrownBy(() -> sut.lade("any", "any")).withMessageContaining(message);
 	}
 
 	@Test
