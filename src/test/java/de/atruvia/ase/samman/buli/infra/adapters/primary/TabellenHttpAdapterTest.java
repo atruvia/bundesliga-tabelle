@@ -8,6 +8,7 @@ import static de.atruvia.ase.samman.buli.domain.Paarung.ViewDirection.HEIM;
 import static de.atruvia.ase.samman.buli.domain.TabellenPlatzMother.platzWith;
 import static de.atruvia.ase.samman.buli.domain.Team.TeamId.teamId;
 import static de.atruvia.ase.samman.buli.infra.adapters.primary.TabellenHttpAdapter.TENDENZ_PATTERN;
+import static java.lang.String.format;
 import static java.net.URI.create;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,7 +72,7 @@ class TabellenHttpAdapterTest {
 		// Eigentlich sollte für TabellenPlatz ein Test-Double genutzt werden. Es muss
 		// dann jedoch sichergestellt werden, dass die Reihenfolge der "ergebnisse" im
 		// Test-Double bei S,U,N der Reihenfolge von TabellenPlatz::merge entspricht
-		mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
+		mockMvc.perform(get(format("/tabelle/%s/%s", league, season))) //
 				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andExpect(jsonPath("$.[0].wappen", is(platz1.team().wappen().toASCIIString()))) //
@@ -114,7 +115,7 @@ class TabellenHttpAdapterTest {
 
 		when(tabellenService.erstelleTabelle(league, season)).thenReturn(tabelleWithEntries(emptyList()));
 
-		mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
+		mockMvc.perform(get(format("/tabelle/%s/%s", league, season))) //
 				.andDo(print()) //
 				.andExpect(status().isNotFound()) //
 		;
@@ -128,7 +129,7 @@ class TabellenHttpAdapterTest {
 		when(tabellenService.erstelleTabelle(validLeague, invalidSeason))
 				.thenThrow(new AvailableLeagueNotFoundException(validLeague, invalidSeason));
 
-		mockMvc.perform(get("/tabelle/" + validLeague + "/" + invalidSeason)) //
+		mockMvc.perform(get(format("/tabelle/%s/%s", validLeague, invalidSeason))) //
 				.andDo(print()) //
 				.andExpect(status().isNotFound()) //
 		;
@@ -143,7 +144,7 @@ class TabellenHttpAdapterTest {
 		TabellenPlatz platz1 = platzWithBase(10, platzWith(values).toBuilder());
 		when(tabellenService.erstelleTabelle(league, season)).thenReturn(tabelleWithEntries(List.of(platz1)));
 
-		String content = mockMvc.perform(get("/tabelle/" + league + "/" + season)) //
+		String content = mockMvc.perform(get(format("/tabelle/%s/%s", league, season))) //
 				.andDo(print()) //
 				.andExpect(status().isOk()) //
 				.andReturn() //
