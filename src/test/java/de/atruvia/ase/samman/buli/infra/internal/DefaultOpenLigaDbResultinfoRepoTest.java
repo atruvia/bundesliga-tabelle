@@ -4,7 +4,6 @@ import static de.atruvia.ase.samman.buli.infra.internal.OpenLigaDbResultinfoRepo
 import static de.atruvia.ase.samman.buli.springframework.ResponseFromResourcesSupplier.responseFromResources;
 import static de.atruvia.ase.samman.buli.springframework.RestTemplateMock.restClient;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
