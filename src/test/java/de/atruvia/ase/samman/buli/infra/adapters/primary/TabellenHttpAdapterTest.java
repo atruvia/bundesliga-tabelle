@@ -149,14 +149,9 @@ class TabellenHttpAdapterTest {
 				.andReturn() //
 				.getResponse() //
 				.getContentAsString();
-		JsonNode tendenzArray = new ObjectMapper().readTree(content).get(0).get("tendenz");
-
-		assertThat(tendenzArray.size()).isEqualByComparingTo(values.length);
-		for (JsonNode entry : tendenzArray) {
-			assertThat(entry.asText())
-					.withFailMessage("Tendenz entry '%s' does not match pattern: %s", entry.asText(), TENDENZ_PATTERN)
-					.matches(TENDENZ_PATTERN);
-		}
+		List<String> tendenzStrings = new ObjectMapper().readTree(content).get(0).get("tendenz").valueStream()
+				.map(JsonNode::asText).toList();
+		assertThat(tendenzStrings).hasSameSizeAs(values).allSatisfy(s -> assertThat(s).matches(TENDENZ_PATTERN));
 	}
 
 	static Tabelle tabelleWithEntries(List<TabellenPlatz> result) {
