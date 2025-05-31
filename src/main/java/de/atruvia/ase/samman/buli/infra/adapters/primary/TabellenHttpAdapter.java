@@ -40,7 +40,12 @@ public class TabellenHttpAdapter {
 
 	@PrimaryAdapter
 	private enum JsonErgebnis {
-		N, U, S;
+		@Schema(description = "Niederlage (bzw. Rückstand bei laufenden Spielen)")
+		N, //
+		@Schema(description = "Unentschieden (bzw. Gleichstand bei laufenden Spielen)")
+		U, //
+		@Schema(description = "Sieg (bzw. Führung bei laufenden Spielen)")
+		S;
 
 		private static final Map<Ergebnis, JsonErgebnis> mapping = new EnumMap<>(Map.of( //
 				SIEG, JsonErgebnis.S, //
