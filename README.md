@@ -17,6 +17,7 @@ So it highlights the following aspects:
 Additionally, it does: 
 - [PACT](https://pact.io/) contract verification that this backend behaves as expected by the frontend(s)
 - BDD showcase via [Cucumber](https://cucumber.io/) and generate reports out of it
+- Approve JSON served by primary adapter as well as approving a markdown for better communication between domain experts and developers using [ApprovalTests.Java](https://github.com/approvals/ApprovalTests.Java)
 - [Property based tests](https://jqwik.net/) to have some solitary detail tests
 - [ArchUnit](https://www.archunit.org/) architecture tests that the code base is structured as intended
 - Smoke test: Starting the freshly built and dockerized application container and verifies if it answers with HTTP status code 200 and a JSON array payload
