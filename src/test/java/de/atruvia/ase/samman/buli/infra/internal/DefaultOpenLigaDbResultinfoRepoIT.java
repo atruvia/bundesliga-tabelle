@@ -16,7 +16,7 @@ class DefaultOpenLigaDbResultinfoRepoIT {
 	OpenLigaDbResultinfoRepo sut = new DefaultOpenLigaDbResultinfoRepo(restClient,
 			new AvailableLeagueRepo(restClient));
 
-	@CartesianTest
+	@CartesianTest(name = "{index} => league: {0} season: {1}")
 	void endergebnisHasHighestGlobalId( //
 			@Values(strings = { "bl1", "bl2" }) String league, //
 			@Values(strings = { "2022", "2023" }) String season //
