@@ -77,8 +77,8 @@ class OpenLigaDbSpieltagRepoIT {
 		checkPropertiesOfFullSeason(paarungen);
 		var expected = Paarung.builder() //
 				.ergebnisTyp(GEPLANT) //
-				.heim(entry(teamFrankfurt, 0)) //
-				.gast(entry(teamBremen, 0)) //
+				.heim(entry(teamFrankfurt)) //
+				.gast(entry(teamBremen)) //
 				.build();
 		assertThat(paarungen) //
 				.withFailMessage("will fail after 2025-08-23T13:30:00Z --> change to BEENDET and set final result") //
