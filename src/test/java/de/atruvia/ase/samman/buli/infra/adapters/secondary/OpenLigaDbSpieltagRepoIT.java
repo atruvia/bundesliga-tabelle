@@ -2,6 +2,7 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.Entry.entry;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
+import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamDortmund;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
@@ -72,10 +72,18 @@ class OpenLigaDbSpieltagRepoIT {
 	}
 
 	@Test
-	@ExpectedToFail
 	void canRetrieveDataOf2025() {
-		// TODO add checks as in #canRetrieveDataOf2024 when data is available
-		assertThat(sut.lade("bl1", "2025")).isNotEmpty();
+		var paarungen = sut.lade("bl1", "2025");
+		checkPropertiesOfFullSeason(paarungen);
+		var expected = Paarung.builder() //
+				.ergebnisTyp(GEPLANT) //
+				.heim(entry(teamFrankfurt, 0)) //
+				.gast(entry(teamBremen, 0)) //
+				.build();
+		assertThat(paarungen) //
+				.withFailMessage("will fail after 2025-08-23T13:30:00Z --> change to BEENDET and set final result") //
+				.hasSize(matchesOfFullSeasonOfTeams(18)).element(2).isEqualTo(expected);
+
 	}
 
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen) {
