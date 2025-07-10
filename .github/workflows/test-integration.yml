@@ -28,7 +28,7 @@ jobs:
         run: mvn -B test-compile failsafe:integration-test --file pom.xml
 
       - name: Integration Test Report
-        uses: dorny/test-reporter@890a17cecf52a379fc869ab770a71657660be727
+        uses: dorny/test-reporter@dc3a92680fcc15842eef52e8c4606ea7ce6bd3f3
         if: (success() || failure()) && github.actor != 'dependabot[bot]'
         with:
           name: Integration Tests Report
