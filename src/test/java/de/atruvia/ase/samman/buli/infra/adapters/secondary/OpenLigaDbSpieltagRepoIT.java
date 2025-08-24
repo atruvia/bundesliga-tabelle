@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.ExpectedToFail;
 import org.springframework.web.client.RestTemplate;
 
 import de.atruvia.ase.samman.buli.domain.Paarung;
@@ -80,6 +81,13 @@ class OpenLigaDbSpieltagRepoIT {
 				.gast(entry(teamBremen, 1)) //
 				.build();
 		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(2).isEqualTo(expected);
+	}
+
+	@Test
+	@ExpectedToFail("2026 data now available")
+	void canRetrieveDataOf2026() {
+		// TODO add checks as in #canRetrieveDataOf2025 when data is available
+		assertThat(sut.lade("bl1", "2026")).isNotEmpty();
 	}
 
 	void checkPropertiesOfFullSeason(List<Paarung> paarungen) {
