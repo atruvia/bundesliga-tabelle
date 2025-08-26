@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,6 @@ import de.atruvia.ase.samman.buli.domain.ports.primary.DefaultTabellenService;
 import de.atruvia.ase.samman.buli.domain.ports.primary.TabellenService;
 
 @WebMvcTest
-@AutoConfigureMockMvc
 @Import(TabellenHttpAdapterApprovalTest.OpenLigaConfig.class)
 class TabellenHttpAdapterApprovalTest {
 
