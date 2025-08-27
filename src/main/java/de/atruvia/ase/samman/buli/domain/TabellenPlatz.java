@@ -179,17 +179,17 @@ public class TabellenPlatz implements Mergeable<TabellenPlatz> {
 	}
 
 	private PaarungView mergeLaufendesSpiel(TabellenPlatz other) {
-		var nonNulls = Stream.of(laufendesSpiel, other.laufendesSpiel) //
+		var laufendeSpiele = Stream.of(laufendesSpiel, other.laufendesSpiel) //
 				.filter(Objects::nonNull) //
-				.distinct() //
 				.toArray(PaarungView[]::new);
-		if (nonNulls.length == 0) {
+		if (laufendeSpiele.length == 0) {
 			return null;
-		} else if (nonNulls.length == 1) {
-			return nonNulls[0];
+		} else if (laufendeSpiele.length == 1) {
+			return laufendeSpiele[0];
+		} else {
+			throw new IllegalStateException(format("Team %s has several matches at the same time (%s)", team.name(),
+					Arrays.stream(laufendeSpiele).map(PaarungView::gegner).map(Entry::team).map(Team::name).toList()));
 		}
-		throw new IllegalStateException(format("Team %s has several matches at the same time (%s)", team.name(),
-				Arrays.stream(nonNulls).map(PaarungView::gegner).map(Entry::team).map(Team::name).toList()));
 	}
 
 	private Team mergeTeams(Team team1, Team team2) {
