@@ -41,7 +41,7 @@ jobs:
         slug: atruvia/bundesliga-tabelle
 
     - name: Upload Cucumber report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: (success() || failure()) && github.event_name != 'pull_request' && github.actor != 'dependabot[bot]'  # run this step even if previous step failed
       continue-on-error: true
       with:
