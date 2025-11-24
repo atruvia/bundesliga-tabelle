@@ -21,3 +21,6 @@ Additionally, it does:
 - [Property based tests](https://jqwik.net/) to have some solitary detail tests
 - [ArchUnit](https://www.archunit.org/) architecture tests that the code base is structured as intended
 - Smoke test: Starting the freshly built and dockerized application container and verifies if it answers with HTTP status code 200 and a JSON array payload
+
+⚠️ Note on Tests
+This repository includes some duplicate tests for the same functionality, implemented in different ways (e.g., as JUnit tests and Cucumber BDD tests) to showcase various testing approaches. Additionally, there are same tests for the same functionality, one demonstrating best practices and the other showing common pitfalls. These examples are provided for educational purposes.
