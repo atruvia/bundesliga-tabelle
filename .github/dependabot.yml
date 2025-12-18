@@ -15,4 +15,10 @@ updates:
     time: "04:00"
   assignees:
   - pfichtner
+  ignore:
+    - dependency-name: "org.springframework.boot:spring-boot-starter-parent"
+      versions: [">=4.0.0"]
+
+    - dependency-name: "org.springdoc:springdoc-openapi-starter-webmvc-ui"
+      versions: [">=3.0.0"]
 
