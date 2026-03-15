@@ -34,8 +34,7 @@ public final class TeamMother {
 			.kurzname("Frankfurt").wappen(create("https://i.imgur.com/X8NFkOb.png")).build();
 
 	public static final Team teamBremen = Team.builder().id(idBremen).name("SV Werder Bremen").kurzname("Bremen")
-			.wappen(create(
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png"))
+			.wappen(create("https://upload.wikimedia.org/wikipedia/commons/b/be/SV-Werder-Bremen-Logo.svg"))
 			.build();
 
 }
