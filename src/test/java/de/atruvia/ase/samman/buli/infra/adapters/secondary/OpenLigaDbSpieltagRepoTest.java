@@ -27,7 +27,8 @@ import de.atruvia.ase.samman.buli.infra.internal.RestClient;
 class OpenLigaDbSpieltagRepoTest {
 
 	static final Team teamMuenchen = TeamMother.teamMuenchen.withWappen(create("https://i.imgur.com/jJEsJrj.png"));
-	static final Team teamBremen = TeamMother.teamBremen.withName("Werder Bremen");
+	static final Team teamBremen = TeamMother.teamBremen.withName("Werder Bremen").withWappen(create(
+			"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png"));
 
 	@Test
 	void canRetrieveDataOf2022() {
