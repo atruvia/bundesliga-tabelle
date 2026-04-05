@@ -22,7 +22,7 @@ public final class TeamMother {
 
 	public static final Team teamDortmund = Team.builder().id(idDortmund).name("Borussia Dortmund").kurzname("Dortmund")
 			.wappen(create(
-					"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/560px-Borussia_Dortmund_logo.svg.png"))
+					"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/960px-Borussia_Dortmund_logo.svg.png"))
 			.build();
 
 	public static final Team teamMuenchen = Team.builder().id(idMuenchen).name("FC Bayern München").kurzname("Bayern")
