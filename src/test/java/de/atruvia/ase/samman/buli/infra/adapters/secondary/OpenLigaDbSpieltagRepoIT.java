@@ -2,7 +2,6 @@ package de.atruvia.ase.samman.buli.infra.adapters.secondary;
 
 import static de.atruvia.ase.samman.buli.domain.Paarung.Entry.entry;
 import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.BEENDET;
-import static de.atruvia.ase.samman.buli.domain.Paarung.ErgebnisTyp.GEPLANT;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamBremen;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamDortmund;
 import static de.atruvia.ase.samman.buli.domain.TeamMother.teamFrankfurt;
@@ -88,9 +87,9 @@ class OpenLigaDbSpieltagRepoIT {
 	void canRetrieveDataOf2026() {
 		var paarungen = sut.lade("bl1", "2026");
 		var expected = Paarung.builder() //
-				.ergebnisTyp(GEPLANT) //
-				.heim(entry(teamDortmund)) //
-				.gast(entry(teamBremen)) //
+				.ergebnisTyp(BEENDET) //
+				.heim(entry(teamDortmund, 2)) //
+				.gast(entry(teamBremen, 2)) //
 				.build();
 		assertThat(paarungen).hasSize(matchesOfFullSeasonOfTeams(18)).element(36).isEqualTo(expected);
 	}
@@ -98,7 +97,7 @@ class OpenLigaDbSpieltagRepoIT {
 	@Test
 	@ExpectedToFail("2027 data now available")
 	void canRetrieveDataOf2027() {
-		// TODO add checks as in #canRetrieveDataOf2026 when data is available
+		// TODO add checks as in #canRetrieveDataOf2026 when data is available and add #canRetrieveDataOf2028 
 		assertThat(sut.lade("bl1", "2027")).isNotEmpty();
 	}
 
